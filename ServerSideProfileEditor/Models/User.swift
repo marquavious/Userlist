@@ -12,15 +12,15 @@ struct User: Equatable {
   var description: String
   var profilePictureUrlString: String?
   var profileHeaderUrlString: String?
-
+  
   var profilePictureUrl: URL? {
     URL(string: profilePictureUrlString ?? "")
   }
-
+  
   var profileHeaderUrl: URL? {
     URL(string: profileHeaderUrlString ?? "")
   }
-
+  
   init(
     username: String,
     description: String,

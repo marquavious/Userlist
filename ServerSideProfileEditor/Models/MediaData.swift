@@ -9,10 +9,10 @@ import Foundation
 
 @Observable
 class MediaData: Identifiable, Observable {
-
+  
   let id: String
   var media: Media
-
+  
   init(id: String = UUID().uuidString, media: Media) {
     self.id = id
     self.media = media

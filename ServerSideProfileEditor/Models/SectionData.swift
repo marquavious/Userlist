@@ -9,10 +9,10 @@ import Foundation
 
 @Observable
 class SectionData: Identifiable, ObservableObject {
-
+  
   enum MediaPosition: Int, CaseIterable, Equatable {
     case top, middle, bottom
-
+    
     var systemImageString: String {
       switch self {
       case .top:
@@ -24,14 +24,14 @@ class SectionData: Identifiable, ObservableObject {
       }
     }
   }
-
+  
   let id: String
   var index: Int
   var title: String?
   var description: String?
   var mediaPosition: MediaPosition?
   var media: Media?
-
+  
   init(
     id: String = UUID().uuidString,
     index: Int,
@@ -57,7 +57,7 @@ extension SectionData: Equatable, Hashable {
     lhs.description == rhs.description &&
     lhs.media == rhs.media
   }
-
+  
   public func hash(into hasher: inout Hasher) {
     hasher.combine(id)
   }
@@ -73,7 +73,7 @@ extension SectionData {
       media: media
     )
   }
-
+  
   static func stubs(
     id: String = UUID().uuidString,
     index: Int = 0

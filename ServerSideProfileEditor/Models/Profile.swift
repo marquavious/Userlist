@@ -17,7 +17,7 @@ extension Profile: Hashable, Equatable {
   public func hash(into hasher: inout Hasher) {
     hasher.combine(id)
   }
-
+  
   static func == (lhs: Profile, rhs: Profile) -> Bool {
     lhs.id == rhs.id &&
     lhs.userInfo == rhs.userInfo &&
@@ -27,9 +27,9 @@ extension Profile: Hashable, Equatable {
 
 extension Profile {
   static func generatRandomProfile(id: String? = nil) -> Profile {
-
+    
     let userInfo = ProfileStubGenerator.randomUsernameDescriptionBundle()
-
+    
     let profile = Profile(
       id: id ?? UUID().uuidString,
       userInfo: User(
@@ -45,7 +45,7 @@ extension Profile {
         SectionData.stubs(index: 3)
       ]
     )
-
+    
     return profile
   }
 }
