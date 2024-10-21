@@ -9,6 +9,22 @@ import Foundation
 
 @Observable
 class SectionData: Identifiable, ObservableObject {
+
+  enum MediaPosition: Int, CaseIterable, Equatable {
+    case top, middle, bottom
+
+    var systemImageString: String {
+      switch self {
+      case .top:
+        "square.3.layers.3d.top.filled"
+      case .middle:
+        "square.3.layers.3d.middle.filled"
+      case .bottom:
+        "square.3.layers.3d.bottom.filled"
+      }
+    }
+  }
+
   let id: String
   var index: Int
   var title: String?
@@ -30,21 +46,6 @@ class SectionData: Identifiable, ObservableObject {
     self.description = description
     self.mediaPosition = mediaPosition
     self.media = media
-  }
-
-  enum MediaPosition: Int, CaseIterable, Equatable {
-    case top, middle, bottom
-
-    var systemImageString: String {
-      switch self {
-      case .top:
-        "square.3.layers.3d.top.filled"
-      case .middle:
-        "square.3.layers.3d.middle.filled"
-      case .bottom:
-        "square.3.layers.3d.bottom.filled"
-      }
-    }
   }
 }
 
@@ -69,7 +70,8 @@ extension SectionData {
       index: index,
       title: title,
       description: description,
-      media: media)
+      media: media
+    )
   }
 
   static func stubs(

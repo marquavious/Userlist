@@ -9,21 +9,6 @@ import Foundation
 
 struct ProfileStubGenerator {
 
-  static func randomSectionTupleData() -> (title: String, description: String) {
-    [
-      (title: "Coffee Shops I Love", description: "I love discovering new coffee shops and trying different blends. Here are some of my favorites."),
-      (title: "Books I Recommend", description: "I'm always on the lookout for the next great read. Here are some of my favorite books."),
-      (title: "My Fitness Journey", description: "I've been working out regularly for the past year and I've seen a huge improvement in my fitness level."),
-      (title: "Favorite Recipes", description: "I love cooking and experimenting with new recipes. Here are some of my favorites."),
-      (title: "Creative Projects", description: "I'm a creative person who loves to express myself through art and design."),
-      (title: "Travel Destinations", description: "I love traveling and exploring new places. Here are some of my favorite travel destinations."),
-      (title: "Gardening Tips", description: "I'm a passionate gardener and I love sharing my tips and tricks."),
-      (title: "Favorite Games", description: "I'm a huge gamer and I love playing a variety of games. Here are some of my favorites."),
-      (title: "DIY Projects", description: "I love taking on DIY projects and creating things with my own hands."),
-      (title: "My Furry Friends", description: "I'm a huge animal lover and I have two adorable pets. Here are their stories.")
-    ].randomElement()!
-  }
-
   static func randomProfilePicture() -> String {
     profilePictures.randomElement()!
   }
@@ -40,30 +25,22 @@ struct ProfileStubGenerator {
     usernames.randomElement()!
   }
 
-  static func randomText() -> String {
-    arrayOfTexts.randomElement()!
+  static func randomSectionTupleData() -> (title: String, description: String) {
+    [
+      (title: "Coffee Shops I Love", description: "I love discovering new coffee shops and trying different blends. Here are some of my favorites."),
+      (title: "Books I Recommend", description: "I'm always on the lookout for the next great read. Here are some of my favorite books."),
+      (title: "My Fitness Journey", description: "I've been working out regularly for the past year and I've seen a huge improvement in my fitness level."),
+      (title: "Favorite Recipes", description: "I love cooking and experimenting with new recipes. Here are some of my favorites."),
+      (title: "Creative Projects", description: "I'm a creative person who loves to express myself through art and design."),
+      (title: "Travel Destinations", description: "I love traveling and exploring new places. Here are some of my favorite travel destinations."),
+      (title: "Gardening Tips", description: "I'm a passionate gardener and I love sharing my tips and tricks."),
+      (title: "Favorite Games", description: "I'm a huge gamer and I love playing a variety of games. Here are some of my favorites."),
+      (title: "DIY Projects", description: "I love taking on DIY projects and creating things with my own hands."),
+      (title: "My Furry Friends", description: "I'm a huge animal lover and I have two adorable pets. Here are their stories.")
+    ].randomElement()!
   }
 
-
-  private static let profilePictures: [String] = [
-    "https://cdn.profoto.com/cdn/053149e/contentassets/d39349344d004f9b8963df1551f24bf4/profoto-albert-watson-steve-jobs-pinned-image-original.jpg?width=1280&quality=75&format=jpg",
-    "https://imgcdn.stablediffusionweb.com/2024/6/12/4d688bcf-f53b-42b6-a98d-3254619f3b58.jpg"
-  ]
-
-  private static let banners: [String] = [
-    "https://images.photowall.com/products/56987/outer-space-4.jpg?h=699&q=85",
-    "https://upload.wikimedia.org/wikipedia/commons/3/37/Skyline-4582510_1920.jpg"
-  ]
-
-  private static let media: [String] = [
-    "https://i.imgur.com/ApCOa7j.jpeg",
-    "https://i.imgur.com/FRf8t4A.png",
-    "https://i.imgur.com/vFTPjU4.png",
-    "https://i.natgeofe.com/k/a6c9f195-de20-445d-9d36-745ef56042c5/OG_Colosseum_Ancient-Rome_KIDS_1122.jpg?w=1436&h=978",
-    "https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-  ]
-
-  private static func randomUsernameDescriptionBundle() -> (username: String, description: String) {
+  static func randomUsernameDescriptionBundle() -> (username: String, description: String) {
     [
       (username:"techsavvypro", description:"I'm a passionate coffee enthusiast who loves trying new blends and brewing methods. I also enjoy baking and experimenting with different recipes."),
       (username:"digitalinnovator", description:"As a dedicated bookworm, I'm always on the lookout for the next great read. I love discussing literature and sharing my favorite books with others."),
@@ -134,10 +111,21 @@ struct ProfileStubGenerator {
         "As a volunteer, I'm passionate about giving back to my community. I love volunteering for local organizations and making a positive impact on the world."
   ]
 
-  private static let arrayOfTexts: [String] = [
-    StringGenerator.generateRandomString(),
-    StringGenerator.generateRandomString(),
-    StringGenerator.generateRandomString(),
-    StringGenerator.generateRandomString()
+  private static let profilePictures: [String] = [
+    "https://cdn.profoto.com/cdn/053149e/contentassets/d39349344d004f9b8963df1551f24bf4/profoto-albert-watson-steve-jobs-pinned-image-original.jpg?width=1280&quality=75&format=jpg",
+    "https://imgcdn.stablediffusionweb.com/2024/6/12/4d688bcf-f53b-42b6-a98d-3254619f3b58.jpg"
+  ]
+
+  private static let banners: [String] = [
+    "https://images.photowall.com/products/56987/outer-space-4.jpg?h=699&q=85",
+    "https://upload.wikimedia.org/wikipedia/commons/3/37/Skyline-4582510_1920.jpg"
+  ]
+
+  private static let media: [String] = [
+    "https://i.imgur.com/ApCOa7j.jpeg",
+    "https://i.imgur.com/FRf8t4A.png",
+    "https://i.imgur.com/vFTPjU4.png",
+    "https://i.natgeofe.com/k/a6c9f195-de20-445d-9d36-745ef56042c5/OG_Colosseum_Ancient-Rome_KIDS_1122.jpg?w=1436&h=978",
+    "https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
   ]
 }
