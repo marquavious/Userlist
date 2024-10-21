@@ -25,6 +25,10 @@ struct ProfileStubGenerator {
     usernames.randomElement()!
   }
 
+  static func randomDescription() -> String {
+    descriptions.randomElement()!
+  }
+
   static func randomSectionTupleData() -> (title: String, description: String) {
     [
       (title: "Coffee Shops I Love", description: "I love discovering new coffee shops and trying different blends. Here are some of my favorites."),

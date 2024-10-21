@@ -43,3 +43,14 @@ struct UserListViewCell: View {
     }
   }
 }
+
+#Preview {
+  ScrollView {
+    ForEach(0...5, id: \.self) { _ in
+      UserListViewCell(
+        imageURL: URL(string: ProfileStubGenerator.randomProfilePicture()),
+        title: ProfileStubGenerator.randomUsername(),
+        description: ProfileStubGenerator.randomDescription())
+    }
+  }
+}

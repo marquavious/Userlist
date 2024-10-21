@@ -17,6 +17,7 @@ struct UserListTabView: View {
     NavigationStack(path: $routerPath.path) {
       UserListView()
         .withAppRouter()
+        .navigationTitle("Userlist")
     }
     .environment(userList)
     .environment(routerPath)

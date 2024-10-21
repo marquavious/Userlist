@@ -11,8 +11,23 @@ import SwiftUI
 struct ServerSideProfileEditorApp: App {
   var body: some Scene {
     WindowGroup {
-      UserListTabView()
-        .withStubbedEnviorments()
+      AppView()
     }
   }
+}
+
+struct AppView: View {
+  var body: some View {
+    TabView {
+      UserListTabView()
+        .tabItem {
+          Label("Userlist", systemImage: "list.bullet")
+        }
+    }
+    .withStubbedEnviorments()
+  }
+}
+
+#Preview {
+  AppView()
 }

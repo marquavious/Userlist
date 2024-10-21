@@ -21,7 +21,8 @@ struct UserListView: View {
             imageURL: user.userInfo.profilePictureUrl,
             title: user.userInfo.username,
             description: user.userInfo.description
-          ).onTapGesture {
+          )
+          .onTapGesture {
             router.navigate(to: .profile(id: user.id))
           }
         }
@@ -31,11 +32,5 @@ struct UserListView: View {
 }
 
 #Preview {
-  NavigationStack {
-    UserListView()
-      .environment(UserListManager())
-      .environment(Theme())
-      .environment(RouterPath())
-      .navigationTitle("Userlist")
-  }
+  AppView()
 }
