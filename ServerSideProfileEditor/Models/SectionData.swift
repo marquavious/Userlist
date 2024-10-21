@@ -76,12 +76,12 @@ extension SectionData {
     id: String = UUID().uuidString,
     index: Int = 0
   ) -> SectionData {
-    SectionData(
-      id: UUID().uuidString,
-      index: 0,
-      title: "TITLE",
-      description: "DESCRIPTION",
-      media: .urlPhoto("https://i.imgur.com/ApCOa7j.jpeg")
+    let stubData = ProfileStubGenerator.randomSectionTupleData()
+    return SectionData(
+      id: id,
+      index: index,
+      title: stubData.title,
+      description: stubData.description
     )
   }
 }
