@@ -20,7 +20,7 @@ extension Profile: Hashable, Equatable {
 
   static func == (lhs: Profile, rhs: Profile) -> Bool {
     lhs.id == rhs.id &&
-    lhs.userInfo == rhs.userInfo
-  && lhs.sections == rhs.sections
+    lhs.userInfo == rhs.userInfo &&
+    lhs.sections == rhs.sections
   }
 }
