@@ -10,7 +10,7 @@ import Foundation
 struct Profile: Identifiable {
   let id: String
   var userInfo: User
-//  var sections: [SectionData]
+  var sections: [SectionData]
 }
 
 extension Profile: Hashable, Equatable {
@@ -20,7 +20,7 @@ extension Profile: Hashable, Equatable {
 
   static func == (lhs: Profile, rhs: Profile) -> Bool {
     lhs.id == rhs.id &&
-    lhs.userInfo == rhs.userInfo &&
-    lhs.sections == rhs.sections
+    lhs.userInfo == rhs.userInfo
+  && lhs.sections == rhs.sections
   }
 }
