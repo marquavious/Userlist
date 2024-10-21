@@ -13,35 +13,48 @@ class SectionData: Identifiable, ObservableObject {
   var index: Int
   var title: String?
   var description: String?
-//  var mediaData: MediaData?
+  var mediaPosition: MediaPosition?
+  var media: Media?
 
   init(
-    id: String,
+    id: String = UUID().uuidString,
     index: Int,
     title: String? = nil,
-    description: String? = nil
-//    mediaData: MediaData? = nil
+    description: String? = nil,
+    mediaPosition: MediaPosition? = nil,
+    media: Media? = nil
   ) {
     self.id = id
     self.index = index
     self.title = title
     self.description = description
-//    self.mediaData = mediaData
+    self.mediaPosition = mediaPosition
+    self.media = media
+  }
+
+  enum MediaPosition: Int, CaseIterable, Equatable {
+    case top, middle, bottom
+
+    var systemImageString: String {
+      switch self {
+      case .top:
+        "square.3.layers.3d.top.filled"
+      case .middle:
+        "square.3.layers.3d.middle.filled"
+      case .bottom:
+        "square.3.layers.3d.bottom.filled"
+      }
+    }
   }
 }
 
 extension SectionData: Equatable, Hashable {
   static func == (lhs: SectionData, rhs: SectionData) -> Bool {
-//    lhs.id == rhs.id &&
-//    lhs.title == rhs.title &&
-//    lhs.description == rhs.description &&
-//    lhs.mediaData == rhs.mediaData
-
     lhs.id == rhs.id &&
     lhs.index == rhs.index &&
     lhs.title == rhs.title &&
-    lhs.description == rhs.description
-//   && lhs.mediaData == rhs.mediaData
+    lhs.description == rhs.description &&
+    lhs.media == rhs.media
   }
 
   public func hash(into hasher: inout Hasher) {
@@ -51,38 +64,24 @@ extension SectionData: Equatable, Hashable {
 
 extension SectionData {
   func copy() -> SectionData {
-    //    SectionData(
-    //      id: id ?? UUID().uuidString,
-    //      index: index,
-    //      title: title,
-    //      description: description,
-    //      mediaData: mediaData)
     SectionData(
       id: id,
       index: index,
       title: title,
-      description: description)
+      description: description,
+      media: media)
   }
 
   static func stubs(
     id: String = UUID().uuidString,
     index: Int = 0
   ) -> SectionData {
-    //    SectionData(
-    //      id: UUID().uuidString,
-    //      index: 0,
-    //      title: "TITLE",
-    //      description: "DESCRIPTION",
-    //      mediaData: MediaData(
-    //        media: .urlPhoto("https://i.imgur.com/ApCOa7j.jpeg".urlValue()),
-    //        position: .top
-    //      )
-    //    )
     SectionData(
-      id: id,
-      index: index,
+      id: UUID().uuidString,
+      index: 0,
       title: "TITLE",
-      description: "DESCRIPTION")
+      description: "DESCRIPTION",
+      media: .urlPhoto("https://i.imgur.com/ApCOa7j.jpeg")
+    )
   }
 }
-
