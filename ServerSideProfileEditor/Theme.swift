@@ -23,4 +23,36 @@ public final class Theme {
       }
     }
   }
+  enum MediaSizes {
+    case mediaHeight
+    var height: CGFloat {
+      switch self {
+      case .mediaHeight:
+        return 250
+      }
+    }
+  }
+
+  enum Geomitry {
+    case cornerRadius
+    var radius: CGFloat {
+      switch self {
+      case .cornerRadius:
+        return 8
+      }
+    }
+  }
+
+  enum Spacing {
+    case intraSectionalHorizontalSpacing
+    case profileSectionCellSpacing
+    var spacing: CGFloat {
+      switch self {
+      case .intraSectionalHorizontalSpacing:
+        return 8
+      case .profileSectionCellSpacing:
+        return 8
+      }
+    }
+  }
 }

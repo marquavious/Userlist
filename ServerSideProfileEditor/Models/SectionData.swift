@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUICore
 
 @Observable
 class SectionData: Identifiable, ObservableObject {
@@ -24,12 +25,40 @@ class SectionData: Identifiable, ObservableObject {
       }
     }
   }
-  
+
+  enum Alignment: Int, CaseIterable, Equatable {
+    case leading, centerd, trailing
+
+    var systemImageString: String {
+      switch self {
+      case .leading:
+        "square.3.layers.3d.top.filled"
+      case .centerd:
+        "square.3.layers.3d.middle.filled"
+      case .trailing:
+        "square.3.layers.3d.bottom.filled"
+      }
+    }
+
+    var horizontalAlignment: HorizontalAlignment {
+      switch self {
+      case .leading:
+          .leading
+      case .centerd:
+          .center
+      case .trailing:
+          .trailing
+      }
+    }
+  }
+
   let id: String
   var index: Int
   var title: String?
   var description: String?
   var mediaPosition: MediaPosition?
+  var mediaHeight: CGFloat?
+  var alignment: Alignment
   var media: Media?
   
   init(
@@ -38,6 +67,8 @@ class SectionData: Identifiable, ObservableObject {
     title: String? = nil,
     description: String? = nil,
     mediaPosition: MediaPosition? = nil,
+    mediaHeight: CGFloat? = nil,
+    alignment: Alignment = .leading,
     media: Media? = nil
   ) {
     self.id = id
@@ -45,6 +76,8 @@ class SectionData: Identifiable, ObservableObject {
     self.title = title
     self.description = description
     self.mediaPosition = mediaPosition
+    self.mediaHeight = mediaHeight
+    self.alignment = alignment
     self.media = media
   }
 }
@@ -55,6 +88,7 @@ extension SectionData: Equatable, Hashable {
     lhs.index == rhs.index &&
     lhs.title == rhs.title &&
     lhs.description == rhs.description &&
+    lhs.alignment == rhs.alignment &&
     lhs.media == rhs.media
   }
   
@@ -83,7 +117,8 @@ extension SectionData {
       id: id,
       index: index,
       title: stubData.title,
-      description: stubData.description
+      description: stubData.description,
+      media: Media.generateRandomMedia()
     )
   }
 }

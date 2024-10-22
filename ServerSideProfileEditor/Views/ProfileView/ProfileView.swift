@@ -49,13 +49,17 @@ struct ProfileView: View {
           photoHeight: Constants.profileHeaderPictureHeight,
           verticalOffset: -Constants.profilePictureSize.height / 1.6
         ) {
-          ProfileViewUserInfoSection(
-            username: profile.userInfo.username,
-            description: profile.userInfo.description,
-            profilePictureUrl: profile.userInfo.profilePictureUrl,
-            imageSize: Constants.profilePictureSize
-          )
-          .frame(maxWidth: .infinity, alignment: .leading)
+          VStack {
+            ProfileViewUserInfoSection(
+              username: profile.userInfo.username,
+              description: profile.userInfo.description,
+              profilePictureUrl: profile.userInfo.profilePictureUrl,
+              imageSize: Constants.profilePictureSize
+            )
+            .frame(maxWidth: .infinity, alignment: .leading)
+            Divider()
+            ProfileViewArrangementSection(sections: profile.sections)
+          }
           .padding(.horizontal, Constants.cellHorizontalPadding)
         }
       }
@@ -74,6 +78,62 @@ struct ProfileView: View {
 #Preview {
   ProfileView(profile: Profile.generatRandomProfile())
     .withStubbedEnviorments()
+}
+
+struct ProfileViewArrangementSection: View {
+
+  var sections: [SectionData]
+  var body: some View {
+    ForEach(sections) { section in
+      VStack(alignment: section.alignment.horizontalAlignment, spacing: Theme.Spacing.profileSectionCellSpacing.spacing) {
+        if let title = section.title {
+          Text(title)
+            .font(Theme.Text.title.font)
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        if let description = section.description {
+          Text(description)
+            .font(Theme.Text.description.font)
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        if let media = section.media {
+
+          switch media {
+          case .urlPhoto(let urlString):
+            Rectangle()
+              .fill(.gray)
+              .frame(height: section.mediaHeight ?? Theme.MediaSizes.mediaHeight.height)
+              .clipShape(RoundedRectangle(cornerRadius: Theme.Geomitry.cornerRadius.radius))
+          case .urlPhotoGrid(
+            let urlStringOne,
+            let urlStringTwo,
+            let urlStringThree,
+            let urlStringFour):
+            VStack {
+              HStack {
+                Rectangle()
+                  .fill(.red)
+                  .clipShape(RoundedRectangle(cornerRadius: Theme.Geomitry.cornerRadius.radius))
+                Rectangle()
+                  .fill(.red)
+                  .clipShape(RoundedRectangle(cornerRadius: Theme.Geomitry.cornerRadius.radius))
+              }
+              .frame(height: section.mediaHeight ?? Theme.MediaSizes.mediaHeight.height / 2)
+              HStack {
+                Rectangle()
+                  .fill(.red)
+                  .clipShape(RoundedRectangle(cornerRadius: Theme.Geomitry.cornerRadius.radius))
+                Rectangle()
+                  .fill(.red)
+                  .clipShape(RoundedRectangle(cornerRadius: Theme.Geomitry.cornerRadius.radius))
+              }.frame(height: section.mediaHeight ?? Theme.MediaSizes.mediaHeight.height / 2)
+            }
+          }
+        }
+      }
+      .padding(.vertical, Theme.Spacing.intraSectionalHorizontalSpacing.spacing / 2)
+    }
+  }
 }
 
 struct ProfileViewUserInfoSection: View {
