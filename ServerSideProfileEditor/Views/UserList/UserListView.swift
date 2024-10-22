@@ -22,6 +22,7 @@ struct UserListView: View {
             title: user.userInfo.username,
             description: user.userInfo.description
           )
+          .padding(.horizontal, 16)
           .onTapGesture {
             router.navigate(to: .profile(id: user.id))
           }

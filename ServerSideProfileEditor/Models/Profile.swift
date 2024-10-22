@@ -26,6 +26,15 @@ extension Profile: Hashable, Equatable {
 }
 
 extension Profile {
+
+  static func emptyProfile() -> Profile {
+    Profile(
+      id: UUID().uuidString,
+      userInfo: User(username: "", description: ""),
+      sections: []
+    )
+  }
+
   static func generatRandomProfile(id: String? = nil) -> Profile {
     
     let userInfo = ProfileStubGenerator.randomUsernameDescriptionBundle()

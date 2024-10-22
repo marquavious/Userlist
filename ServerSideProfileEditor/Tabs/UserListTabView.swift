@@ -10,16 +10,16 @@ import SwiftUI
 
 struct UserListTabView: View {
 
-  @State private var routerPath = RouterPath()
   @Environment(UserListManager.self) var userList
+  @State private var routerPath = RouterPath()
 
   var body: some View {
     NavigationStack(path: $routerPath.path) {
       UserListView()
+        .environment(userList)
         .withAppRouter()
         .navigationTitle("Userlist")
     }
-    .environment(userList)
     .environment(routerPath)
   }
 }

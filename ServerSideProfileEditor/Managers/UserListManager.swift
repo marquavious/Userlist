@@ -8,6 +8,10 @@
 import Foundation
 
 @Observable
-class UserListManager: Observable {
-  var users = [Profile.generatRandomProfile(), Profile.generatRandomProfile(), Profile.generatRandomProfile()]
+class UserListManager: ObservableObject {
+  var users = [Profile.generatRandomProfile(id:"0"), Profile.generatRandomProfile(id:"1"), Profile.generatRandomProfile(id:"2")]
+
+  public static let shared = UserListManager()
+
+  private init() {}
 }

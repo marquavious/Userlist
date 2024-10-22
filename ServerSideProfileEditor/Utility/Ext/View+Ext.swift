@@ -15,14 +15,23 @@ extension View {
       switch destination {
       case .profile(let id):
         ProfileView(id: id)
+          .withEnvironments()
       }
     }
   }
 }
 
 extension View {
+
+  func withEnvironments() -> some View {
+    environment(UserListManager.shared)
+      .environment(Theme())
+      .environment(RouterPath())
+  }
+
+  // Foe Debug
   func withStubbedEnviorments() -> some View {
-    environment(UserListManager())
+    environment(UserListManager.shared)
       .environment(Theme())
       .environment(RouterPath())
   }

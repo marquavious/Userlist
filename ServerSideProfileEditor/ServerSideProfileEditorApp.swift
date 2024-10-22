@@ -9,9 +9,13 @@ import SwiftUI
 
 @main
 struct ServerSideProfileEditorApp: App {
+
+  @State var userlist = UserListManager.shared
+
   var body: some Scene {
     WindowGroup {
       AppView()
+        .environment(userlist)
     }
   }
 }
@@ -24,7 +28,6 @@ struct AppView: View {
           Label("Userlist", systemImage: "list.bullet")
         }
     }
-    .withStubbedEnviorments()
   }
 }
 
