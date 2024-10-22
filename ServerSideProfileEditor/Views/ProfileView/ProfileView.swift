@@ -85,10 +85,14 @@ struct ProfileViewArrangementSection: View {
   var sections: [SectionData]
   var body: some View {
     ForEach(sections) { section in
-      VStack(alignment: section.alignment.horizontalAlignment, spacing: Theme.Spacing.profileSectionCellSpacing.spacing) {
+      VStack(
+        alignment: section.alignment.horizontalAlignment,
+        spacing: Theme.Spacing.profileSectionCellSpacing.spacing
+      ) {
         if let title = section.title {
           Text(title)
             .font(Theme.Text.title.font)
+            .fontWeight(.semibold)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
         if let description = section.description {
@@ -97,11 +101,9 @@ struct ProfileViewArrangementSection: View {
             .frame(maxWidth: .infinity, alignment: .leading)
         }
         if let media = section.media {
-
           switch media {
           case .urlPhoto(let urlString):
-            Rectangle()
-              .fill(.gray)
+            createImageView(urlString: urlString)
               .frame(height: section.mediaHeight ?? Theme.MediaSizes.mediaHeight.height)
               .clipShape(RoundedRectangle(cornerRadius: Theme.Geomitry.cornerRadius.radius))
           case .urlPhotoGrid(
@@ -111,28 +113,51 @@ struct ProfileViewArrangementSection: View {
             let urlStringFour):
             VStack {
               HStack {
-                Rectangle()
-                  .fill(.red)
+                createImageView(urlString: urlStringOne)
+                  .frame(height: section.mediaHeight ?? Theme.MediaSizes.mediaHeight.height / 2)
                   .clipShape(RoundedRectangle(cornerRadius: Theme.Geomitry.cornerRadius.radius))
-                Rectangle()
-                  .fill(.red)
+                  .clipped()
+                createImageView(urlString: urlStringTwo)
+                  .frame(height: section.mediaHeight ?? Theme.MediaSizes.mediaHeight.height / 2)
                   .clipShape(RoundedRectangle(cornerRadius: Theme.Geomitry.cornerRadius.radius))
+                  .clipped()
               }
+              .clipped()
               .frame(height: section.mediaHeight ?? Theme.MediaSizes.mediaHeight.height / 2)
               HStack {
-                Rectangle()
-                  .fill(.red)
+                createImageView(urlString: urlStringThree)
+                  .frame(height: section.mediaHeight ?? Theme.MediaSizes.mediaHeight.height / 2)
                   .clipShape(RoundedRectangle(cornerRadius: Theme.Geomitry.cornerRadius.radius))
-                Rectangle()
-                  .fill(.red)
+                  .clipped()
+                createImageView(urlString: urlStringFour)
+                  .frame(height: section.mediaHeight ?? Theme.MediaSizes.mediaHeight.height / 2)
                   .clipShape(RoundedRectangle(cornerRadius: Theme.Geomitry.cornerRadius.radius))
-              }.frame(height: section.mediaHeight ?? Theme.MediaSizes.mediaHeight.height / 2)
+                  .clipped()
+              }
+              .clipped()
+              .frame(height: section.mediaHeight ?? Theme.MediaSizes.mediaHeight.height / 2)
             }
           }
         }
       }
       .padding(.vertical, Theme.Spacing.intraSectionalHorizontalSpacing.spacing / 2)
     }
+  }
+
+  private func createImageView(urlString: String?) -> some View {
+    Rectangle()
+      .fill(.gray)
+      .overlay {
+        AsyncImage(url: URL(string: urlString ?? "")) { image in
+          image
+            .resizable()
+            .aspectRatio(contentMode: .fill)
+        } placeholder: {
+          Color.gray
+        }
+        .background(.gray)
+        .clipShape(RoundedRectangle(cornerRadius: Theme.Geomitry.cornerRadius.radius))
+      }
   }
 }
 

@@ -12,17 +12,22 @@ import SwiftUI
 @Observable
 public final class Theme {
   enum Text {
-    case title, description
-    
+    case title, description, profileCellTitle, profileCellDescription
+
     var font: Font {
       switch self {
       case .title:
-          .system(size: 16)
+          .system(size: 18)
       case .description:
+          .system(size: 16)
+      case .profileCellTitle:
+          .system(size: 16)
+      case .profileCellDescription:
           .system(size: 14)
       }
     }
   }
+
   enum MediaSizes {
     case mediaHeight
     var height: CGFloat {
@@ -55,4 +60,9 @@ public final class Theme {
       }
     }
   }
+}
+
+#Preview {
+  ProfileView(profile: Profile.generatRandomProfile())
+    .withStubbedEnviorments()
 }

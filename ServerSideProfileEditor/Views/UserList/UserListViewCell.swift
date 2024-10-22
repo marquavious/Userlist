@@ -31,10 +31,10 @@ struct UserListViewCell: View {
 
         VStack(alignment: .leading) {
           Text(title)
-            .font(Theme.Text.title.font)
+            .font(Theme.Text.profileCellTitle.font)
             .bold()
           Text("_\(description)_")
-            .font(Theme.Text.description.font)
+            .font(Theme.Text.profileCellDescription.font)
             .lineLimit(3)
         }
       }
