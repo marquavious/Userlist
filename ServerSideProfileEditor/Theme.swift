@@ -33,7 +33,7 @@ public final class Theme {
     var height: CGFloat {
       switch self {
       case .mediaHeight:
-        return 250
+        return 200
       }
     }
   }

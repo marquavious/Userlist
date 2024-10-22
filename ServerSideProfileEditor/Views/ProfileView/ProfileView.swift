@@ -62,6 +62,7 @@ struct ProfileView: View {
           }
           .padding(.horizontal, Constants.cellHorizontalPadding)
         }
+        .contentMargins(.bottom, Constants.profilePictureSize.height / 1.6)
       }
     }
   }
@@ -166,7 +167,6 @@ struct ProfileViewUserInfoSection: View {
   var username: String
   var description: String?
   var profilePictureUrl: URL?
-
   var imageSize: CGSize = CGSize(width: 60, height: 60)
 
   var body: some View {
