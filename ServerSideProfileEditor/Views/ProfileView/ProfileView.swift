@@ -60,11 +60,15 @@ struct ProfileView: View {
             Divider()
             ProfileViewArrangementSection(sections: profile.sections)
           }
-          .padding(.horizontal, Constants.cellHorizontalPadding)
+//          .padding(.horizontal, Constants.cellHorizontalPadding)
         }
+//        .padding(.horizontal, Constants.cellHorizontalPadding)
+
+//        .scrollClipDisabled()
         .contentMargins(.bottom, Constants.contentMarginsOffset)
       }
     }
+//    .scrollClipDisabled()
   }
 
   private func loadData(id: String) {
@@ -107,8 +111,12 @@ struct ProfileViewArrangementSection: View {
             height: Theme.MediaSizes.mediaHeight.height,
             cornerRadius: Theme.Geomitry.cornerRadius.radius
           )
+//          .padding(.horizontal, 16)
+//          .border(.green)
         }
       }
+//      .border(.blue)
+      .padding(.horizontal, 16)
       .padding(.vertical, Theme.Spacing.intraSectionalHorizontalSpacing.spacing / 2)
     }
   }
@@ -248,11 +256,7 @@ struct MediaView: View {
       CustomContentModeImageView(urlString: photoData.urlString, contentMode: photoData.contentMode)
         .frame(height: height)
         .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-    case .urlPhotoGrid(
-      let photoDataOne,
-      let photoDataTwo,
-      let photoDataThree,
-      let photoDataFour):
+    case .urlPhotoGrid(let photoDataOne, let photoDataTwo, let photoDataThree, let photoDataFour):
       PhotoGridView(
         height: height,
         cornerRadius: cornerRadius,
@@ -261,6 +265,40 @@ struct MediaView: View {
         photoDataThree: photoDataThree,
         photoDataFour: photoDataFour
       )
+    case .urlPhotoCarousel(photoArray: let photoArray):
+      PhotoCarouselView(
+        photoArray: photoArray,
+        photoCornerRadius: Theme.Geomitry.cornerRadius.radius
+      )
+      .frame(height: height)
     }
   }
 }
+
+struct PhotoCarouselView: View {
+
+  @State var photoArray: [PhotoData]
+  @State var photoCornerRadius: CGFloat
+
+  var body: some View {
+    GeometryReader { proxy in
+      ScrollView(.horizontal) {
+        HStack {
+          ForEach(photoArray) { image in
+            CustomContentModeImageView(
+              urlString: image.urlString,
+              contentMode: image.contentMode
+            )
+            .frame(width: proxy.frame(in: .global).width)
+            .clipShape(RoundedRectangle(cornerRadius: photoCornerRadius))
+          }
+        }
+        .scrollTargetLayout()
+      }
+      .scrollTargetBehavior(.viewAligned)
+      .scrollIndicators(.hidden)
+    }
+    .scrollClipDisabled()
+  }
+}
+
