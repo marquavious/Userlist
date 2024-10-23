@@ -55,20 +55,18 @@ struct ProfileView: View {
               description: profile.userInfo.description,
               profilePictureUrl: profile.userInfo.profilePictureUrl,
               imageSize: Constants.profilePictureSize
-            )
+            ) {
+              self.state = .loaded(profile: Profile.emptyProfile())
+            }
             .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, Constants.cellHorizontalPadding)
             Divider()
             ProfileViewArrangementSection(sections: profile.sections)
           }
-//          .padding(.horizontal, Constants.cellHorizontalPadding)
         }
-//        .padding(.horizontal, Constants.cellHorizontalPadding)
-
-//        .scrollClipDisabled()
         .contentMargins(.bottom, Constants.contentMarginsOffset)
       }
     }
-//    .scrollClipDisabled()
   }
 
   private func loadData(id: String) {
@@ -111,11 +109,8 @@ struct ProfileViewArrangementSection: View {
             height: Theme.MediaSizes.mediaHeight.height,
             cornerRadius: Theme.Geomitry.cornerRadius.radius
           )
-//          .padding(.horizontal, 16)
-//          .border(.green)
         }
       }
-//      .border(.blue)
       .padding(.horizontal, 16)
       .padding(.vertical, Theme.Spacing.intraSectionalHorizontalSpacing.spacing / 2)
     }
@@ -217,9 +212,10 @@ struct ProfileViewUserInfoSection: View {
   var profilePictureUrl: URL?
   var imageSize: CGSize = CGSize(width: 60, height: 60)
 
+  var editButtonPressed: (() -> Void)
+
   var body: some View {
     VStack(alignment: .leading, spacing: 8) {
-
       AsyncImage(url: profilePictureUrl) { image in
         image
           .resizable()
@@ -233,8 +229,14 @@ struct ProfileViewUserInfoSection: View {
       .clipShape(Circle())
       .overlay(Circle().stroke(.gray, lineWidth: 1))
 
-      Text(username)
-        .font(.headline)
+      HStack {
+        Text("\(username) •")
+          .font(.headline)
+        Button("Edit Profile") {
+          editButtonPressed()
+        }.buttonStyle(.automatic)
+        Spacer()
+      }.frame(maxWidth: .infinity)
 
       if let description {
         Text(description)

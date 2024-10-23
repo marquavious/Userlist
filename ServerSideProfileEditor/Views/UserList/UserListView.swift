@@ -34,4 +34,5 @@ struct UserListView: View {
 
 #Preview {
   AppView()
+    .withStubbedEnviorments()
 }
