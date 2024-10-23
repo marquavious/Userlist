@@ -6,18 +6,18 @@
 //
 
 import Foundation
+import SwiftUI
 
 enum Media: Equatable {
   case urlPhoto(
-    urlString: String?
+    photoData: PhotoData
   )
   case urlPhotoGrid(
-    urlStringOne: String?,
-    urlStringTwo: String?,
-    urlStringThree: String?,
-    urlStringFour: String?
+    photoDataOne: PhotoData,
+    photoDataTwo: PhotoData,
+    photoDataThree: PhotoData,
+    photoDataFour: PhotoData
   )
-
   var description: String {
     switch self {
     case .urlPhoto:
@@ -29,16 +29,25 @@ enum Media: Equatable {
 }
 
 extension Media {
- static func generateRandomMedia() -> Media {
+  static func generateRandomMedia() -> Media {
     if Bool.random() {
-      return .urlPhoto(urlString: ProfileStubGenerator.randomMediaPicture())
+      return .urlPhoto(
+        photoData: .init(
+          urlString: ProfileStubGenerator.randomMediaPicture(),
+          contentMode: .allCases.randomElement()!)
+      )
     } else {
       return .urlPhotoGrid(
-        urlStringOne: ProfileStubGenerator.randomMediaPicture(),
-        urlStringTwo: ProfileStubGenerator.randomMediaPicture(),
-        urlStringThree: ProfileStubGenerator.randomMediaPicture(),
-        urlStringFour:ProfileStubGenerator.randomMediaPicture()
+        photoDataOne: .init(urlString: ProfileStubGenerator.randomMediaPicture(), contentMode: .allCases.randomElement()!),
+        photoDataTwo: .init(urlString: ProfileStubGenerator.randomMediaPicture(), contentMode: .allCases.randomElement()!),
+        photoDataThree: .init(urlString: ProfileStubGenerator.randomMediaPicture(), contentMode: .allCases.randomElement()!),
+        photoDataFour: .init(urlString: ProfileStubGenerator.randomMediaPicture(), contentMode: .allCases.randomElement()!)
       )
     }
   }
+}
+
+struct PhotoData: Equatable {
+  let urlString: String?
+  let contentMode: ContentMode
 }

@@ -10,10 +10,10 @@ import SwiftUICore
 
 @Observable
 class SectionData: Identifiable, ObservableObject {
-  
+
   enum MediaPosition: Int, CaseIterable, Equatable {
     case top, middle, bottom
-    
+
     var systemImageString: String {
       switch self {
       case .top:
@@ -58,6 +58,7 @@ class SectionData: Identifiable, ObservableObject {
   var description: String?
   var mediaPosition: MediaPosition?
   var mediaHeight: CGFloat?
+  var mediaContentMode: ContentMode
   var alignment: Alignment
   var media: Media?
   
@@ -68,6 +69,7 @@ class SectionData: Identifiable, ObservableObject {
     description: String? = nil,
     mediaPosition: MediaPosition? = nil,
     mediaHeight: CGFloat? = nil,
+    mediaContentMode: ContentMode = .fill,
     alignment: Alignment = .leading,
     media: Media? = nil
   ) {
@@ -77,6 +79,7 @@ class SectionData: Identifiable, ObservableObject {
     self.description = description
     self.mediaPosition = mediaPosition
     self.mediaHeight = mediaHeight
+    self.mediaContentMode = mediaContentMode
     self.alignment = alignment
     self.media = media
   }
@@ -88,6 +91,9 @@ extension SectionData: Equatable, Hashable {
     lhs.index == rhs.index &&
     lhs.title == rhs.title &&
     lhs.description == rhs.description &&
+    lhs.mediaPosition == rhs.mediaPosition &&
+    lhs.mediaHeight == rhs.mediaHeight &&
+    lhs.mediaContentMode == rhs.mediaContentMode &&
     lhs.alignment == rhs.alignment &&
     lhs.media == rhs.media
   }
@@ -118,6 +124,7 @@ extension SectionData {
       index: index,
       title: stubData.title,
       description: stubData.description,
+      mediaContentMode: .allCases.randomElement()!,
       media: Media.generateRandomMedia()
     )
   }

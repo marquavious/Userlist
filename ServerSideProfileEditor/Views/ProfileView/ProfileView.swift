@@ -16,7 +16,7 @@ struct ProfileView: View {
   struct Constants {
     static let profilePictureSize: CGSize = CGSize(width: 95, height: 95)
     static let profileHeaderPictureHeight: CGFloat = UIScreen.main.bounds.height * CGFloat(0.2)
-    static let contentMarginsOffset: CGFloat = UIScreen.main.bounds.height * CGFloat(0.2)
+    static let contentMarginsOffset: CGFloat = UIScreen.main.bounds.height * CGFloat(0.05)
     static let cellHorizontalPadding: CGFloat = 16
   }
 
@@ -62,7 +62,7 @@ struct ProfileView: View {
           }
           .padding(.horizontal, Constants.cellHorizontalPadding)
         }
-        .contentMargins(.bottom, Constants.profilePictureSize.height / 1.6)
+        .contentMargins(.bottom, Constants.contentMarginsOffset)
       }
     }
   }
@@ -102,62 +102,102 @@ struct ProfileViewArrangementSection: View {
             .frame(maxWidth: .infinity, alignment: .leading)
         }
         if let media = section.media {
-          switch media {
-          case .urlPhoto(let urlString):
-            createImageView(urlString: urlString)
-              .frame(height: section.mediaHeight ?? Theme.MediaSizes.mediaHeight.height)
-              .clipShape(RoundedRectangle(cornerRadius: Theme.Geomitry.cornerRadius.radius))
-          case .urlPhotoGrid(
-            let urlStringOne,
-            let urlStringTwo,
-            let urlStringThree,
-            let urlStringFour):
-            VStack {
-              HStack {
-                createImageView(urlString: urlStringOne)
-                  .frame(height: section.mediaHeight ?? Theme.MediaSizes.mediaHeight.height / 2)
-                  .clipShape(RoundedRectangle(cornerRadius: Theme.Geomitry.cornerRadius.radius))
-                  .clipped()
-                createImageView(urlString: urlStringTwo)
-                  .frame(height: section.mediaHeight ?? Theme.MediaSizes.mediaHeight.height / 2)
-                  .clipShape(RoundedRectangle(cornerRadius: Theme.Geomitry.cornerRadius.radius))
-                  .clipped()
-              }
-              .clipped()
-              .frame(height: section.mediaHeight ?? Theme.MediaSizes.mediaHeight.height / 2)
-              HStack {
-                createImageView(urlString: urlStringThree)
-                  .frame(height: section.mediaHeight ?? Theme.MediaSizes.mediaHeight.height / 2)
-                  .clipShape(RoundedRectangle(cornerRadius: Theme.Geomitry.cornerRadius.radius))
-                  .clipped()
-                createImageView(urlString: urlStringFour)
-                  .frame(height: section.mediaHeight ?? Theme.MediaSizes.mediaHeight.height / 2)
-                  .clipShape(RoundedRectangle(cornerRadius: Theme.Geomitry.cornerRadius.radius))
-                  .clipped()
-              }
-              .clipped()
-              .frame(height: section.mediaHeight ?? Theme.MediaSizes.mediaHeight.height / 2)
-            }
-          }
+          MediaView(
+            media: media,
+            height: Theme.MediaSizes.mediaHeight.height,
+            cornerRadius: Theme.Geomitry.cornerRadius.radius
+          )
         }
       }
       .padding(.vertical, Theme.Spacing.intraSectionalHorizontalSpacing.spacing / 2)
     }
   }
+}
 
-  private func createImageView(urlString: String?) -> some View {
+struct PhotoGridView: View {
+  @State var height: CGFloat
+  @State var cornerRadius: CGFloat
+  @State var photoDataOne: PhotoData
+  @State var photoDataTwo: PhotoData
+  @State var photoDataThree: PhotoData
+  @State var photoDataFour: PhotoData
+
+  var body: some View {
+    HStack {
+      CustomContentModeImageView(
+        urlString: photoDataOne.urlString,
+        contentMode: photoDataOne.contentMode
+      )
+      .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+      CustomContentModeImageView(
+        urlString: photoDataTwo.urlString,
+        contentMode: photoDataTwo.contentMode
+      )
+      .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+    }
+    .frame(height: height / 2)
+    HStack {
+      CustomContentModeImageView(
+        urlString: photoDataThree.urlString,
+        contentMode: photoDataThree.contentMode
+      )
+      .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+      CustomContentModeImageView(
+        urlString: photoDataFour.urlString,
+        contentMode: photoDataFour.contentMode
+      )
+      .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+    }
+    .frame(height: height / 2)
+  }
+}
+
+struct CustomContentModeImageView: View {
+
+  var urlString: String?
+  var contentMode: ContentMode
+
+  var body: some View {
     Rectangle()
       .fill(.gray)
       .overlay {
-        AsyncImage(url: URL(string: urlString ?? "")) { image in
-          image
-            .resizable()
-            .aspectRatio(contentMode: .fill)
-        } placeholder: {
-          Color.gray
+        if contentMode == .fit {
+          ZStack {
+            AsyncImage(url: URL(string: urlString ?? "")) { image in
+              Rectangle()
+                .fill(.clear)
+                .overlay {
+                  image
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .blur(radius: 5)
+                }
+            } placeholder: {
+              Color.gray
+            }
+            .background(.gray)
+            .clipShape(RoundedRectangle(cornerRadius: Theme.Geomitry.cornerRadius.radius))
+
+            AsyncImage(url: URL(string: urlString ?? "")) { image in
+              image
+                .resizable()
+                .aspectRatio(contentMode: contentMode)
+            } placeholder: {
+              Color.gray
+            }
+            .background(.gray)
+          }
+        } else {
+          AsyncImage(url: URL(string: urlString ?? "")) { image in
+            image
+              .resizable()
+              .aspectRatio(contentMode: contentMode)
+          } placeholder: {
+            Color.gray
+          }
+          .background(.gray)
+          .clipShape(RoundedRectangle(cornerRadius: Theme.Geomitry.cornerRadius.radius))
         }
-        .background(.gray)
-        .clipShape(RoundedRectangle(cornerRadius: Theme.Geomitry.cornerRadius.radius))
       }
   }
 }
@@ -192,6 +232,35 @@ struct ProfileViewUserInfoSection: View {
         Text(description)
           .font(.subheadline)
       }
+    }
+  }
+}
+
+struct MediaView: View {
+
+  @State var media: Media
+  @State var height: CGFloat
+  @State var cornerRadius: CGFloat
+
+  var body: some View {
+    switch media {
+    case .urlPhoto(let photoData):
+      CustomContentModeImageView(urlString: photoData.urlString, contentMode: photoData.contentMode)
+        .frame(height: height)
+        .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+    case .urlPhotoGrid(
+      let photoDataOne,
+      let photoDataTwo,
+      let photoDataThree,
+      let photoDataFour):
+      PhotoGridView(
+        height: height,
+        cornerRadius: cornerRadius,
+        photoDataOne: photoDataOne,
+        photoDataTwo: photoDataTwo,
+        photoDataThree: photoDataThree,
+        photoDataFour: photoDataFour
+      )
     }
   }
 }
