@@ -75,10 +75,15 @@ struct ProfileView: View {
         .sheet(isPresented: $isInEditorMode) {
           List {
             Section {
-              VStack {
-                Toggle(isOn: $showProfileChanges) {
-                  Text("Toggle Preview")
-                }
+              Toggle(isOn: $showProfileChanges) {
+                Text("Toggle Preview")
+              }
+
+              Section("User Details") {
+                ProfileEditorView(
+                  showProfileChanges: $showProfileChanges,
+                  profile: .emptyProfile()
+                )
               }
             }
           }
@@ -100,7 +105,7 @@ struct ProfileView: View {
   }
 
   private func loadData(id: String) {
-    if let profile = userlist.users.first(where: {$0.id == id }) {
+    if let profile = userlist.users.first(where: { $0.id == id }) {
       state = .loaded(profile: profile)
       self.initalProfileData = profile
     } else {
@@ -335,3 +340,46 @@ struct PhotoCarouselView: View {
   }
 }
 
+
+struct ProfileEditorView: View {
+
+  @Binding var showProfileChanges: Bool
+  @State var profile: Profile
+
+  var body: some View {
+
+      Section {
+        HStack {
+          AsyncImage(url: profile.userInfo.profilePictureUrl) { image in
+            image
+              .resizable()
+              .scaledToFit()
+          } placeholder: {
+            Color.secondary
+          }
+          .frame(
+            width: Theme.MediaSizes.profilePicture.height,
+            height: Theme.MediaSizes.profilePicture.width
+          )
+          .background(.background)
+          .background(.gray)
+          .clipShape(Circle())
+          .overlay(Circle().stroke(.gray, lineWidth: 1))
+          Spacer()
+          AsyncImage(url: profile.userInfo.profilePictureUrl) { image in
+            image
+              .resizable()
+              .scaledToFit()
+          } placeholder: {
+            Color.secondary
+          }
+          .scaledToFill()
+          .frame(height: Theme.MediaSizes.profilePicture.height)
+          .background(.gray)
+          .clipShape(RoundedRectangle(cornerRadius: Theme.Geomitry.cornerRadius.radius))
+        }
+        .listRowSeparator(.hidden)
+      }
+
+  }
+}

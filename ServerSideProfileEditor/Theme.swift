@@ -30,10 +30,22 @@ public final class Theme {
 
   enum MediaSizes {
     case mediaHeight
+    case profilePicture
     var height: CGFloat {
       switch self {
       case .mediaHeight:
         return 200
+      case .profilePicture:
+        return 95
+      }
+    }
+
+    var width: CGFloat {
+      switch self {
+      case .profilePicture:
+        return 95
+      default:
+        fatalError("Use this purposefully...")
       }
     }
   }
