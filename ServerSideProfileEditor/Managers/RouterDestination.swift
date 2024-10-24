@@ -9,18 +9,14 @@ import Foundation
 
 enum RouterDestination: Identifiable, Hashable {
   case profile(id: String)
+  case userInfoEditor(profile: Profile)
 
-  var plaintextDescription: String {
-    switch self {
-    case .profile:
-      "profile"
-    }
-  }
-  
   var id: String {
     switch self {
     case .profile(let id):
       "profile_\(id)"
+    case .userInfoEditor(let profile):
+      "profile_\(profile.id)"
     }
   }
 }

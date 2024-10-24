@@ -17,11 +17,17 @@ struct UserListView: View {
     ScrollView {
       LazyVStack {
         ForEach(userList.users) { user in
-          UserListViewCell(
-            imageURL: user.userInfo.profilePictureUrl,
-            title: user.userInfo.username,
-            description: user.userInfo.description
-          )
+          HStack {
+            UserListViewCell(
+              imageURL: user.userInfo.profilePictureUrl,
+              title: user.userInfo.username,
+              description: user.userInfo.description
+            )
+            Image(systemName: "chevron.forward")
+              .renderingMode(.original)
+              .opacity(0.5)
+          }
+          .environment(router)
           .padding(.horizontal, 16)
           .onTapGesture {
             router.navigate(to: .profile(id: user.id))

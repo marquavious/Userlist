@@ -22,19 +22,29 @@ struct CustomTextField: View {
     HStack {
       VStack(alignment: .leading) {
         Group {
-          let textPrefix = "\(text.isEmpty && isRequired ? "*" : "")"
+          let textPrefix = "\(text.isEmpty && isRequired ? "* " : "")"
           if let iconSystemImageName {
-            Text("\(textPrefix)\(title) \(Image(systemName: iconSystemImageName))")
+            HStack(alignment: .firstTextBaseline, spacing: 2) {
+              Text(textPrefix)
+                .foregroundStyle((text.isEmpty && isRequired) ? .red : .primary)
+              + Text(title)
+                .foregroundStyle(.primary)
+            }
           } else {
-            Text("\(textPrefix)\(title)")
+            Text("\(textPrefix)")
+              .foregroundStyle((text.isEmpty && isRequired) ? .red : .primary)
+            + Text("\(title)")
           }
         }
-        .opacity(focused ? 1 : 0.5)
-        .foregroundStyle((text.isEmpty && isRequired) ? .red : .primary)
 
         HStack {
-          TextField(textfieldPrompt, text: $text, axis: .vertical)
-            .lineLimit(.max, reservesSpace: false)
+          if let iconSystemImageName {
+            TextField("\(Image(systemName: iconSystemImageName)) \(textfieldPrompt)", text: $text, axis: .vertical)
+              .lineLimit(.max, reservesSpace: false)
+          } else {
+            TextField(textfieldPrompt, text: $text, axis: .vertical)
+              .lineLimit(.max, reservesSpace: false)
+          }
         }
       }
 
@@ -59,4 +69,8 @@ struct CustomTextField: View {
     }
     .animation(.easeIn(duration: 0.1), value: focused)
   }
+}
+
+#Preview {
+  ProfileEditorViewPreview()
 }

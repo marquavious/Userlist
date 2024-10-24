@@ -9,17 +9,21 @@ import Foundation
 import SwiftUI
 
 struct ProfileEditorViewSectionCell: View {
-  @State var title: String
-  @State var description: String
+  @State var title: String?
+  @State var description: String?
   @State var media: Media?
 
   var body: some View {
     HStack {
       VStack(alignment: .leading) {
-        Text(title)
-          .font(.subheadline)
-        Text(description)
-          .font(.caption)
+        if let title {
+          Text(title)
+            .font(.subheadline)
+        }
+        if let description {
+          Text(description)
+            .font(.caption)
+        }
         if let media = media {
           Text(media.description)
             .foregroundStyle(.gray)

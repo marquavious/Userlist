@@ -38,7 +38,6 @@ struct UserListViewCell: View {
             .lineLimit(3)
         }
       }
-      Divider()
     }
   }
 }

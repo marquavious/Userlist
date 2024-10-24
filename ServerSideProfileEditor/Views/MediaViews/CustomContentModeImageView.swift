@@ -57,6 +57,6 @@ struct CustomContentModeImageView: View {
   }
 }
 
-//#Preview {
-//    CustomContentModeImageView()
-//}
+#Preview {
+  CustomContentModeImageView(contentMode: .fill)
+}

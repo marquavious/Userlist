@@ -15,7 +15,16 @@ extension View {
       switch destination {
       case .profile(let id):
         ProfileView(id: id)
-          .withEnvironments()
+          .environment(UserListManager.shared)
+      case .userInfoEditor(let profile):
+        List {
+          Section("User Info") {
+            ProfileEditorView(profile: profile)
+              .listStyle(.sidebar)
+          }
+        }
+        .navigationTitle("Profile Editor")
+          .environment(UserListManager.shared)
       }
     }
   }

@@ -21,6 +21,7 @@ struct ProfileView: View {
   }
 
   @Environment(UserListManager.self) var userlist
+  @Environment(RouterPath.self) var router
   @State var state: ProfileView.LoadingState
 
   @State var isInEditorMode: Bool = false
@@ -74,28 +75,15 @@ struct ProfileView: View {
         }
         .contentMargins(.bottom, isInEditorMode ? UIScreen.main.bounds.height * 0.2 : Constants.contentMarginsOffset)
         .sheet(isPresented: $isInEditorMode) {
-          List {
-            Section {
-              Toggle(isOn: $showProfileChanges) {
-                Text("Toggle Preview")
-              }
-              Section("User Details") {
-                ProfileEditorView(
-                  showProfileChanges: $showProfileChanges,
-                  profile: newProfileData ?? .emptyProfile()
-                )
-                .listRowSeparator(.hidden)
-              }
-              Section("User Details") {
-                
-              }
-            }
-          }
-          .presentationBackground(.ultraThinMaterial)
-          .presentationBackgroundInteraction(.enabled)
-          .presentationDetents([.fraction(0.2), .large],
-                               selection: $sheetPresentationDetent)
-          .interactiveDismissDisabled(true)
+            ProfileEditorSheetView(
+              showProfileChanges: $showProfileChanges,
+              profile: profile
+            )
+            .presentationBackground(.ultraThinMaterial)
+            .presentationBackgroundInteraction(.enabled)
+            .presentationDetents([.fraction(0.2), .large],
+                                 selection: $sheetPresentationDetent)
+            .interactiveDismissDisabled(true)
         }
         .onChange(of: showProfileChanges) { ov, nv in
           if let initalProfileData, let newProfileData {
@@ -132,4 +120,67 @@ struct ProfileViewForPreviews: View {
 
 #Preview {
   ProfileViewForPreviews()
+}
+
+struct ProfileEditorSheetView: View {
+  @State var router = RouterPath()
+  @Binding var showProfileChanges: Bool
+  @State var profile: Profile
+
+  var body: some View {
+    NavigationStack(path: $router.path) {
+      List {
+        Section {
+          VStack {
+            Toggle(isOn: $showProfileChanges) {
+              Text("Toggle Preview")
+            }
+            HStack {
+              Button("Save") {
+              }
+              .modifier(ControlPanelButtonViewModifier(backgroundColor: .blue))
+              Button("Discard Changes") {
+              }
+              .modifier(ControlPanelButtonViewModifier(backgroundColor: .red))
+            }
+          }.padding(.vertical, 8)
+        }
+        Section("User Details") {
+          HStack {
+            UserListViewCell(
+              imageURL: profile.userInfo.profilePictureUrl,
+              title: profile.userInfo.username,
+              description: profile.userInfo.description
+            )
+            Image(systemName: "chevron.forward")
+              .renderingMode(.original)
+              .opacity(0.5)
+          }
+          .onTapGesture {
+            router.navigate(to: .userInfoEditor(profile: profile))
+          }
+          .listRowSeparator(.hidden)
+          .padding(.vertical, 8)
+        }
+        Section("Section Arangement") {
+          VStack {
+            ForEach(profile.sections) { sectionData in
+              ProfileEditorViewSectionCell(
+                title: sectionData.title,
+                description: sectionData.description,
+                media: sectionData.media
+              )
+              .listRowSeparator(.hidden)
+            }
+          }
+          .padding(.vertical, 4)
+        }
+      }
+      .listStyle(.sidebar)
+      .scrollDismissesKeyboard(.interactively)
+      .scrollIndicators(.hidden)
+      .withAppRouter()
+    }
+    .environment(router)
+  }
 }

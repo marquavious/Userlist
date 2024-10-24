@@ -9,9 +9,9 @@ import SwiftUI
 
 @main
 struct ServerSideProfileEditorApp: App {
-
+  
   @State var userlist = UserListManager.shared
-
+  
   var body: some Scene {
     WindowGroup {
       AppView()

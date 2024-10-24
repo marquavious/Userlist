@@ -45,7 +45,7 @@ struct ProfileEditorView: View {
     }
   }
 
-  @Binding var showProfileChanges: Bool
+//  @Binding var showProfileChanges: Bool
   @State var profile: Profile
   @State var usernameText = ""
   @State var descriptionText = ""
@@ -55,6 +55,7 @@ struct ProfileEditorView: View {
 
   var body: some View {
     Section {
+      VStack(spacing: 8) {
         HStack {
           AsyncImage(url: profile.userInfo.profilePictureUrl) { image in
             image
@@ -69,7 +70,6 @@ struct ProfileEditorView: View {
           )
           .background(.background)
           .clipShape(Circle())
-          .overlay(Circle().stroke(.gray, lineWidth: 1))
           Spacer()
           AsyncImage(url: profile.userInfo.profilePictureUrl) { image in
             image
@@ -84,7 +84,6 @@ struct ProfileEditorView: View {
         }
         .listRowSeparator(.hidden)
 
-      VStack(spacing: 8) {
         CustomTextField(
           title: "Username",
           textfieldPrompt: "Username...",
@@ -132,7 +131,6 @@ struct ProfileEditorViewPreview: View {
   var body: some View {
     List {
       ProfileEditorView(
-        showProfileChanges: $showProfileChanges,
         profile: Profile.generatRandomProfile()
       ).listStyle(.sidebar)
     }
