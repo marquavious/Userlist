@@ -36,6 +36,7 @@ struct ProfileView: View {
   init(profile: Profile) {
     self.state = .loaded(profile: profile)
     self.initalProfileData = profile
+    self.newProfileData = profile
   }
 
   var body: some View {
@@ -73,24 +74,28 @@ struct ProfileView: View {
         }
         .contentMargins(.bottom, isInEditorMode ? UIScreen.main.bounds.height * 0.2 : Constants.contentMarginsOffset)
         .sheet(isPresented: $isInEditorMode) {
-          List {
-            Section {
-              Toggle(isOn: $showProfileChanges) {
-                Text("Toggle Preview")
-              }
+          if let newProfileData {
+            List {
+              Section {
+                Toggle(isOn: $showProfileChanges) {
+                  Text("Toggle Preview")
+                }
 
-              Section("User Details") {
-                ProfileEditorView(
-                  showProfileChanges: $showProfileChanges,
-                  profile: .emptyProfile()
-                )
+                Section("User Details") {
+                  ProfileEditorView(
+                    showProfileChanges: $showProfileChanges,
+                    profile: newProfileData
+                  )
+                }
               }
             }
+            .presentationBackground(.ultraThinMaterial)
+            .presentationBackgroundInteraction(.enabled)
+            .presentationDetents([.fraction(0.2), .large], selection: $sheetPresentationDetent)
+            .interactiveDismissDisabled(true)
+          } else {
+            Text("Missing Fatal Error")
           }
-          .presentationBackground(.ultraThinMaterial)
-          .presentationBackgroundInteraction(.enabled)
-          .presentationDetents([.fraction(0.2), .large], selection: $sheetPresentationDetent)
-          .interactiveDismissDisabled(true)
         }
         .onChange(of: showProfileChanges) { ov, nv in
           if let initalProfileData, let newProfileData {
@@ -108,15 +113,25 @@ struct ProfileView: View {
     if let profile = userlist.users.first(where: { $0.id == id }) {
       state = .loaded(profile: profile)
       self.initalProfileData = profile
+      self.newProfileData = profile
     } else {
       state = .error(description: "User does not exist")
     }
   }
 }
 
+struct ProfileViewForPreviews: View {
+
+  @State var profile = UserListManager.shared.users.randomElement()!
+
+  var body: some View {
+    ProfileView(profile: profile)
+      .withStubbedEnviorments()
+  }
+}
+
 #Preview {
-  ProfileView(profile: Profile.generatRandomProfile())
-    .withStubbedEnviorments()
+  ProfileViewForPreviews()
 }
 
 struct ProfileViewArrangementSection: View {
@@ -358,8 +373,8 @@ struct ProfileEditorView: View {
             Color.secondary
           }
           .frame(
-            width: Theme.MediaSizes.profilePicture.height,
-            height: Theme.MediaSizes.profilePicture.width
+            width: Theme.MediaSizes.profilePicture.width,
+            height: Theme.MediaSizes.profilePicture.height
           )
           .background(.background)
           .background(.gray)
