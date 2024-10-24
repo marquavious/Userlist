@@ -86,6 +86,9 @@ struct ProfileView: View {
                 )
                 .listRowSeparator(.hidden)
               }
+              Section("User Details") {
+                
+              }
             }
           }
           .presentationBackground(.ultraThinMaterial)

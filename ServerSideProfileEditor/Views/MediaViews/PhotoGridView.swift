@@ -9,7 +9,6 @@ import Foundation
 import SwiftUI
 
 struct PhotoGridView: View {
-  @State var height: CGFloat
   @State var cornerRadius: CGFloat
   @State var photoDataOne: PhotoData
   @State var photoDataTwo: PhotoData
@@ -17,31 +16,54 @@ struct PhotoGridView: View {
   @State var photoDataFour: PhotoData
 
   var body: some View {
-    HStack {
-      CustomContentModeImageView(
-        urlString: photoDataOne.urlString,
-        contentMode: photoDataOne.contentMode
-      )
-      .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-      CustomContentModeImageView(
-        urlString: photoDataTwo.urlString,
-        contentMode: photoDataTwo.contentMode
-      )
-      .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+    VStack {
+      HStack {
+        CustomContentModeImageView(
+          urlString: photoDataOne.urlString,
+          contentMode: photoDataOne.contentMode
+        )
+        .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+        CustomContentModeImageView(
+          urlString: photoDataTwo.urlString,
+          contentMode: photoDataTwo.contentMode
+        )
+        .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+      }
+
+      HStack {
+        CustomContentModeImageView(
+          urlString: photoDataThree.urlString,
+          contentMode: photoDataThree.contentMode
+        )
+        .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+        CustomContentModeImageView(
+          urlString: photoDataFour.urlString,
+          contentMode: photoDataFour.contentMode
+        )
+        .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+      }
     }
-    .frame(height: height / 2)
-    HStack {
-      CustomContentModeImageView(
-        urlString: photoDataThree.urlString,
-        contentMode: photoDataThree.contentMode
-      )
-      .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-      CustomContentModeImageView(
-        urlString: photoDataFour.urlString,
-        contentMode: photoDataFour.contentMode
-      )
-      .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-    }
-    .frame(height: height / 2)
+  }
+}
+
+#Preview {
+  ProfileViewForPreviews()
+}
+
+extension View {
+  func readSize(onChange: @escaping (CGSize) -> Void) -> some View {
+    background(
+      GeometryReader { geometryProxy in
+        Color.clear
+          .preference(key: SizePreferenceKey.self, value: geometryProxy.size)
+      }
+    )
+    .onPreferenceChange(SizePreferenceKey.self, perform: onChange)
+  }
+}
+
+struct SizePreferenceKey: PreferenceKey {
+  static var defaultValue: CGSize = .zero
+  static func reduce(value: inout CGSize, nextValue: () -> CGSize) {
   }
 }

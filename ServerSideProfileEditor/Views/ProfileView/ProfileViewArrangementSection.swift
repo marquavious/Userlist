@@ -31,9 +31,9 @@ struct ProfileViewArrangementSection: View {
         if let media = section.media {
           MediaView(
             media: media,
-            height: Theme.MediaSizes.mediaHeight.height,
             cornerRadius: Theme.Geomitry.cornerRadius.radius
           )
+          .frame(height: Theme.MediaSizes.mediaHeight.height)
         }
       }
       .padding(.horizontal, 16)
