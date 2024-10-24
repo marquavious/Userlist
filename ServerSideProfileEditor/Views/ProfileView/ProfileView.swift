@@ -23,12 +23,19 @@ struct ProfileView: View {
   @Environment(UserListManager.self) var userlist
   @State var state: ProfileView.LoadingState
 
+  @State var isInEditorMode: Bool = false
+  @State var sheetPresentationDetent: PresentationDetent = PresentationDetent.fraction(0.2)
+  @State var showProfileChanges: Bool = false
+  @State var initalProfileData: Profile?
+  @State var newProfileData: Profile?
+
   init(id: String) {
     self.state = .loading(id: id)
   }
 
   init(profile: Profile) {
     self.state = .loaded(profile: profile)
+    self.initalProfileData = profile
   }
 
   var body: some View {
@@ -56,7 +63,7 @@ struct ProfileView: View {
               profilePictureUrl: profile.userInfo.profilePictureUrl,
               imageSize: Constants.profilePictureSize
             ) {
-              self.state = .loaded(profile: Profile.emptyProfile())
+              isInEditorMode.toggle()
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, Constants.cellHorizontalPadding)
@@ -64,7 +71,30 @@ struct ProfileView: View {
             ProfileViewArrangementSection(sections: profile.sections)
           }
         }
-        .contentMargins(.bottom, Constants.contentMarginsOffset)
+        .contentMargins(.bottom, isInEditorMode ? UIScreen.main.bounds.height * 0.2 : Constants.contentMarginsOffset)
+        .sheet(isPresented: $isInEditorMode) {
+          List {
+            Section {
+              VStack {
+                Toggle(isOn: $showProfileChanges) {
+                  Text("Toggle Preview")
+                }
+              }
+            }
+          }
+          .presentationBackground(.ultraThinMaterial)
+          .presentationBackgroundInteraction(.enabled)
+          .presentationDetents([.fraction(0.2), .large], selection: $sheetPresentationDetent)
+          .interactiveDismissDisabled(true)
+        }
+        .onChange(of: showProfileChanges) { ov, nv in
+          if let initalProfileData, let newProfileData {
+            withAnimation(.easeInOut(duration: 0.2)) {
+              self.state = nv ? .loaded(profile: newProfileData) :
+                .loaded(profile: initalProfileData)
+            }
+          }
+        }
       }
     }
   }
@@ -72,6 +102,7 @@ struct ProfileView: View {
   private func loadData(id: String) {
     if let profile = userlist.users.first(where: {$0.id == id }) {
       state = .loaded(profile: profile)
+      self.initalProfileData = profile
     } else {
       state = .error(description: "User does not exist")
     }
