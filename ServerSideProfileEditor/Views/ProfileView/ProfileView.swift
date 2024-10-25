@@ -75,15 +75,15 @@ struct ProfileView: View {
         }
         .contentMargins(.bottom, isInEditorMode ? UIScreen.main.bounds.height * 0.2 : Constants.contentMarginsOffset)
         .sheet(isPresented: $isInEditorMode) {
-            ProfileEditorSheetView(
-              showProfileChanges: $showProfileChanges,
-              profile: profile
-            )
-            .presentationBackground(.ultraThinMaterial)
-            .presentationBackgroundInteraction(.enabled)
-            .presentationDetents([.fraction(0.2), .large],
-                                 selection: $sheetPresentationDetent)
-            .interactiveDismissDisabled(true)
+          ProfileEditorSheetView(
+            showProfileChanges: $showProfileChanges,
+            profile: profile
+          )
+          .presentationBackground(.ultraThinMaterial)
+          .presentationBackgroundInteraction(.enabled)
+          .presentationDetents([.fraction(0.2), .large],
+                               selection: $sheetPresentationDetent)
+          .interactiveDismissDisabled(true)
         }
         .onChange(of: showProfileChanges) { ov, nv in
           if let initalProfileData, let newProfileData {
@@ -167,10 +167,19 @@ struct ProfileEditorSheetView: View {
                 description: sectionData.description,
                 media: sectionData.media
               )
+              .onTapGesture {
+                router.navigate(to:
+                    .sectionInfoEditor(
+                      section: sectionData,
+                      updatedSectionClosure: { section in
+                        _ = router.path.popLast()
+                      })
+                )
+              }
               .listRowSeparator(.hidden)
             }
           }
-          .padding(.vertical, 4)
+          .padding(.vertical, 8)
         }
       }
       .listStyle(.sidebar)

@@ -22,6 +22,14 @@ extension View {
         }
         .navigationTitle("User Information")
         .environment(UserListManager.shared)
+      case .sectionInfoEditor(let section, let updatedSectionClosure):
+        Rectangle()
+          .fill(.red)
+          .overlay {
+            Button("No way this works") {
+              updatedSectionClosure(section)
+            }
+          }
       }
     }
   }
