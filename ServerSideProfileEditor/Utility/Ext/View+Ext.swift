@@ -18,13 +18,10 @@ extension View {
           .environment(UserListManager.shared)
       case .userInfoEditor(let profile):
         List {
-          Section("User Info") {
-            ProfileEditorView(profile: profile)
-              .listStyle(.sidebar)
-          }
+          ProfileEditorView(profile: profile)
         }
-        .navigationTitle("Profile Editor")
-          .environment(UserListManager.shared)
+        .navigationTitle("User Information")
+        .environment(UserListManager.shared)
       }
     }
   }

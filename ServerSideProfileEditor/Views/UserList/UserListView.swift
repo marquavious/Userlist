@@ -23,9 +23,6 @@ struct UserListView: View {
               title: user.userInfo.username,
               description: user.userInfo.description
             )
-            Image(systemName: "chevron.forward")
-              .renderingMode(.original)
-              .opacity(0.5)
           }
           .environment(router)
           .padding(.horizontal, 16)

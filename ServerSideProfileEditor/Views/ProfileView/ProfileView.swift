@@ -152,9 +152,6 @@ struct ProfileEditorSheetView: View {
               title: profile.userInfo.username,
               description: profile.userInfo.description
             )
-            Image(systemName: "chevron.forward")
-              .renderingMode(.original)
-              .opacity(0.5)
           }
           .onTapGesture {
             router.navigate(to: .userInfoEditor(profile: profile))
