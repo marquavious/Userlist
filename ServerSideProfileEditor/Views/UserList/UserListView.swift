@@ -15,7 +15,7 @@ struct UserListView: View {
 
   var body: some View {
     ScrollView {
-      LazyVStack {
+      LazyVStack(alignment: .leading) {
         ForEach(userList.users) { user in
           HStack {
             UserListViewCell(

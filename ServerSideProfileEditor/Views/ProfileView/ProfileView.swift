@@ -143,7 +143,7 @@ struct ProfileEditorSheetView: View {
               }
               .modifier(ControlPanelButtonViewModifier(backgroundColor: .red))
             }
-          }.padding(.vertical, 8)
+          }.padding(.vertical, 4) // For some reasom...
         }
         Section("User Details") {
           HStack {
