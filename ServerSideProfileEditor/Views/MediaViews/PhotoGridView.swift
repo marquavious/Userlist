@@ -10,10 +10,10 @@ import SwiftUI
 
 struct PhotoGridView: View {
   @State var cornerRadius: CGFloat
-  @State var photoDataOne: PhotoData
-  @State var photoDataTwo: PhotoData
-  @State var photoDataThree: PhotoData
-  @State var photoDataFour: PhotoData
+  var photoDataOne: PhotoData
+  var photoDataTwo: PhotoData
+  var photoDataThree: PhotoData
+  var photoDataFour: PhotoData
 
   var body: some View {
     VStack {

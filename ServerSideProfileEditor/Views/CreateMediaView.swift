@@ -9,7 +9,8 @@ import Foundation
 import SwiftUI
 
 struct CreateMediaView: View {
-  @State var media: Media
+
+  var media: Media
 
   var createdMedia: ((Media) -> Void)
 
@@ -22,9 +23,20 @@ struct CreateMediaView: View {
       ) { photoData in
         createdMedia(.urlPhoto(photoData: photoData))
       }
-    case .urlPhotoGrid:
-      Rectangle()
-        .fill(.blue)
+    case .urlPhotoGrid(let photoDataOne, let photoDataTwo, let photoDataThree, let photoDataFour):
+      CreateURLMediaPhotoGridView(
+        photoDataOne: photoDataOne,
+        photoDataTwo: photoDataTwo,
+        photoDataThree: photoDataThree,
+        photoDataFour: photoDataFour
+      ){
+        createdMedia(.urlPhotoGrid(
+          photoDataOne: $0,
+          photoDataTwo: $1,
+          photoDataThree: $2,
+          photoDataFour: $3
+        ))
+      }
     case .urlPhotoCarousel:
       Rectangle()
         .fill(.red)

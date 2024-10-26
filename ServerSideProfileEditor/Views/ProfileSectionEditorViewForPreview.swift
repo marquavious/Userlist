@@ -21,9 +21,5 @@ struct ProfileSectionEditorViewForPreview: View {
       media: media) { _ in
 
       }
-//    ProfileSectionEditorView(
-//      sectionData: SectionData.stubs(),
-//      media: media
-//    ) { _ in }
   }
 }

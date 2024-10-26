@@ -48,8 +48,8 @@ struct CreateURLMediaPhotoView: View {
   }
 
   @State var url: String = ""
-  @FocusState var isFocused: Bool
   @State var contentMode: ContentModeOption
+  @FocusState var isFocused: Bool
 
   let didUpdateUrl: ((PhotoData) -> Void)
 
@@ -82,7 +82,8 @@ struct CreateURLMediaPhotoView: View {
       didUpdate()
     }.onChange(of: contentMode) {
       didUpdate()
-    }  }
+    }
+  }
 
   private func didUpdate() {
     didUpdateUrl(
@@ -94,3 +95,5 @@ struct CreateURLMediaPhotoView: View {
     )
   }
 }
+
+

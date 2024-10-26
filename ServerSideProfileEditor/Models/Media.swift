@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-enum Media: Equatable, CaseIterable {
+enum Media: Equatable, CaseIterable, Identifiable {
   // Only for type checking,
   // There is for sure a better way to do this..
   static var allCases: [Media] = [
@@ -28,6 +28,8 @@ enum Media: Equatable, CaseIterable {
   case urlPhotoCarousel(
     photoArray: [PhotoData]
   )
+
+  var id: String { UUID().uuidString }
   var description: String {
     switch self {
     case .urlPhoto:
