@@ -9,7 +9,6 @@ import Foundation
 import SwiftUI
 
 enum Media: Equatable, CaseIterable {
-
   // Only for type checking,
   // There is for sure a better way to do this..
   static var allCases: [Media] = [
@@ -17,7 +16,6 @@ enum Media: Equatable, CaseIterable {
     .urlPhotoCarousel(photoArray: [PhotoData.emptyInstance(), PhotoData.emptyInstance(), PhotoData.emptyInstance()]),
     .urlPhotoGrid(photoDataOne: PhotoData.emptyInstance(), photoDataTwo: PhotoData.emptyInstance(), photoDataThree: PhotoData.emptyInstance(), photoDataFour: PhotoData.emptyInstance())
   ]
-
   case urlPhoto(
     photoData: PhotoData
   )
@@ -85,17 +83,5 @@ extension Media {
         .init(id: UUID().uuidString, urlString: ProfileStubGenerator.randomMediaPicture(), contentMode: .allCases.randomElement()!)
       ])
     }
-  }
-}
-
-struct PhotoData: Equatable, Identifiable {
-  let id: String
-  let urlString: String?
-  let contentMode: ContentMode
-}
-
-extension PhotoData {
-  static func emptyInstance() -> PhotoData {
-    PhotoData(id: "", urlString: "", contentMode: .fit)
   }
 }

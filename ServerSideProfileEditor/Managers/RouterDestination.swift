@@ -13,7 +13,7 @@ enum RouterDestination: Identifiable, Hashable {
   static func == (lhs: RouterDestination, rhs: RouterDestination) -> Bool {
     lhs.id == rhs.id
   }
-  
+
   case profile(id: String)
   case userInfoEditor(profile: Profile)
   case sectionInfoEditor(section: SectionData, updatedSectionClosure: UpdatedSectionClosure)

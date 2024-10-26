@@ -29,7 +29,6 @@ struct PhotoGridView: View {
         )
         .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
       }
-
       HStack {
         CustomContentModeImageView(
           urlString: photoDataThree.urlString,
@@ -48,22 +47,4 @@ struct PhotoGridView: View {
 
 #Preview {
   ProfileViewForPreviews()
-}
-
-extension View {
-  func readSize(onChange: @escaping (CGSize) -> Void) -> some View {
-    background(
-      GeometryReader { geometryProxy in
-        Color.clear
-          .preference(key: SizePreferenceKey.self, value: geometryProxy.size)
-      }
-    )
-    .onPreferenceChange(SizePreferenceKey.self, perform: onChange)
-  }
-}
-
-struct SizePreferenceKey: PreferenceKey {
-  static var defaultValue: CGSize = .zero
-  static func reduce(value: inout CGSize, nextValue: () -> CGSize) {
-  }
 }

@@ -33,7 +33,7 @@ struct UserListViewCell: View {
           Text(title)
             .font(Theme.Text.profileCellTitle.font)
             .bold()
-          Text("_\(description)_")
+          Text(description)
             .font(Theme.Text.profileCellDescription.font)
             .lineLimit(3)
         }
