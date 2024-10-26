@@ -29,23 +29,23 @@ struct ProfileViewArrangementSection: View {
 }
 
 struct SectionView: View {
-  @State var title: String?
-  @State var description: String?
-  @State var media: Media?
-  @State var horizontalAlignment: HorizontalAlignment
+  var title: String?
+  var description: String?
+  var media: Media?
+  var horizontalAlignment: HorizontalAlignment
 
   var body: some View {
     VStack(
       alignment: horizontalAlignment,
       spacing: Theme.Spacing.profileSectionCellSpacing.spacing
     ) {
-      if let title = title {
+      if let title = title, !title.isEmpty {
         Text(title)
           .font(Theme.Text.title.font)
           .fontWeight(.semibold)
           .frame(maxWidth: .infinity, alignment: .leading)
       }
-      if let description = description {
+      if let description = description, !description.isEmpty {
         Text(description)
           .font(Theme.Text.description.font)
           .frame(maxWidth: .infinity, alignment: .leading)

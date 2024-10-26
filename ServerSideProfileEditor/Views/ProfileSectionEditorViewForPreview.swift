@@ -9,8 +9,21 @@ import Foundation
 import SwiftUI
 
 struct ProfileSectionEditorViewForPreview: View {
+
+  @State var titleText: String?
+  @State var sectionData: SectionData?
+  @State var media: Media?
+
   var body: some View {
     ProfileSectionEditorView(
-      sectionData: SectionData.stubs()) { _ in }
+      sectionData: sectionData ?? SectionData.stubs(),
+      titleText: titleText ??  ProfileStubGenerator.randomSectionTupleData().title,
+      media: media) { _ in
+
+      }
+//    ProfileSectionEditorView(
+//      sectionData: SectionData.stubs(),
+//      media: media
+//    ) { _ in }
   }
 }

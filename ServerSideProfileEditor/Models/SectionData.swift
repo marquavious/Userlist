@@ -113,7 +113,7 @@ extension SectionData {
       media: media
     )
   }
-  
+
   static func stubs(
     id: String = UUID().uuidString,
     index: Int = 0

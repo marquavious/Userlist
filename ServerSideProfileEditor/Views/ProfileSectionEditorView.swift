@@ -35,26 +35,26 @@ struct ProfileSectionEditorView: View {
     }
   }
 
-  @State var sectionData: SectionData
-  var sectionDidUpdate: UpdatedSectionClosure
+  var sectionData: SectionData
   @FocusState private var formFocus: FormFocus?
   @State var titleText: String = ""
-  @State private var descriptionText: String = ""
+  @State var descriptionText: String = ""
+  @State var media: Media?
   @State var sheetPresentationDetent: PresentationDetent = PresentationDetent.fraction(0.2)
   @State var showChanges: Bool = true
+  var sectionDidUpdate: UpdatedSectionClosure
 
   var body: some View {
     List {
       Section("Preview") {
         SectionView(
-          title: sectionData.title,
-          description: sectionData.description,
-          media: sectionData.media,
-          horizontalAlignment: sectionData.alignment.horizontalAlignment
+          title: titleText,
+          description: descriptionText,
+          media: media,
+          horizontalAlignment: .leading
         )
         .padding(.vertical, 8)
       }
-
       Section("Control Panel") {
         ToggleStateControlPanel(
           title: "Show Updates",
@@ -62,7 +62,6 @@ struct ProfileSectionEditorView: View {
         )
         .padding(.vertical, 8)
       }
-
       Section("Text Edit") {
         VStack {
           CustomTextField(
@@ -84,10 +83,31 @@ struct ProfileSectionEditorView: View {
         }
         .padding(.vertical, 8)
       }
+      Section("Media Edit") {
+        if let unwrappedMedia = media {
+          CreateMediaView(media: unwrappedMedia) { newMedia in
+            self.media = newMedia
+          }
+          .padding(.vertical, 8)
+        }
+      }
+    }
+    .onAppear {
+      titleText = sectionData.title ?? ""
+      descriptionText = sectionData.description ?? ""
+      media = sectionData.media
     }
   }
 }
 
 #Preview {
-  ProfileSectionEditorViewForPreview()
+  ProfileSectionEditorViewForPreview(
+    media:
+        .urlPhoto(
+          photoData: PhotoData(
+            id: UUID().uuidString,
+            urlString: "https://i.imgur.com/ApCOa7j.jpeg",
+            contentMode: .allCases.randomElement()!)
+        )
+  )
 }

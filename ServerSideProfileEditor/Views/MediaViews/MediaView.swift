@@ -10,7 +10,7 @@ import SwiftUI
 
 struct MediaView: View {
 
-  @State var media: Media
+  var media: Media
   @State var cornerRadius: CGFloat
 
   var body: some View {

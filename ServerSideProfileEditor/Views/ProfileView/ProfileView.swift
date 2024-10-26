@@ -70,7 +70,7 @@ struct ProfileView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, Constants.cellHorizontalPadding)
             Divider()
-            ProfileViewArrangementSection(sections: profile.sections)
+//            ProfileViewArrangementSection(sections: profile.sections)
           }
         }
         .contentMargins(.bottom, isInEditorMode ? UIScreen.main.bounds.height * 0.2 : Constants.contentMarginsOffset)
