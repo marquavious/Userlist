@@ -42,6 +42,7 @@ struct ProfileSectionEditorView: View {
   @State var media: Media?
   @State var sheetPresentationDetent: PresentationDetent = PresentationDetent.fraction(0.2)
   @State var showChanges: Bool = true
+
   var sectionDidUpdate: UpdatedSectionClosure
 
   var body: some View {
@@ -59,7 +60,16 @@ struct ProfileSectionEditorView: View {
         ToggleStateControlPanel(
           title: "Show Updates",
           showChanges: $showChanges
-        )
+        ) {
+//          sectionDidUpdate(
+//            User(
+//              username: titleText,
+//              description: descriptionText,
+//              profilePictureUrlString: <#T##String#>,
+//              profileHeaderUrlString: <#T##String#>
+//            )
+//          )
+        }
         .padding(.vertical, 8)
       }
       Section("Text Edit") {

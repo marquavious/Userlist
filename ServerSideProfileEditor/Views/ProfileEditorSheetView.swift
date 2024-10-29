@@ -11,34 +11,52 @@ import SwiftUI
 struct ProfileEditorSheetView: View {
   @State var router = RouterPath()
   @Binding var showProfileChanges: Bool
-  @State var profile: Profile
+
+  @State var shownProfile: Profile
+  @State private var initialProfileData: Profile
+  @State private var updatedProfileData: Profile
+
+  init(showProfileChanges: Binding<Bool>, profile: Profile) {
+    self._showProfileChanges = showProfileChanges
+    self.shownProfile = profile
+    self.initialProfileData = profile
+    self.updatedProfileData = profile
+  }
 
   var body: some View {
     NavigationStack(path: $router.path) {
       List {
         Section {
-          ToggleStateControlPanel(
-            title: "Show Updates",
-            showChanges: $showProfileChanges
-          )
+          ToggleStateControlPanel(title: "Show Updates", showChanges: $showProfileChanges) {
+            
+          }
         }
         Section("User Details") {
           HStack {
             UserListViewCell(
-              imageURL: profile.userInfo.profilePictureUrl,
-              title: profile.userInfo.username,
-              description: profile.userInfo.description
+              imageURL: shownProfile.userInfo.profilePictureUrl,
+              title: shownProfile.userInfo.username,
+              description: shownProfile.userInfo.description
             )
           }
           .onTapGesture {
-            router.navigate(to: .userInfoEditor(profile: profile))
+            router.navigate(
+              to: .userInfoEditor(
+                user: initialProfileData.userInfo,
+                updatedUser: updatedProfileData.userInfo,
+                updatedUserClosure: { user in
+                  updatedProfileData.userInfo = user
+                  _ = router.path.popLast()
+                }
+              )
+            )
           }
           .listRowSeparator(.hidden)
           .padding(.vertical, 8)
         }
         Section("Section Arangement") {
           VStack {
-            ForEach(profile.sections) { sectionData in
+            ForEach(shownProfile.sections) { sectionData in
               ProfileEditorViewSectionCell(
                 title: sectionData.title,
                 description: sectionData.description,
@@ -65,6 +83,15 @@ struct ProfileEditorSheetView: View {
       .withAppRouter()
     }
     .environment(router)
+    .onChange(of: showProfileChanges) { oldValue, newValue in
+      if newValue {
+        print("shownProfile", shownProfile)
+        shownProfile = updatedProfileData
+      } else {
+        print("initialProfileData", initialProfileData)
+        shownProfile = initialProfileData
+      }
+    }
   }
 }
 

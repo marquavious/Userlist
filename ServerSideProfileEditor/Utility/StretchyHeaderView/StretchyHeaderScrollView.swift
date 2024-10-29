@@ -17,7 +17,7 @@ struct StretchyHeaderScrollView<Content: View>: View {
   
   var body: some View {
     ScrollView(showsIndicators: showsIndicators) {
-      VStack {
+      VStack(alignment: .leading) {
         AsyncImage(url: url) { image in
           image
             .resizable()

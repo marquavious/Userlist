@@ -29,6 +29,7 @@ struct ProfileView: View {
   @State var showProfileChanges: Bool = false
   @State var initalProfileData: Profile?
   @State var newProfileData: Profile?
+  
 
   init(id: String) {
     self.state = .loading(id: id)
@@ -70,14 +71,19 @@ struct ProfileView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, Constants.cellHorizontalPadding)
             Divider()
-//            ProfileViewArrangementSection(sections: profile.sections)
+            ProfileViewArrangementSection(sections: profile.sections)
           }
         }
         .contentMargins(.bottom, isInEditorMode ? UIScreen.main.bounds.height * 0.2 : Constants.contentMarginsOffset)
         .sheet(isPresented: $isInEditorMode) {
+//          ProfileEditorSheetView(
+//            showProfileChanges: $showProfileChanges,
+//            profile: newProfileData ?? .emptyProfile(),
+//            initialProfileData: profile
+//          )
           ProfileEditorSheetView(
             showProfileChanges: $showProfileChanges,
-            profile: profile
+            profile: (showProfileChanges ? newProfileData ?? .emptyProfile() : initalProfileData) ?? .emptyProfile()
           )
           .presentationBackground(.ultraThinMaterial)
           .presentationBackgroundInteraction(.enabled)

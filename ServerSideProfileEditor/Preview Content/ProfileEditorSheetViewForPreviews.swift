@@ -12,11 +12,12 @@ struct ProfileEditorSheetViewForPreviews: View {
 
   @State var showProfileChanges: Bool = true
   @State var profile = Profile.generatRandomProfile()
+  @State var profileTwo = Profile.generatRandomProfile()
 
   var body: some View {
     ProfileEditorSheetView(
       showProfileChanges: $showProfileChanges,
-      profile: profile
+      profile: showProfileChanges ? profile : profileTwo
     )
   }
 }

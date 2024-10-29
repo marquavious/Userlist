@@ -11,6 +11,9 @@ import SwiftUI
 struct ToggleStateControlPanel: View {
   @State var title: String
   @Binding var showChanges: Bool
+
+  var saveButtonPressed: () -> Void
+
   var body: some View {
     VStack {
       Toggle(isOn: $showChanges) {
@@ -18,6 +21,7 @@ struct ToggleStateControlPanel: View {
       }
       HStack {
         Button("Save") {
+          saveButtonPressed()
         }
         .modifier(ControlPanelButtonViewModifier(backgroundColor: .blue))
         Button("Discard Changes") {

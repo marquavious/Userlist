@@ -17,6 +17,7 @@ struct CustomTextField: View {
 
   @Binding var text: String
   @Environment(\.isFocused) var focused: Bool
+  @Environment(\.isEnabled) var isEnabled: Bool
 
   var body: some View {
     HStack {
@@ -61,6 +62,7 @@ struct CustomTextField: View {
     .textFieldStyle(.plain)
     .font(.caption)
     .padding()
+    .foregroundStyle(!isEnabled ? Color.gray : .primary)
     .background {
       Rectangle()
         .fill(Color.gray)

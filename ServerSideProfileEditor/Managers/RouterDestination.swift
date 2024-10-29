@@ -8,6 +8,7 @@
 import Foundation
 
 typealias UpdatedSectionClosure = (SectionData) -> Void
+typealias UpdatedUserClosure = (User) -> Void
 
 enum RouterDestination: Identifiable, Hashable {
   static func == (lhs: RouterDestination, rhs: RouterDestination) -> Bool {
@@ -15,15 +16,15 @@ enum RouterDestination: Identifiable, Hashable {
   }
 
   case profile(id: String)
-  case userInfoEditor(profile: Profile)
+  case userInfoEditor(user: User, updatedUser: User, updatedUserClosure: UpdatedUserClosure)
   case sectionInfoEditor(section: SectionData, updatedSectionClosure: UpdatedSectionClosure)
 
   var id: String {
     switch self {
     case .profile(let id):
       "profile_\(id)"
-    case .userInfoEditor(let profile):
-      "profile_editor_\(profile.id)"
+    case .userInfoEditor(let user, _, _):
+      "user_editor_\(user.username)"
     case .sectionInfoEditor(let section, _):
       "section_editor_\(section.id)"
     }
