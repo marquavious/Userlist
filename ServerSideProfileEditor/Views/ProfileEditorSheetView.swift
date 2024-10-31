@@ -12,15 +12,15 @@ struct ProfileEditorSheetView: View {
   @State var router = RouterPath()
   @Binding var showProfileChanges: Bool
 
-  @State var shownProfile: Profile
-  @State private var initialProfileData: Profile
-  @State private var updatedProfileData: Profile
+  @State private var profile: Profile
+  @State private var sectionData: [SectionData]
+  private var initialProfileData: Profile
 
   init(showProfileChanges: Binding<Bool>, profile: Profile) {
     self._showProfileChanges = showProfileChanges
-    self.shownProfile = profile
+    self.profile = profile
     self.initialProfileData = profile
-    self.updatedProfileData = profile
+    self.sectionData = profile.sections
   }
 
   var body: some View {
@@ -28,50 +28,75 @@ struct ProfileEditorSheetView: View {
       List {
         Section {
           ToggleStateControlPanel(title: "Show Updates", showChanges: $showProfileChanges) {
-            
+
+          } discardChangesPressed:  {
+
           }
         }
         Section("User Details") {
-          HStack {
+          VStack(spacing: 8) {
             UserListViewCell(
-              imageURL: shownProfile.userInfo.profilePictureUrl,
-              title: shownProfile.userInfo.username,
-              description: shownProfile.userInfo.description
-            )
-          }
-          .onTapGesture {
-            router.navigate(
-              to: .userInfoEditor(
-                user: initialProfileData.userInfo,
-                updatedUser: updatedProfileData.userInfo,
-                updatedUserClosure: { user in
-                  updatedProfileData.userInfo = user
-                  _ = router.path.popLast()
-                }
+              imageURL: profile.userInfo.profilePictureUrl,
+              title: profile.userInfo.username,
+              description: profile.userInfo.description
+            ).onTapGesture {
+              router.navigate(
+                to: .userInfoEditor(
+                  user: profile.userInfo,
+                  updatedUserClosure: { user in
+                    profile.userInfo = user
+                    _ = router.path.popLast()
+                  }
+                )
               )
-            )
+            }
+            if initialProfileData.userInfo != profile.userInfo {
+              Divider()
+              Button("Discard Changes") {
+                profile.userInfo.profilePictureUrlString = initialProfileData.userInfo.profilePictureUrlString
+                profile.userInfo.profileHeaderUrlString = initialProfileData.userInfo.profileHeaderUrlString
+                profile.userInfo.username = initialProfileData.userInfo.username
+                profile.userInfo.description = initialProfileData.userInfo.description
+              }
+              .listRowSeparator(.hidden)
+              .font(.system(size: 12))
+              .buttonStyle(.plain)
+            }
           }
-          .listRowSeparator(.hidden)
-          .padding(.vertical, 8)
         }
         Section("Section Arangement") {
           VStack {
-            ForEach(shownProfile.sections) { sectionData in
+            ForEach(sectionData) { section in
               ProfileEditorViewSectionCell(
-                title: sectionData.title,
-                description: sectionData.description,
-                media: sectionData.media
+                title: section.title,
+                description: section.description,
+                media: section.media
               )
               .onTapGesture {
                 router.navigate(to:
                     .sectionInfoEditor(
-                      section: sectionData,
-                      updatedSectionClosure: { section in
-                        _ = router.path.popLast()
+                      section: section,
+                      updatedSectionClosure: { newSection in
+                        if let index = sectionData.firstIndex(where: { $0.id == section.id }) {
+                          sectionData[index] = newSection
+                        } else {
+                          sectionData.append(newSection)
+                        }
+                        _ = router.path = []
                       })
                 )
               }
               .listRowSeparator(.hidden)
+            }
+
+            if initialProfileData.sections != sectionData {
+              Divider()
+              Button("Discard Changes") {
+                sectionData = initialProfileData.sections
+              }
+              .listRowSeparator(.hidden)
+              .font(.system(size: 12))
+              .buttonStyle(.plain)
             }
           }
           .padding(.vertical, 8)
@@ -83,15 +108,6 @@ struct ProfileEditorSheetView: View {
       .withAppRouter()
     }
     .environment(router)
-    .onChange(of: showProfileChanges) { oldValue, newValue in
-      if newValue {
-        print("shownProfile", shownProfile)
-        shownProfile = updatedProfileData
-      } else {
-        print("initialProfileData", initialProfileData)
-        shownProfile = initialProfileData
-      }
-    }
   }
 }
 

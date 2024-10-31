@@ -64,7 +64,7 @@ class SectionData: Identifiable, ObservableObject {
   
   init(
     id: String = UUID().uuidString,
-    index: Int,
+    index: Int = 0,
     title: String? = nil,
     description: String? = nil,
     mediaPosition: MediaPosition? = nil,

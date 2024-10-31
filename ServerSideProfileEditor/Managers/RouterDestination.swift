@@ -16,14 +16,14 @@ enum RouterDestination: Identifiable, Hashable {
   }
 
   case profile(id: String)
-  case userInfoEditor(user: User, updatedUser: User, updatedUserClosure: UpdatedUserClosure)
+  case userInfoEditor(user: User, updatedUserClosure: UpdatedUserClosure)
   case sectionInfoEditor(section: SectionData, updatedSectionClosure: UpdatedSectionClosure)
 
   var id: String {
     switch self {
     case .profile(let id):
       "profile_\(id)"
-    case .userInfoEditor(let user, _, _):
+    case .userInfoEditor(let user, _):
       "user_editor_\(user.username)"
     case .sectionInfoEditor(let section, _):
       "section_editor_\(section.id)"

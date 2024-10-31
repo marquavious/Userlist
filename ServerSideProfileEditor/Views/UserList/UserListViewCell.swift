@@ -29,14 +29,25 @@ struct UserListViewCell: View {
         .clipShape(Circle())
         .overlay(Circle().stroke(.gray, lineWidth: 1))
 
-        VStack(alignment: .leading) {
-          Text(title)
-            .font(Theme.Text.profileCellTitle.font)
-            .bold()
-          Text(description)
-            .font(Theme.Text.profileCellDescription.font)
-            .lineLimit(3)
+        if !title.isEmpty || !description.isEmpty {
+          VStack(alignment: .leading) {
+            if !title.isEmpty {
+              Text(title)
+                .font(Theme.Text.profileCellTitle.font)
+                .bold()
+                .multilineTextAlignment(.leading)
+            }
+            if !description.isEmpty {
+              Text(description)
+                .font(Theme.Text.profileCellDescription.font)
+                .lineLimit(3)
+                .frame(maxWidth: .infinity)
+                .multilineTextAlignment(.leading)
+            }
+          }
         }
+        
+        Spacer()
       }
     }
   }

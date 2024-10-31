@@ -13,6 +13,7 @@ struct ToggleStateControlPanel: View {
   @Binding var showChanges: Bool
 
   var saveButtonPressed: () -> Void
+  var discardChangesPressed: () -> Void
 
   var body: some View {
     VStack {
@@ -25,6 +26,7 @@ struct ToggleStateControlPanel: View {
         }
         .modifier(ControlPanelButtonViewModifier(backgroundColor: .blue))
         Button("Discard Changes") {
+          discardChangesPressed()
         }
         .modifier(ControlPanelButtonViewModifier(backgroundColor: .red))
       }

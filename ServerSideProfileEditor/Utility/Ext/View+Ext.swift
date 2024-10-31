@@ -16,11 +16,8 @@ extension View {
       case .profile(let id):
         ProfileView(id: id)
           .environment(UserListManager.shared)
-      case .userInfoEditor(let user, let _, let updatedUserClosure):
-        List {
+      case .userInfoEditor(let user, let updatedUserClosure):
           ProfileEditorView(initialUser: user, userDidUpdate: updatedUserClosure)
-        }
-        .navigationTitle("User Information")
         .environment(UserListManager.shared)
       case .sectionInfoEditor(let section, let updatedSectionClosure):
         ProfileSectionEditorView(

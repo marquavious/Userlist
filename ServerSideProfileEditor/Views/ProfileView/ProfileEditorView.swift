@@ -8,6 +8,12 @@
 import Foundation
 import SwiftUI
 
+@Observable
+class ProfileEditorViewModel: ObservableObject {
+  var switchOnStateText: ProfileEditorView.ProfileEditorStateTextProvider = ProfileEditorView.ProfileEditorStateTextProvider()
+  var switchOffStateText: ProfileEditorView.ProfileEditorStateTextProvider = ProfileEditorView.ProfileEditorStateTextProvider()
+}
+
 struct ProfileEditorView: View {
 
   class ProfileEditorStateTextProvider {
@@ -72,7 +78,7 @@ struct ProfileEditorView: View {
   var switchOnStateText: ProfileEditorStateTextProvider = ProfileEditorStateTextProvider()
   var switchOffStateText: ProfileEditorStateTextProvider = ProfileEditorStateTextProvider()
 
-  @State private var showChanges: Bool = true
+  @State private var shouldShowChanges: Bool = true
   @FocusState private var focusedTextField: ProfileEditorTextField?
 
   var userDidUpdate: UpdatedUserClosure
@@ -96,117 +102,134 @@ struct ProfileEditorView: View {
   }
 
   var body: some View {
-    Section {
-      VStack(spacing: 8) {
-        HStack {
-          AsyncImage(url: URL(string: profilePictureURL)) { image in
-            image
-              .resizable()
-              .scaledToFit()
-          } placeholder: {
-            Color.secondary
+    List {
+      Section {
+        VStack {
+          HStack {
+            AsyncImage(url: URL(string: profilePictureURL)) { image in
+              image
+                .resizable()
+                .scaledToFit()
+            } placeholder: {
+              Color.secondary
+            }
+            .frame(
+              width: Theme.MediaSizes.profilePicture.width,
+              height: Theme.MediaSizes.profilePicture.height
+            )
+            .background(.background)
+            .clipShape(Circle())
+            Spacer()
+            AsyncImage(url: URL(string: bannerPhotoURL)) { image in
+              image
+                .resizable()
+                .scaledToFit()
+            } placeholder: {
+              Color.secondary
+            }
+            .scaledToFill()
+            .frame(height: Theme.MediaSizes.profilePicture.height)
+            .clipShape(RoundedRectangle(cornerRadius: Theme.Geomitry.cornerRadius.radius))
           }
-          .frame(
-            width: Theme.MediaSizes.profilePicture.width,
-            height: Theme.MediaSizes.profilePicture.height
+          .listRowSeparator(.hidden)
+
+          CustomTextField(
+            title: "Username",
+            textfieldPrompt: "Username...",
+            isRequired: true,
+            text: $usernameText
           )
-          .background(.background)
-          .clipShape(Circle())
-          Spacer()
-          AsyncImage(url: URL(string: bannerPhotoURL)) { image in
-            image
-              .resizable()
-              .scaledToFit()
-          } placeholder: {
-            Color.secondary
-          }
-          .scaledToFill()
-          .frame(height: Theme.MediaSizes.profilePicture.height)
-          .clipShape(RoundedRectangle(cornerRadius: Theme.Geomitry.cornerRadius.radius))
+          .environment(\.isFocused, focusedTextField == .username)
+          .focused($focusedTextField, equals: .username)
+          .disabled(!shouldShowChanges)
+
+          CustomTextField(
+            title: "Description",
+            textfieldPrompt: "Description...",
+            isRequired: false,
+            text: $descriptionText
+          )
+          .environment(\.isFocused, focusedTextField == .description)
+          .focused($focusedTextField, equals: .description)
+          .disabled(!shouldShowChanges)
+
+          CustomTextField(
+            title: "Profile Picure URL",
+            textfieldPrompt: "URl...",
+            iconSystemImageName: "link",
+            isRequired: true,
+            text: $profilePictureURL
+          )
+          .environment(\.isFocused, focusedTextField == .profilePictureUrl)
+          .focused($focusedTextField, equals: .profilePictureUrl)
+          .disabled(!shouldShowChanges)
+
+          CustomTextField(
+            title: "Banner Picure URL",
+            textfieldPrompt: "URL...",
+            iconSystemImageName: "link",
+            isRequired: true,
+            text: $bannerPhotoURL
+          )
+          .environment(\.isFocused, focusedTextField == .headerPictureUrl)
+          .focused($focusedTextField, equals: .headerPictureUrl)
+          .disabled(!shouldShowChanges)
         }
-        .listRowSeparator(.hidden)
-
-        CustomTextField(
-          title: "Username",
-          textfieldPrompt: "Username...",
-          isRequired: true,
-          text: $usernameText
-        )
-        .environment(\.isFocused, focusedTextField == .username)
-        .focused($focusedTextField, equals: .username)
-        .disabled(!showChanges)
-
-        CustomTextField(
-          title: "Description",
-          textfieldPrompt: "Description...",
-          isRequired: false,
-          text: $descriptionText
-        )
-        .environment(\.isFocused, focusedTextField == .description)
-        .focused($focusedTextField, equals: .description)
-        .disabled(!showChanges)
-
-        CustomTextField(
-          title: "Profile Picure URL",
-          textfieldPrompt: "URl...",
-          iconSystemImageName: "link",
-          isRequired: true,
-          text: $profilePictureURL
-        )
-        .environment(\.isFocused, focusedTextField == .profilePictureUrl)
-        .focused($focusedTextField, equals: .profilePictureUrl)
-        .disabled(!showChanges)
-
-        CustomTextField(
-          title: "Banner Picure URL",
-          textfieldPrompt: "URL...",
-          iconSystemImageName: "link",
-          isRequired: true,
-          text: $bannerPhotoURL
-        )
-        .environment(\.isFocused, focusedTextField == .headerPictureUrl)
-        .focused($focusedTextField, equals: .headerPictureUrl)
-        .disabled(!showChanges)
       }
+      .listRowSeparator(.hidden)
+      .listStyle(.sidebar)
 
       Section {
         ToggleStateControlPanel(
           title: "Show Updates",
-          showChanges: $showChanges
-        ) {
-          didUpdateUser()
-        }
+          showChanges: $shouldShowChanges,
+          saveButtonPressed: {
+            didUpdateUser()
+          },
+          discardChangesPressed: {
+            switchOnStateText.usernameText = switchOffStateText.usernameText
+            switchOnStateText.descriptionText = switchOffStateText.descriptionText
+            switchOnStateText.profilePictureURL = switchOffStateText.profilePictureURL
+            switchOnStateText.bannerPhotoURL = switchOffStateText.bannerPhotoURL
+            shouldShowChanges = true
+            refreshTextFields()
+          })
         .padding(.vertical, 8)
       }
-    }.onChange(of: usernameText) { oldValue, newValue in
-      if showChanges {
+      .listRowSeparator(.hidden)
+      .listStyle(.sidebar)
+    }
+    .onChange(of: usernameText) { oldValue, newValue in
+      if shouldShowChanges {
         switchOnStateText.usernameText = newValue
       }
     }
     .onChange(of: descriptionText) { oldValue, newValue in
-      if showChanges {
+      if shouldShowChanges {
         switchOnStateText.descriptionText = newValue
       }
     }
     .onChange(of: profilePictureURL) { oldValue, newValue in
-      if showChanges {
+      if shouldShowChanges {
         switchOnStateText.profilePictureURL = newValue
       }
     }
     .onChange(of: bannerPhotoURL) { oldValue, newValue in
-      if showChanges {
+      if shouldShowChanges {
         switchOnStateText.bannerPhotoURL = newValue
       }
-    }.onAppear {
+    }
+    .onAppear {
       refreshTextFields()
     }
-    .onChange(of: showChanges) { oldValue, newValue in
+    .onChange(of: shouldShowChanges) { oldValue, newValue in
       refreshTextFields()
     }
+    .navigationTitle("User Information")
   }
 
   private func refreshTextFields() {
-    if showChanges {
+    if shouldShowChanges {
       usernameText = switchOnStateText.usernameText
       descriptionText = switchOnStateText.descriptionText
       profilePictureURL = switchOnStateText.profilePictureURL
@@ -236,15 +259,13 @@ struct ProfileEditorViewPreview: View {
   @State var profile: User = User.stubs().first!
   @State var updatedProfile: User = User.stubs().last!
   var body: some View {
-    List {
+
       ProfileEditorView(
         initialUser: profile,
         userDidUpdate: { _ in
-          
+
         }
       )
-      .listStyle(.sidebar)
-    }
   }
 }
 

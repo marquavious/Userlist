@@ -35,15 +35,78 @@ struct ProfileSectionEditorView: View {
     }
   }
 
-  var sectionData: SectionData
-  @FocusState private var formFocus: FormFocus?
+  class ProfileSectionEditorViewInfo {
+    var id: String
+    var index: Int
+    var titleText: String?
+    var descriptionText: String?
+    var media: Media?
+
+    init(
+      id: String,
+      index: Int,
+      titleText: String?,
+      descriptionText: String?,
+      media: Media?
+    ) {
+      self.id = id
+      self.index = index
+      self.titleText = titleText
+      self.descriptionText = descriptionText
+      self.media = media
+    }
+  }
+
   @State var titleText: String = ""
   @State var descriptionText: String = ""
   @State var media: Media?
+  @FocusState private var formFocus: FormFocus?
   @State var sheetPresentationDetent: PresentationDetent = PresentationDetent.fraction(0.2)
   @State var showChanges: Bool = true
 
+  @State var initialState: ProfileSectionEditorViewInfo
+  @State var updatedState: ProfileSectionEditorViewInfo
+
   var sectionDidUpdate: UpdatedSectionClosure
+
+  init(
+  id: String,
+  index: Int,
+  titleText: String = "",
+  descriptionText: String = "",
+  media: Media?,
+  sectionDidUpdate: @escaping UpdatedSectionClosure
+  ) {
+    self.sectionDidUpdate = sectionDidUpdate
+    let stateData = ProfileSectionEditorViewInfo(
+      id: id,
+      index: index,
+      titleText: titleText,
+      descriptionText: descriptionText,
+      media: media
+    )
+    self.initialState = stateData
+    self.updatedState = stateData
+  }
+
+  init(sectionData: SectionData, sectionDidUpdate: @escaping UpdatedSectionClosure) {
+    self.sectionDidUpdate = sectionDidUpdate
+
+    self.initialState = ProfileSectionEditorViewInfo(
+      id: sectionData.id,
+      index: sectionData.index,
+      titleText: sectionData.title,
+      descriptionText: sectionData.description,
+      media: sectionData.media
+    )
+    self.updatedState = ProfileSectionEditorViewInfo(
+      id: sectionData.id,
+      index: sectionData.index,
+      titleText: sectionData.title,
+      descriptionText: sectionData.description,
+      media: sectionData.media
+    )
+  }
 
   var body: some View {
     List {
@@ -61,14 +124,16 @@ struct ProfileSectionEditorView: View {
           title: "Show Updates",
           showChanges: $showChanges
         ) {
-//          sectionDidUpdate(
-//            User(
-//              username: titleText,
-//              description: descriptionText,
-//              profilePictureUrlString: <#T##String#>,
-//              profileHeaderUrlString: <#T##String#>
-//            )
-//          )
+          sectionDidUpdate(
+            SectionData(
+              index: updatedState.index,
+              title: updatedState.titleText,
+              description: updatedState.descriptionText,
+              media: updatedState.media
+            )
+          )
+        } discardChangesPressed:  {
+          
         }
         .padding(.vertical, 8)
       }
@@ -103,9 +168,43 @@ struct ProfileSectionEditorView: View {
       }
     }
     .onAppear {
-      titleText = sectionData.title ?? ""
-      descriptionText = sectionData.description ?? ""
-      media = sectionData.media
+      titleText = updatedState.titleText ?? ""
+      descriptionText = updatedState.descriptionText ?? ""
+      media = updatedState.media
+      refreshTextFields()
+    }
+    .onChange(of: titleText) { oldValue, newValue in
+      if showChanges {
+        updatedState.titleText = newValue
+      }
+      refreshTextFields()
+    }
+    .onChange(of: descriptionText) { oldValue, newValue in
+      if showChanges {
+        updatedState.descriptionText = newValue
+      }
+      refreshTextFields()
+    }
+    .onChange(of: media) { oldValue, newValue in
+      if showChanges {
+        updatedState.media = newValue
+      }
+      refreshTextFields()
+    }
+    .onChange(of: showChanges) { oldValue, newValue in
+      refreshTextFields()
+    }
+  }
+
+  private func refreshTextFields() {
+    if showChanges {
+      titleText = updatedState.titleText ?? ""
+      descriptionText = updatedState.descriptionText ?? ""
+      media = updatedState.media
+    } else {
+      titleText = initialState.titleText ?? ""
+      descriptionText = initialState.descriptionText ?? ""
+      media = initialState.media
     }
   }
 }
