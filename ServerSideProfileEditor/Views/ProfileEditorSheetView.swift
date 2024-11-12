@@ -8,19 +8,40 @@
 import Foundation
 import SwiftUI
 
+@Observable
+class ProfileEditorSheetViewInfo: ObservableObject, Identifiable {
+  var profile: Profile
+  var sectionData: [SectionData]
+
+  init(
+    profile: Profile,
+    sectionData: [SectionData]
+  ) {
+    self.profile = profile
+    self.sectionData = sectionData
+  }
+  func copyState(_ state: ProfileEditorSheetViewInfo) {
+    profile = state.profile
+    sectionData = state.sectionData
+  }
+}
+
 struct ProfileEditorSheetView: View {
   @State var router = RouterPath()
   @Binding var showProfileChanges: Bool
-
+  @State private var initialProfileDataViewInfo: ProfileEditorSheetViewInfo
   @State private var profile: Profile
   @State private var sectionData: [SectionData]
-  private var initialProfileData: Profile
 
   init(showProfileChanges: Binding<Bool>, profile: Profile) {
     self._showProfileChanges = showProfileChanges
     self.profile = profile
-    self.initialProfileData = profile
     self.sectionData = profile.sections
+
+    self.initialProfileDataViewInfo = ProfileEditorSheetViewInfo(
+      profile: profile,
+      sectionData: profile.sections
+    )
   }
 
   var body: some View {
@@ -30,7 +51,8 @@ struct ProfileEditorSheetView: View {
           ToggleStateControlPanel(title: "Show Updates", showChanges: $showProfileChanges) {
 
           } discardChangesPressed:  {
-
+            profile = initialProfileDataViewInfo.profile
+            sectionData = initialProfileDataViewInfo.sectionData
           }
         }
         Section("User Details") {
@@ -50,17 +72,16 @@ struct ProfileEditorSheetView: View {
                 )
               )
             }
-            if initialProfileData.userInfo != profile.userInfo {
+            if initialProfileDataViewInfo.profile.userInfo != profile.userInfo {
               Divider()
-              Button("Discard Changes") {
-                profile.userInfo.profilePictureUrlString = initialProfileData.userInfo.profilePictureUrlString
-                profile.userInfo.profileHeaderUrlString = initialProfileData.userInfo.profileHeaderUrlString
-                profile.userInfo.username = initialProfileData.userInfo.username
-                profile.userInfo.description = initialProfileData.userInfo.description
+              Button {
+                profile = initialProfileDataViewInfo.profile
+              } label: {
+                Text("Discard Changes")
+                  .contentShape(Rectangle())
+                  .foregroundStyle(.blue)
               }
-              .listRowSeparator(.hidden)
-              .font(.system(size: 12))
-              .buttonStyle(.plain)
+              .buttonStyle(.bordered)
             }
           }
         }
@@ -89,23 +110,31 @@ struct ProfileEditorSheetView: View {
               .listRowSeparator(.hidden)
             }
 
-            if initialProfileData.sections != sectionData {
+            if initialProfileDataViewInfo.sectionData != sectionData {
               Divider()
-              Button("Discard Changes") {
-                sectionData = initialProfileData.sections
+              Button {
+                sectionData = initialProfileDataViewInfo.sectionData
+              } label: {
+                Text("Discard Changes")
+                  .contentShape(Rectangle())
+                  .foregroundStyle(.blue)
               }
-              .listRowSeparator(.hidden)
-              .font(.system(size: 12))
-              .buttonStyle(.plain)
+              .buttonStyle(.bordered)
             }
           }
-          .padding(.vertical, 8)
+
         }
       }
       .listStyle(.sidebar)
       .scrollDismissesKeyboard(.interactively)
       .scrollIndicators(.hidden)
       .withAppRouter()
+    }
+    .onChange(of: profile) { oldValue, newValue in
+      profile = newValue
+    }
+    .onChange(of: sectionData) { oldValue, newValue in
+      sectionData = newValue
     }
     .environment(router)
   }

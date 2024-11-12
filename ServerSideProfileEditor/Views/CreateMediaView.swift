@@ -20,8 +20,8 @@ struct CreateMediaView: View {
       CreateURLMediaPhotoView(
         url: photoData.urlString ?? "",
         contentMode: CreateURLMediaPhotoView.ContentModeOption.optionMode(contentMode: photoData.contentMode)
-      ) { photoData in
-        createdMedia(.urlPhoto(photoData: photoData))
+      ) {
+        createdMedia(.urlPhoto(photoData: $0))
       }
     case .urlPhotoGrid(let photoDataOne, let photoDataTwo, let photoDataThree, let photoDataFour):
       CreateURLMediaPhotoGridView(
@@ -37,9 +37,14 @@ struct CreateMediaView: View {
           photoDataFour: $3
         ))
       }
-    case .urlPhotoCarousel:
-      Rectangle()
-        .fill(.red)
+    case .urlPhotoCarousel(let photos):
+      CreateURLMediaPhotoCarouselView(
+        photoArray: photos
+      ){
+        createdMedia(
+          .urlPhotoCarousel(photoArray: $0)
+        )
+      }
     }
   }
 }

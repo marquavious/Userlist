@@ -16,6 +16,6 @@ struct PhotoData: Equatable, Identifiable {
 
 extension PhotoData {
   static func emptyInstance() -> PhotoData {
-    PhotoData(id: "", urlString: "", contentMode: .fit)
+    PhotoData(id: UUID().uuidString, urlString: "", contentMode: .fit)
   }
 }

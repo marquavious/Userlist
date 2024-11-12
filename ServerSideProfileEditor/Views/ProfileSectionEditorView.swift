@@ -41,41 +41,58 @@ struct ProfileSectionEditorView: View {
     var titleText: String?
     var descriptionText: String?
     var media: Media?
+    var alignment: SectionData.Alignment
+    var mediaPosition: SectionData.MediaPosition
 
     init(
       id: String,
       index: Int,
       titleText: String?,
       descriptionText: String?,
-      media: Media?
+      alignment: SectionData.Alignment,
+      media: Media?,
+      mediaPosition: SectionData.MediaPosition
     ) {
       self.id = id
       self.index = index
       self.titleText = titleText
       self.descriptionText = descriptionText
+      self.alignment = alignment
       self.media = media
+      self.mediaPosition = mediaPosition
+    }
+
+    func copyState(_ state: ProfileSectionEditorViewInfo) {
+      self.id = state.id
+      self.index = state.index
+      self.titleText = state.titleText
+      self.descriptionText = state.descriptionText
+      self.media = state.media
     }
   }
 
   @State var titleText: String = ""
   @State var descriptionText: String = ""
+  @State var alignment: SectionData.Alignment = .leading
+  @State var mediaPosition: SectionData.MediaPosition = .top
   @State var media: Media?
   @FocusState private var formFocus: FormFocus?
   @State var sheetPresentationDetent: PresentationDetent = PresentationDetent.fraction(0.2)
   @State var showChanges: Bool = true
-
-  @State var initialState: ProfileSectionEditorViewInfo
   @State var updatedState: ProfileSectionEditorViewInfo
 
+  var initialState: ProfileSectionEditorViewInfo
   var sectionDidUpdate: UpdatedSectionClosure
 
   init(
-  id: String,
-  index: Int,
-  titleText: String = "",
-  descriptionText: String = "",
-  media: Media?,
-  sectionDidUpdate: @escaping UpdatedSectionClosure
+    id: String,
+    index: Int,
+    titleText: String = "",
+    descriptionText: String = "",
+    alignment: SectionData.Alignment,
+    media: Media?,
+    mediaPosition: SectionData.MediaPosition,
+    sectionDidUpdate: @escaping UpdatedSectionClosure
   ) {
     self.sectionDidUpdate = sectionDidUpdate
     let stateData = ProfileSectionEditorViewInfo(
@@ -83,7 +100,9 @@ struct ProfileSectionEditorView: View {
       index: index,
       titleText: titleText,
       descriptionText: descriptionText,
-      media: media
+      alignment: alignment,
+      media: media,
+      mediaPosition: mediaPosition
     )
     self.initialState = stateData
     self.updatedState = stateData
@@ -97,14 +116,18 @@ struct ProfileSectionEditorView: View {
       index: sectionData.index,
       titleText: sectionData.title,
       descriptionText: sectionData.description,
-      media: sectionData.media
+      alignment: sectionData.alignment,
+      media: sectionData.media,
+      mediaPosition: sectionData.mediaPosition
     )
     self.updatedState = ProfileSectionEditorViewInfo(
       id: sectionData.id,
       index: sectionData.index,
       titleText: sectionData.title,
       descriptionText: sectionData.description,
-      media: sectionData.media
+      alignment: sectionData.alignment,
+      media: sectionData.media,
+      mediaPosition: sectionData.mediaPosition
     )
   }
 
@@ -115,7 +138,8 @@ struct ProfileSectionEditorView: View {
           title: titleText,
           description: descriptionText,
           media: media,
-          horizontalAlignment: .leading
+          alignment: alignment,
+          mediaPosition: mediaPosition
         )
         .padding(.vertical, 8)
       }
@@ -129,14 +153,39 @@ struct ProfileSectionEditorView: View {
               index: updatedState.index,
               title: updatedState.titleText,
               description: updatedState.descriptionText,
+              alignment: updatedState.alignment,
               media: updatedState.media
             )
           )
-        } discardChangesPressed:  {
-          
+        } discardChangesPressed: {
+          updatedState.copyState(initialState)
+          refreshData()
         }
         .padding(.vertical, 8)
       }
+
+      Section("Layout") {
+        VStack {
+          Picker("Text Position", selection: $alignment) {
+            ForEach(SectionData.Alignment.allCases) { option in
+              Image(systemName: option.systemImageString)
+                .tag(option)
+                .tint(.blue)
+            }
+          }
+          .pickerStyle(.segmented)
+
+          Picker("Media Position", selection: $mediaPosition) {
+            ForEach(SectionData.MediaPosition.allCases) { option in
+              Image(systemName: option.systemImageString)
+                .tag(option)
+                .tint(.blue)
+            }
+          }
+          .pickerStyle(.segmented)
+        }
+      }
+
       Section("Text Edit") {
         VStack {
           CustomTextField(
@@ -157,54 +206,100 @@ struct ProfileSectionEditorView: View {
           .focused($formFocus, equals: .description)
         }
         .padding(.vertical, 8)
+
       }
       Section("Media Edit") {
         if let unwrappedMedia = media {
-          CreateMediaView(media: unwrappedMedia) { newMedia in
-            self.media = newMedia
+          VStack {
+            CreateMediaView(media: unwrappedMedia) { newMedia in
+              self.media = newMedia
+            }
+            Button {
+              media = nil
+            } label: {
+              Text("Delete Media")
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.bordered)
           }
-          .padding(.vertical, 8)
+          .padding(.top, 8)
+        } else {
+          Menu("Add Media +", systemImage: "photo") {
+            Button("Photo With URL") {
+              withAnimation(.easeInOut(duration: 0.2)) {
+                self.media = .urlPhoto(photoData: .emptyInstance())
+              }
+            }
+
+            Button("Photo Grid With URLs") {
+              withAnimation(.easeInOut(duration: 0.2)) {
+                self.media = .urlPhotoGrid(
+                  photoDataOne: .emptyInstance(),
+                  photoDataTwo: .emptyInstance(),
+                  photoDataThree: .emptyInstance(),
+                  photoDataFour: .emptyInstance()
+                )
+              }
+            }
+
+            Button("Photo Carusel With URLs") {
+              self.media = .urlPhotoCarousel(photoArray: [.emptyInstance()])
+            }
+          }.menuStyle(.borderlessButton)
         }
       }
     }
     .onAppear {
-      titleText = updatedState.titleText ?? ""
-      descriptionText = updatedState.descriptionText ?? ""
-      media = updatedState.media
-      refreshTextFields()
+      refreshData()
     }
     .onChange(of: titleText) { oldValue, newValue in
       if showChanges {
         updatedState.titleText = newValue
+        refreshData()
       }
-      refreshTextFields()
     }
     .onChange(of: descriptionText) { oldValue, newValue in
       if showChanges {
         updatedState.descriptionText = newValue
+        refreshData()
       }
-      refreshTextFields()
     }
     .onChange(of: media) { oldValue, newValue in
       if showChanges {
         updatedState.media = newValue
+        refreshData()
       }
-      refreshTextFields()
+    }
+    .onChange(of: alignment) { oldValue, newValue in
+      if showChanges {
+        updatedState.alignment = newValue
+        refreshData()
+      }
+    }
+    .onChange(of: mediaPosition) { oldValue, newValue in
+      if showChanges {
+        updatedState.mediaPosition = newValue
+        refreshData()
+      }
     }
     .onChange(of: showChanges) { oldValue, newValue in
-      refreshTextFields()
+      refreshData()
     }
   }
 
-  private func refreshTextFields() {
+  private func refreshData() {
     if showChanges {
       titleText = updatedState.titleText ?? ""
       descriptionText = updatedState.descriptionText ?? ""
       media = updatedState.media
+      alignment = updatedState.alignment
+      mediaPosition = updatedState.mediaPosition
     } else {
       titleText = initialState.titleText ?? ""
       descriptionText = initialState.descriptionText ?? ""
       media = initialState.media
+      alignment = initialState.alignment
+      mediaPosition = initialState.mediaPosition
     }
   }
 }
@@ -216,7 +311,8 @@ struct ProfileSectionEditorView: View {
           photoData: PhotoData(
             id: UUID().uuidString,
             urlString: "https://i.imgur.com/ApCOa7j.jpeg",
-            contentMode: .allCases.randomElement()!)
+            contentMode: .allCases.randomElement()!
+          )
         )
   )
 }

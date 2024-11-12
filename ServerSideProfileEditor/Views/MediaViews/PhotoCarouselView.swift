@@ -10,8 +10,8 @@ import SwiftUI
 
 struct PhotoCarouselView: View {
 
-  @State var photoArray: [PhotoData]
-  @State var photoCornerRadius: CGFloat
+  var photoArray: [PhotoData]
+  var photoCornerRadius: CGFloat
 
   var body: some View {
     GeometryReader { proxy in

@@ -8,12 +8,6 @@
 import Foundation
 import SwiftUI
 
-@Observable
-class ProfileEditorViewModel: ObservableObject {
-  var switchOnStateText: ProfileEditorView.ProfileEditorStateTextProvider = ProfileEditorView.ProfileEditorStateTextProvider()
-  var switchOffStateText: ProfileEditorView.ProfileEditorStateTextProvider = ProfileEditorView.ProfileEditorStateTextProvider()
-}
-
 struct ProfileEditorView: View {
 
   class ProfileEditorStateTextProvider {

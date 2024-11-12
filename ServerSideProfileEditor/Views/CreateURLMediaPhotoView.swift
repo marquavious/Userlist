@@ -65,7 +65,6 @@ struct CreateURLMediaPhotoView: View {
       .environment(\.isFocused, isFocused)
       .focused($isFocused, equals: true)
       HStack {
-        Text("Frame:")
         Picker("", selection: $contentMode) {
           ForEach(ContentModeOption.allCases) { option in
             Image(systemName: option.systemImage)
@@ -95,5 +94,3 @@ struct CreateURLMediaPhotoView: View {
     )
   }
 }
-
-

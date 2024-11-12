@@ -11,8 +11,10 @@ import SwiftUICore
 @Observable
 class SectionData: Identifiable, ObservableObject {
 
-  enum MediaPosition: Int, CaseIterable, Equatable {
-    case top, middle, bottom
+  enum MediaPosition: Int, Identifiable, CaseIterable, Equatable {
+    case top, middle, bottom, flipped
+
+    var id: String { UUID().uuidString }
 
     var systemImageString: String {
       switch self {
@@ -22,23 +24,27 @@ class SectionData: Identifiable, ObservableObject {
         "square.3.layers.3d.middle.filled"
       case .bottom:
         "square.3.layers.3d.bottom.filled"
+      case .flipped:
+        "arrow.up.arrow.down"
       }
     }
   }
 
-  enum Alignment: Int, CaseIterable, Equatable {
+  enum Alignment: Int, Identifiable, CaseIterable, Equatable {
     case leading, centerd, trailing
 
     var systemImageString: String {
       switch self {
       case .leading:
-        "square.3.layers.3d.top.filled"
+        "text.alignleft"
       case .centerd:
-        "square.3.layers.3d.middle.filled"
+        "text.aligncenter"
       case .trailing:
-        "square.3.layers.3d.bottom.filled"
+        "text.alignright"
       }
     }
+
+    var id: String { UUID().uuidString }
 
     var horizontalAlignment: HorizontalAlignment {
       switch self {
@@ -50,13 +56,22 @@ class SectionData: Identifiable, ObservableObject {
           .trailing
       }
     }
+
+    var alignment: Alignment {
+      switch self {
+      case .trailing:
+          .trailing
+      default:
+          .leading
+      }
+    }
   }
 
   let id: String
   var index: Int
   var title: String?
   var description: String?
-  var mediaPosition: MediaPosition?
+  var mediaPosition: MediaPosition
   var mediaHeight: CGFloat?
   var mediaContentMode: ContentMode
   var alignment: Alignment
@@ -67,7 +82,7 @@ class SectionData: Identifiable, ObservableObject {
     index: Int = 0,
     title: String? = nil,
     description: String? = nil,
-    mediaPosition: MediaPosition? = nil,
+    mediaPosition: MediaPosition = .top,
     mediaHeight: CGFloat? = nil,
     mediaContentMode: ContentMode = .fill,
     alignment: Alignment = .leading,
@@ -125,7 +140,7 @@ extension SectionData {
       title: stubData.title,
       description: stubData.description,
       mediaContentMode: .allCases.randomElement()!,
-      media: Media.generateRandomMedia()
+      media: Bool.random() ? nil : Media.generateRandomMedia()
     )
   }
 }
