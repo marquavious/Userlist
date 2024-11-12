@@ -21,7 +21,18 @@ struct ProfileViewArrangementSection: View {
         mediaPosition: section.mediaPosition
       )
       .padding(.horizontal, 16)
+
+      CustomDivider()
+        .padding(.vertical, 8)
     }
+  }
+}
+
+struct CustomDivider: View {
+  var body: some View {
+      Text("_•   •   •_")
+      .foregroundStyle(.gray)
+      .opacity(0.3)
   }
 }
 
@@ -34,33 +45,74 @@ struct SectionView: View {
   var description: String?
   var media: Media?
   var alignment: SectionData.Alignment
-  var mediaPosition: SectionData.MediaPosition
+  var mediaPosition: SectionData.Layout
 
   var body: some View {
     VStack(
-      alignment: alignment.horizontalAlignment,
-      spacing: Theme.Spacing.profileSectionCellSpacing.spacing
+      alignment: alignment.horizontalAlignment
     ) {
-      switch mediaPosition {
-      case .top:
-        createMeidaView()
-        createTitleTextView()
-        createDescriptionTextView()
-      case .middle:
-        createTitleTextView()
-        createMeidaView()
-        createDescriptionTextView()
-      case .bottom:
-        createTitleTextView()
-        createDescriptionTextView()
-        createMeidaView()
-      case .flipped:
-        createDescriptionTextView()
-        createMeidaView()
-        createTitleTextView()
+      Group {
+        if mediaIsEmpty {
+          VStack(spacing: 4) {
+            if mediaPosition == .flipped {
+              createDescriptionTextView()
+              createTitleTextView()
+            } else {
+              createTitleTextView()
+              createDescriptionTextView()
+            }
+          }
+        } else {
+          switch mediaPosition {
+          case .top:
+            createMeidaView()
+            VStack(spacing: 4) {
+              createTitleTextView()
+              createDescriptionTextView()
+            }
+          case .middle:
+            VStack(spacing: mediaIsEmpty ? 0 : 4) {
+              createTitleTextView()
+              createMeidaView()
+            }
+            createDescriptionTextView()
+          case .bottom:
+            VStack(spacing: (descriptionIsEmpty || titleIsEmpty) ? 0 : 4) {
+              createTitleTextView()
+              createDescriptionTextView()
+            }
+            createMeidaView()
+          case .flipped:
+            createDescriptionTextView()
+            VStack(spacing: mediaIsEmpty ? 0 : 4) {
+              createMeidaView()
+              createTitleTextView()
+            }
+          }
+        }
       }
+      .padding(.vertical, Theme.Spacing.intraSectionalHorizontalSpacing.spacing)
     }
-    .padding(.vertical, Theme.Spacing.intraSectionalHorizontalSpacing.spacing / 2)
+  }
+
+  private var titleIsEmpty: Bool {
+    if let title = title {
+      return title.isEmpty
+    } else {
+      return true
+    }
+  }
+
+  private var descriptionIsEmpty: Bool {
+    if let description = description {
+      return description.isEmpty
+    } else {
+      return true
+    }
+  }
+
+  private var mediaIsEmpty: Bool {
+    media == nil
   }
 
   @ViewBuilder
@@ -92,6 +144,7 @@ struct SectionView: View {
         cornerRadius: Theme.Geomitry.cornerRadius.radius
       )
       .frame(height: Theme.MediaSizes.mediaHeight.height)
+      .padding(.vertical, 4)
     }
   }
 

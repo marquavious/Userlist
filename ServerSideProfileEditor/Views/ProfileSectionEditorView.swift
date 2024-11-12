@@ -42,7 +42,7 @@ struct ProfileSectionEditorView: View {
     var descriptionText: String?
     var media: Media?
     var alignment: SectionData.Alignment
-    var mediaPosition: SectionData.MediaPosition
+    var mediaPosition: SectionData.Layout
 
     init(
       id: String,
@@ -51,7 +51,7 @@ struct ProfileSectionEditorView: View {
       descriptionText: String?,
       alignment: SectionData.Alignment,
       media: Media?,
-      mediaPosition: SectionData.MediaPosition
+      mediaPosition: SectionData.Layout
     ) {
       self.id = id
       self.index = index
@@ -74,7 +74,7 @@ struct ProfileSectionEditorView: View {
   @State var titleText: String = ""
   @State var descriptionText: String = ""
   @State var alignment: SectionData.Alignment = .leading
-  @State var mediaPosition: SectionData.MediaPosition = .top
+  @State var mediaPosition: SectionData.Layout = .top
   @State var media: Media?
   @FocusState private var formFocus: FormFocus?
   @State var sheetPresentationDetent: PresentationDetent = PresentationDetent.fraction(0.2)
@@ -91,7 +91,7 @@ struct ProfileSectionEditorView: View {
     descriptionText: String = "",
     alignment: SectionData.Alignment,
     media: Media?,
-    mediaPosition: SectionData.MediaPosition,
+    mediaPosition: SectionData.Layout,
     sectionDidUpdate: @escaping UpdatedSectionClosure
   ) {
     self.sectionDidUpdate = sectionDidUpdate
@@ -176,7 +176,11 @@ struct ProfileSectionEditorView: View {
           .pickerStyle(.segmented)
 
           Picker("Media Position", selection: $mediaPosition) {
-            ForEach(SectionData.MediaPosition.allCases) { option in
+            ForEach(
+              media == nil ?
+              SectionData.Layout.textOnlyCases :
+              SectionData.Layout.allCases
+            ) { option in
               Image(systemName: option.systemImageString)
                 .tag(option)
                 .tint(.blue)
@@ -300,6 +304,10 @@ struct ProfileSectionEditorView: View {
       media = initialState.media
       alignment = initialState.alignment
       mediaPosition = initialState.mediaPosition
+    }
+
+    if media == nil {
+      updatedState.mediaPosition = .top // Default
     }
   }
 }

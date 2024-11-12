@@ -76,11 +76,6 @@ struct ProfileView: View {
         }
         .contentMargins(.bottom, isInEditorMode ? UIScreen.main.bounds.height * 0.2 : Constants.contentMarginsOffset)
         .sheet(isPresented: $isInEditorMode) {
-//          ProfileEditorSheetView(
-//            showProfileChanges: $showProfileChanges,
-//            profile: newProfileData ?? .emptyProfile(),
-//            initialProfileData: profile
-//          )
           ProfileEditorSheetView(
             showProfileChanges: $showProfileChanges,
             profile: (showProfileChanges ? newProfileData ?? .emptyProfile() : initalProfileData) ?? .emptyProfile()

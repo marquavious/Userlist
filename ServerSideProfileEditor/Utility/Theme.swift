@@ -66,7 +66,7 @@ public final class Theme {
     var spacing: CGFloat {
       switch self {
       case .intraSectionalHorizontalSpacing:
-        return 8
+        return 4
       case .profileSectionCellSpacing:
         return 8
       }

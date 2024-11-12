@@ -11,8 +11,10 @@ import SwiftUICore
 @Observable
 class SectionData: Identifiable, ObservableObject {
 
-  enum MediaPosition: Int, Identifiable, CaseIterable, Equatable {
+  enum Layout: Int, Identifiable, CaseIterable, Equatable {
     case top, middle, bottom, flipped
+
+    static let textOnlyCases: [Self] = [.top, .flipped]
 
     var id: String { UUID().uuidString }
 
@@ -71,7 +73,7 @@ class SectionData: Identifiable, ObservableObject {
   var index: Int
   var title: String?
   var description: String?
-  var mediaPosition: MediaPosition
+  var mediaPosition: Layout
   var mediaHeight: CGFloat?
   var mediaContentMode: ContentMode
   var alignment: Alignment
@@ -82,7 +84,7 @@ class SectionData: Identifiable, ObservableObject {
     index: Int = 0,
     title: String? = nil,
     description: String? = nil,
-    mediaPosition: MediaPosition = .top,
+    mediaPosition: Layout = .top,
     mediaHeight: CGFloat? = nil,
     mediaContentMode: ContentMode = .fill,
     alignment: Alignment = .leading,
@@ -134,12 +136,15 @@ extension SectionData {
     index: Int = 0
   ) -> SectionData {
     let stubData = ProfileStubGenerator.randomSectionTupleData()
+
     return SectionData(
       id: id,
       index: index,
       title: stubData.title,
       description: stubData.description,
+      mediaPosition: SectionData.Layout.allCases.randomElement() ?? .top,
       mediaContentMode: .allCases.randomElement()!,
+      alignment: .leading,
       media: Bool.random() ? nil : Media.generateRandomMedia()
     )
   }
