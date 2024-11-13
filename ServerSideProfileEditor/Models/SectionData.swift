@@ -73,7 +73,7 @@ class SectionData: Identifiable, ObservableObject {
   var index: Int
   var title: String?
   var description: String?
-  var mediaPosition: Layout
+  var layout: Layout
   var mediaHeight: CGFloat?
   var mediaContentMode: ContentMode
   var alignment: Alignment
@@ -84,7 +84,7 @@ class SectionData: Identifiable, ObservableObject {
     index: Int = 0,
     title: String? = nil,
     description: String? = nil,
-    mediaPosition: Layout = .top,
+    layout: Layout = .top,
     mediaHeight: CGFloat? = nil,
     mediaContentMode: ContentMode = .fill,
     alignment: Alignment = .leading,
@@ -94,7 +94,7 @@ class SectionData: Identifiable, ObservableObject {
     self.index = index
     self.title = title
     self.description = description
-    self.mediaPosition = mediaPosition
+    self.layout = layout
     self.mediaHeight = mediaHeight
     self.mediaContentMode = mediaContentMode
     self.alignment = alignment
@@ -108,7 +108,7 @@ extension SectionData: Equatable, Hashable {
     lhs.index == rhs.index &&
     lhs.title == rhs.title &&
     lhs.description == rhs.description &&
-    lhs.mediaPosition == rhs.mediaPosition &&
+    lhs.layout == rhs.layout &&
     lhs.mediaHeight == rhs.mediaHeight &&
     lhs.mediaContentMode == rhs.mediaContentMode &&
     lhs.alignment == rhs.alignment &&
@@ -142,7 +142,7 @@ extension SectionData {
       index: index,
       title: stubData.title,
       description: stubData.description,
-      mediaPosition: SectionData.Layout.allCases.randomElement() ?? .top,
+      layout: SectionData.Layout.allCases.randomElement() ?? .top,
       mediaContentMode: .allCases.randomElement()!,
       alignment: .leading,
       media: Bool.random() ? nil : Media.generateRandomMedia()

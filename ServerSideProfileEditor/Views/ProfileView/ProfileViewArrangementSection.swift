@@ -18,7 +18,7 @@ struct ProfileViewArrangementSection: View {
         description: section.description,
         media: section.media,
         alignment: section.alignment,
-        mediaPosition: section.mediaPosition
+        mediaPosition: section.layout
       )
       .padding(.horizontal, 16)
 

@@ -18,6 +18,8 @@ struct ProfileEditorSheetViewForPreviews: View {
     ProfileEditorSheetView(
       showProfileChanges: $showProfileChanges,
       profile: showProfileChanges ? profile : profileTwo
-    )
+    ) { _ in
+
+    }
   }
 }

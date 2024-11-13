@@ -10,18 +10,18 @@ import SwiftUI
 
 @Observable
 class ProfileEditorSheetViewInfo: ObservableObject, Identifiable {
-  var profile: Profile
+  var userInfo: User
   var sectionData: [SectionData]
 
   init(
-    profile: Profile,
+    userData: User,
     sectionData: [SectionData]
   ) {
-    self.profile = profile
+    self.userInfo = userData
     self.sectionData = sectionData
   }
   func copyState(_ state: ProfileEditorSheetViewInfo) {
-    profile = state.profile
+    userInfo = state.userInfo
     sectionData = state.sectionData
   }
 }
@@ -30,16 +30,19 @@ struct ProfileEditorSheetView: View {
   @State var router = RouterPath()
   @Binding var showProfileChanges: Bool
   @State private var initialProfileDataViewInfo: ProfileEditorSheetViewInfo
-  @State private var profile: Profile
+  @State private var userInfo: User
   @State private var sectionData: [SectionData]
 
-  init(showProfileChanges: Binding<Bool>, profile: Profile) {
+  var didUpdateProfile: ((Profile) -> Void)
+
+  init(showProfileChanges: Binding<Bool>, profile: Profile, didUpdateProfile: @escaping ((Profile) -> Void)) {
     self._showProfileChanges = showProfileChanges
-    self.profile = profile
+    self.userInfo = profile.userInfo
     self.sectionData = profile.sections
+    self.didUpdateProfile = didUpdateProfile
 
     self.initialProfileDataViewInfo = ProfileEditorSheetViewInfo(
-      profile: profile,
+      userData: profile.userInfo,
       sectionData: profile.sections
     )
   }
@@ -51,31 +54,31 @@ struct ProfileEditorSheetView: View {
           ToggleStateControlPanel(title: "Show Updates", showChanges: $showProfileChanges) {
 
           } discardChangesPressed:  {
-            profile = initialProfileDataViewInfo.profile
+            userInfo = initialProfileDataViewInfo.userInfo
             sectionData = initialProfileDataViewInfo.sectionData
           }
         }
         Section("User Details") {
           VStack(spacing: 8) {
             UserListViewCell(
-              imageURL: profile.userInfo.profilePictureUrl,
-              title: profile.userInfo.username,
-              description: profile.userInfo.description
+              imageURL: userInfo.profilePictureUrl,
+              title: userInfo.username,
+              description: userInfo.description
             ).onTapGesture {
               router.navigate(
                 to: .userInfoEditor(
-                  user: profile.userInfo,
+                  user: userInfo,
                   updatedUserClosure: { user in
-                    profile.userInfo = user
+                    userInfo = user
                     _ = router.path.popLast()
                   }
                 )
               )
             }
-            if initialProfileDataViewInfo.profile.userInfo != profile.userInfo {
+            if initialProfileDataViewInfo.userInfo != userInfo {
               Divider()
               Button {
-                profile = initialProfileDataViewInfo.profile
+                userInfo = initialProfileDataViewInfo.userInfo
               } label: {
                 Text("Discard Changes")
                   .contentShape(Rectangle())
@@ -130,11 +133,11 @@ struct ProfileEditorSheetView: View {
       .scrollIndicators(.hidden)
       .withAppRouter()
     }
-    .onChange(of: profile) { oldValue, newValue in
-      profile = newValue
+    .onChange(of: userInfo) { oldValue, newValue in
+      didUpdateProfile(.init(id: UUID().uuidString, userInfo: userInfo, sections: sectionData))
     }
     .onChange(of: sectionData) { oldValue, newValue in
-      sectionData = newValue
+      didUpdateProfile(.init(id: UUID().uuidString, userInfo: userInfo, sections: sectionData))
     }
     .environment(router)
   }

@@ -29,7 +29,6 @@ struct ProfileView: View {
   @State var showProfileChanges: Bool = false
   @State var initalProfileData: Profile?
   @State var newProfileData: Profile?
-  
 
   init(id: String) {
     self.state = .loading(id: id)
@@ -78,8 +77,10 @@ struct ProfileView: View {
         .sheet(isPresented: $isInEditorMode) {
           ProfileEditorSheetView(
             showProfileChanges: $showProfileChanges,
-            profile: (showProfileChanges ? newProfileData ?? .emptyProfile() : initalProfileData) ?? .emptyProfile()
-          )
+            profile: profile
+          ) { updatedProfile in
+            self.newProfileData = updatedProfile
+          }
           .presentationBackground(.ultraThinMaterial)
           .presentationBackgroundInteraction(.enabled)
           .presentationDetents([.fraction(0.2), .large],
@@ -87,6 +88,15 @@ struct ProfileView: View {
           .interactiveDismissDisabled(true)
         }
         .onChange(of: showProfileChanges) { ov, nv in
+
+          if let initalProfileData {
+            print(initalProfileData)
+          }
+
+          if let newProfileData {
+            print(newProfileData)
+          }
+
           if let initalProfileData, let newProfileData {
             withAnimation(.easeInOut(duration: 0.2)) {
               self.state = nv ? .loaded(profile: newProfileData) :
