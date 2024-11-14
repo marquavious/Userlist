@@ -248,32 +248,21 @@ struct ProfileEditorView: View {
   }
 }
 
-struct ProfileEditorViewPreview: View {
-  @State var showProfileChanges: Bool = false
-  @State var profile: User = User.stubs().first!
-  @State var updatedProfile: User = User.stubs().last!
-  var body: some View {
-
-      ProfileEditorView(
-        initialUser: profile,
-        userDidUpdate: { _ in
-
-        }
-      )
-  }
-}
-
 #Preview {
   ProfileEditorViewPreview()
 }
 
-private struct FocusedKey: EnvironmentKey {
-  static let defaultValue: Bool = false
-}
+struct ProfileEditorViewPreview: View {
+  @State var showProfileChanges: Bool = false
+  @State var profile: User = User.stubs().first!
+  @State var updatedProfile: User = User.stubs().last!
 
-extension EnvironmentValues {
-  var isFocused: Bool {
-    get { self[FocusedKey.self] }
-    set { self[FocusedKey.self] = newValue }
+  var body: some View {
+    ProfileEditorView(
+      initialUser: profile,
+      userDidUpdate: { _ in
+
+      }
+    )
   }
 }

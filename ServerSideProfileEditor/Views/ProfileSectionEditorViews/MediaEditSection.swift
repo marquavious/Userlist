@@ -11,14 +11,12 @@ struct MediaEditSection: View {
 
   @Binding var media: Media?
 
-  var didCreateMedia: ((Media) -> Void)
-
   var body: some View {
     Section("Media Edit") {
       if let unwrappedMedia = media {
         VStack {
           CreateMediaView(media: unwrappedMedia) { newMedia in
-            didCreateMedia(newMedia)
+            media = newMedia
           }
           Button {
             media = nil
@@ -31,7 +29,7 @@ struct MediaEditSection: View {
         .padding(.top, 8)
       } else {
         AddMediaButton { newMedia in
-          didCreateMedia(newMedia)
+          media = newMedia
         }
       }
     }

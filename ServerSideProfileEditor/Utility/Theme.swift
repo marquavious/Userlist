@@ -28,6 +28,10 @@ public final class Theme {
     }
   }
 
+  enum AnimationSpeed: Double {
+    case normal = 0.2
+  }
+
   enum MediaSizes {
     case mediaHeight
     case profilePicture

@@ -25,34 +25,10 @@ struct ProfileSectionEditorView: View {
   var initialState: ProfileSectionEditorViewState
   var sectionDidUpdate: UpdatedSectionClosure
 
-  init(
-    id: String,
-    index: Int,
-    titleText: String = "",
-    descriptionText: String = "",
-    alignment: SectionData.Alignment,
-    media: Media?,
-    mediaPosition: SectionData.Layout,
-    sectionDidUpdate: @escaping UpdatedSectionClosure
-  ) {
-    self.sectionDidUpdate = sectionDidUpdate
-    let stateData = ProfileSectionEditorViewState(
-      id: id,
-      index: index,
-      titleText: titleText,
-      descriptionText: descriptionText,
-      alignment: alignment,
-      media: media,
-      mediaPosition: mediaPosition
-    )
-    self.initialState = stateData
-    self.updatedState = stateData
-  }
-
   init(sectionData: SectionData, sectionDidUpdate: @escaping UpdatedSectionClosure) {
     self.sectionDidUpdate = sectionDidUpdate
 
-    self.initialState = ProfileSectionEditorViewState(
+    self.initialState = .init(
       id: sectionData.id,
       index: sectionData.index,
       titleText: sectionData.title,
@@ -61,7 +37,8 @@ struct ProfileSectionEditorView: View {
       media: sectionData.media,
       mediaPosition: sectionData.layout
     )
-    self.updatedState = ProfileSectionEditorViewState(
+
+    self.updatedState = .init(
       id: sectionData.id,
       index: sectionData.index,
       titleText: sectionData.title,
@@ -88,19 +65,9 @@ struct ProfileSectionEditorView: View {
       ControlPanelSection(
         showChanges: $showChanges
       ) {
-        sectionDidUpdate(
-          SectionData(
-            index: updatedState.index,
-            title: updatedState.titleText,
-            description: updatedState.descriptionText,
-            layout: updatedState.layout,
-            alignment: updatedState.alignment,
-            media: updatedState.media
-          )
-        )
+        saveButtonPressed()
       } discardButtonPressed: {
-        updatedState.copyState(initialState)
-        refreshView()
+        discardButtonPressed()
       }
 
       EditorLayoutSection(
@@ -115,11 +82,7 @@ struct ProfileSectionEditorView: View {
         editorFocus: $editorFocus
       )
 
-      MediaEditSection(
-        media: $media
-      ) { newMedia in
-        media = newMedia
-      }
+      MediaEditSection(media: $media)
     }
     .onAppear {
       refreshView()
@@ -157,6 +120,24 @@ struct ProfileSectionEditorView: View {
     .onChange(of: showChanges) { _, newValue in
       refreshView()
     }
+  }
+
+  private func saveButtonPressed() {
+    sectionDidUpdate(
+      SectionData(
+        index: updatedState.index,
+        title: updatedState.titleText,
+        description: updatedState.descriptionText,
+        layout: updatedState.layout,
+        alignment: updatedState.alignment,
+        media: updatedState.media
+      )
+    )
+  }
+
+  private func discardButtonPressed() {
+    updatedState.copyState(initialState)
+    refreshView()
   }
 
   private func refreshView() {

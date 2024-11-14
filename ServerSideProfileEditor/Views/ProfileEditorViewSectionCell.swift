@@ -35,7 +35,6 @@ struct ProfileEditorViewSectionCell: View {
       if let media = media {
         MediaView(
           media: media,
-          // Change
           cornerRadius: Theme.Geomitry.cornerRadius.radius
         )
         .frame(width: 50, height: 50)

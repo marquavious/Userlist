@@ -20,6 +20,8 @@ struct ProfileEditorSheetViewForPreviews: View {
       profile: showProfileChanges ? profile : profileTwo
     ) { _ in
 
+    } saveButtonPressed: { _ in
+
     }
   }
 }

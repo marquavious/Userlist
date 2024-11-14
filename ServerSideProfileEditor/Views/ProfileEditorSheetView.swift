@@ -34,8 +34,9 @@ struct ProfileEditorSheetView: View {
   @State private var sectionData: [SectionData]
 
   var didUpdateProfile: ((Profile) -> Void)
+  var saveButtonPressed: ((Profile) -> Void)
 
-  init(showProfileChanges: Binding<Bool>, profile: Profile, didUpdateProfile: @escaping ((Profile) -> Void)) {
+  init(showProfileChanges: Binding<Bool>, profile: Profile, didUpdateProfile: @escaping ((Profile) -> Void), saveButtonPressed: @escaping ((Profile) -> Void)) {
     self._showProfileChanges = showProfileChanges
     self.userInfo = profile.userInfo
     self.sectionData = profile.sections
@@ -45,6 +46,7 @@ struct ProfileEditorSheetView: View {
       userData: profile.userInfo,
       sectionData: profile.sections
     )
+    self.saveButtonPressed = saveButtonPressed
   }
 
   var body: some View {
@@ -52,7 +54,7 @@ struct ProfileEditorSheetView: View {
       List {
         Section {
           ToggleStateControlPanel(title: "Show Updates", showChanges: $showProfileChanges) {
-
+            saveButtonPressed(.init(id: UUID().uuidString, userInfo: userInfo, sections: sectionData))
           } discardChangesPressed:  {
             userInfo = initialProfileDataViewInfo.userInfo
             sectionData = initialProfileDataViewInfo.sectionData
