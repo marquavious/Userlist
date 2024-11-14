@@ -13,7 +13,7 @@ class ProfileSectionEditorViewState {
   var titleText: String?
   var descriptionText: String?
   var media: Media?
-  var alignment: SectionData.Alignment
+  var alignment: SectionData.AlignmentGuide
   var layout: SectionData.Layout
 
   init(
@@ -21,7 +21,7 @@ class ProfileSectionEditorViewState {
     index: Int,
     titleText: String?,
     descriptionText: String?,
-    alignment: SectionData.Alignment,
+    alignment: SectionData.AlignmentGuide,
     media: Media?,
     layout: SectionData.Layout
   ) {

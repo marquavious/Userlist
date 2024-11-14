@@ -38,9 +38,9 @@ public final class Theme {
     var height: CGFloat {
       switch self {
       case .mediaHeight:
-        return 200
+        200
       case .profilePicture:
-        return 95
+        95
       }
     }
 
@@ -59,7 +59,7 @@ public final class Theme {
     var radius: CGFloat {
       switch self {
       case .cornerRadius:
-        return 8
+        8
       }
     }
   }
@@ -67,12 +67,15 @@ public final class Theme {
   enum Spacing {
     case intraSectionalHorizontalSpacing
     case profileSectionCellSpacing
+    case cellTextSpacing
     var spacing: CGFloat {
       switch self {
       case .intraSectionalHorizontalSpacing:
-        return 4
+        4
       case .profileSectionCellSpacing:
-        return 8
+        8
+      case .cellTextSpacing:
+        4
       }
     }
   }

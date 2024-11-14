@@ -15,7 +15,7 @@ struct ProfileSectionEditorView: View {
 
   @State var titleText: String = ""
   @State var descriptionText: String = ""
-  @State var alignment: SectionData.Alignment = .leading
+  @State var alignment: SectionData.AlignmentGuide = .leading
   @State var layout: SectionData.Layout = .top
   @State var media: Media?
   @FocusState private var editorFocus: EditorFocus?
@@ -34,7 +34,7 @@ struct ProfileSectionEditorView: View {
   var body: some View {
     List {
       Section("Preview") {
-        SectionView(
+        SectionCell(
           title: titleText,
           description: descriptionText,
           media: media,

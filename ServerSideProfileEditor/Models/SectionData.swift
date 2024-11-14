@@ -32,7 +32,7 @@ class SectionData: Identifiable, ObservableObject {
     }
   }
 
-  enum Alignment: Int, Identifiable, CaseIterable, Equatable {
+  enum AlignmentGuide: Int, Identifiable, CaseIterable, Equatable {
     case leading, centerd, trailing
 
     var systemImageString: String {
@@ -59,12 +59,25 @@ class SectionData: Identifiable, ObservableObject {
       }
     }
 
-    var alignment: Alignment {
+    var textAlignment: TextAlignment {
       switch self {
+      case .leading:
+          .leading
+      case .centerd:
+          .center
       case .trailing:
           .trailing
-      default:
+      }
+    }
+
+    var frameAlignment: Alignment {
+      switch self {
+      case .leading:
           .leading
+      case .trailing:
+          .trailing
+      case .centerd:
+          .center
       }
     }
   }
@@ -76,7 +89,7 @@ class SectionData: Identifiable, ObservableObject {
   var layout: Layout
   var mediaHeight: CGFloat?
   var mediaContentMode: ContentMode
-  var alignment: Alignment
+  var alignment: AlignmentGuide
   var media: Media?
   
   init(
@@ -87,7 +100,7 @@ class SectionData: Identifiable, ObservableObject {
     layout: Layout = .top,
     mediaHeight: CGFloat? = nil,
     mediaContentMode: ContentMode = .fill,
-    alignment: Alignment = .leading,
+    alignment: AlignmentGuide = .leading,
     media: Media? = nil
   ) {
     self.id = id
