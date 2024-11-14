@@ -23,7 +23,7 @@ class ProfileSectionEditorViewState {
     descriptionText: String?,
     alignment: SectionData.Alignment,
     media: Media?,
-    mediaPosition: SectionData.Layout
+    layout: SectionData.Layout
   ) {
     self.id = id
     self.index = index
@@ -31,7 +31,17 @@ class ProfileSectionEditorViewState {
     self.descriptionText = descriptionText
     self.alignment = alignment
     self.media = media
-    self.layout = mediaPosition
+    self.layout = layout
+  }
+
+  init(sectionData: SectionData) {
+    self.id = sectionData.id
+    self.index = sectionData.index
+    self.titleText = sectionData.title
+    self.descriptionText = sectionData.description
+    self.alignment = sectionData.alignment
+    self.media = sectionData.media
+    self.layout = sectionData.layout
   }
 
   func copyState(_ state: ProfileSectionEditorViewState) {

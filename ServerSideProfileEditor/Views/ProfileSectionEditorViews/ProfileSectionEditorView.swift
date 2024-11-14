@@ -22,31 +22,13 @@ struct ProfileSectionEditorView: View {
   @State var showChanges: Bool = true
   @State var updatedState: ProfileSectionEditorViewState
 
-  var initialState: ProfileSectionEditorViewState
-  var sectionDidUpdate: UpdatedSectionClosure
+  private var initialState: ProfileSectionEditorViewState
+  private var sectionDidUpdate: UpdatedSectionClosure
 
   init(sectionData: SectionData, sectionDidUpdate: @escaping UpdatedSectionClosure) {
     self.sectionDidUpdate = sectionDidUpdate
-
-    self.initialState = .init(
-      id: sectionData.id,
-      index: sectionData.index,
-      titleText: sectionData.title,
-      descriptionText: sectionData.description,
-      alignment: sectionData.alignment,
-      media: sectionData.media,
-      mediaPosition: sectionData.layout
-    )
-
-    self.updatedState = .init(
-      id: sectionData.id,
-      index: sectionData.index,
-      titleText: sectionData.title,
-      descriptionText: sectionData.description,
-      alignment: sectionData.alignment,
-      media: sectionData.media,
-      mediaPosition: sectionData.layout
-    )
+    self.initialState = .init(sectionData: sectionData)
+    self.updatedState = .init(sectionData: sectionData)
   }
 
   var body: some View {
@@ -75,6 +57,8 @@ struct ProfileSectionEditorView: View {
         layout: $layout,
         media: $media
       )
+      .disabled(media == nil && (titleText.isEmpty || descriptionText.isEmpty))
+      .disabled(titleText.isEmpty && descriptionText.isEmpty)
 
       TextEditSection(
         titleText: $titleText,
@@ -161,11 +145,12 @@ struct ProfileSectionEditorView: View {
   ProfileSectionEditorViewForPreview(
     media:
         .urlPhoto(
-          photoData: PhotoData(
-            id: UUID().uuidString,
-            urlString: "https://i.imgur.com/ApCOa7j.jpeg",
-            contentMode: .allCases.randomElement()!
-          )
+          photoData:
+            PhotoData(
+              id: UUID().uuidString,
+              urlString: "https://i.imgur.com/ApCOa7j.jpeg",
+              contentMode: .allCases.randomElement()!
+            )
         )
   )
 }
