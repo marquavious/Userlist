@@ -40,7 +40,7 @@ struct SectionCell: View {
     ) {
       Group {
         if mediaIsEmpty {
-          VStack(spacing: 4) {
+          VStack(spacing: Theme.Spacing.cellTextSpacing.spacing) {
             if mediaPosition == .flipped {
               createDescriptionTextView()
               createTitleTextView()
@@ -53,7 +53,7 @@ struct SectionCell: View {
           switch mediaPosition {
           case .top:
             createMeidaView()
-            VStack(spacing: 4) {
+            VStack(spacing: Theme.Spacing.cellTextSpacing.spacing) {
               createTitleTextView()
               createDescriptionTextView()
             }
@@ -111,7 +111,7 @@ struct SectionCell: View {
         cornerRadius: Theme.Geomitry.cornerRadius.radius
       )
       .frame(height: Theme.MediaSizes.mediaHeight.height)
-      .padding(.vertical, 4)
+      .padding(.vertical, Theme.Spacing.cellTextSpacing.spacing)
     }
   }
 }

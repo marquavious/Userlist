@@ -57,8 +57,7 @@ struct ProfileSectionEditorView: View {
         layout: $layout,
         media: $media
       )
-      .disabled(media == nil && (titleText.isEmpty || descriptionText.isEmpty))
-      .disabled(titleText.isEmpty && descriptionText.isEmpty)
+      .disabled(media == nil && (titleText.isEmpty && descriptionText.isEmpty))
 
       TextEditSection(
         titleText: $titleText,

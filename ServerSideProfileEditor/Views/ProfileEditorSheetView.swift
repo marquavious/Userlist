@@ -8,29 +8,11 @@
 import Foundation
 import SwiftUI
 
-@Observable
-class ProfileEditorSheetViewInfo: ObservableObject, Identifiable {
-  var userInfo: User
-  var sectionData: [SectionData]
-
-  init(
-    userData: User,
-    sectionData: [SectionData]
-  ) {
-    self.userInfo = userData
-    self.sectionData = sectionData
-  }
-  func copyState(_ state: ProfileEditorSheetViewInfo) {
-    userInfo = state.userInfo
-    sectionData = state.sectionData
-  }
-}
-
 struct ProfileEditorSheetView: View {
   @State var router = RouterPath()
   @Binding var showProfileChanges: Bool
-  @State private var initialProfileDataViewInfo: ProfileEditorSheetViewInfo
-  @State private var userInfo: User
+  @State private var initialProfileDataViewInfo: ProfileEditorSheetViewState
+  @State private var userData: User
   @State private var sectionData: [SectionData]
 
   var didUpdateProfile: ((Profile) -> Void)
@@ -38,11 +20,11 @@ struct ProfileEditorSheetView: View {
 
   init(showProfileChanges: Binding<Bool>, profile: Profile, didUpdateProfile: @escaping ((Profile) -> Void), saveButtonPressed: @escaping ((Profile) -> Void)) {
     self._showProfileChanges = showProfileChanges
-    self.userInfo = profile.userInfo
+    self.userData = profile.userInfo
     self.sectionData = profile.sections
     self.didUpdateProfile = didUpdateProfile
 
-    self.initialProfileDataViewInfo = ProfileEditorSheetViewInfo(
+    self.initialProfileDataViewInfo = ProfileEditorSheetViewState(
       userData: profile.userInfo,
       sectionData: profile.sections
     )
@@ -54,33 +36,33 @@ struct ProfileEditorSheetView: View {
       List {
         Section {
           ToggleStateControlPanel(title: "Show Updates", showChanges: $showProfileChanges) {
-            saveButtonPressed(.init(id: UUID().uuidString, userInfo: userInfo, sections: sectionData))
+            saveButtonPressed(.init(id: UUID().uuidString, userInfo: userData, sections: sectionData))
           } discardChangesPressed:  {
-            userInfo = initialProfileDataViewInfo.userInfo
+            userData = initialProfileDataViewInfo.userData
             sectionData = initialProfileDataViewInfo.sectionData
           }
         }
         Section("User Details") {
           VStack(spacing: 8) {
             UserListViewCell(
-              imageURL: userInfo.profilePictureUrl,
-              title: userInfo.username,
-              description: userInfo.description
+              imageURL: userData.profilePictureUrl,
+              title: userData.username,
+              description: userData.description
             ).onTapGesture {
               router.navigate(
                 to: .userInfoEditor(
-                  user: userInfo,
+                  user: userData,
                   updatedUserClosure: { user in
-                    userInfo = user
+                    userData = user
                     _ = router.path.popLast()
                   }
                 )
               )
             }
-            if initialProfileDataViewInfo.userInfo != userInfo {
+            if initialProfileDataViewInfo.userData != userData {
               Divider()
               Button {
-                userInfo = initialProfileDataViewInfo.userInfo
+                userData = initialProfileDataViewInfo.userData
               } label: {
                 Text("Discard Changes")
                   .contentShape(Rectangle())
@@ -127,7 +109,6 @@ struct ProfileEditorSheetView: View {
               .buttonStyle(.bordered)
             }
           }
-
         }
       }
       .listStyle(.sidebar)
@@ -135,11 +116,11 @@ struct ProfileEditorSheetView: View {
       .scrollIndicators(.hidden)
       .withAppRouter()
     }
-    .onChange(of: userInfo) { oldValue, newValue in
-      didUpdateProfile(.init(id: UUID().uuidString, userInfo: userInfo, sections: sectionData))
+    .onChange(of: userData) { oldValue, newValue in
+      didUpdateProfile(.init(id: UUID().uuidString, userInfo: userData, sections: sectionData))
     }
     .onChange(of: sectionData) { oldValue, newValue in
-      didUpdateProfile(.init(id: UUID().uuidString, userInfo: userInfo, sections: sectionData))
+      didUpdateProfile(.init(id: UUID().uuidString, userInfo: userData, sections: sectionData))
     }
     .environment(router)
   }

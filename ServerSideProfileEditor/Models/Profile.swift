@@ -26,7 +26,6 @@ extension Profile: Hashable, Equatable {
 }
 
 extension Profile {
-
   static func emptyProfile() -> Profile {
     Profile(
       id: UUID().uuidString,
