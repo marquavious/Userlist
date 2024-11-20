@@ -7,40 +7,39 @@
 
 import Foundation
 
-struct Profile: Identifiable {
+struct ProfileData: Identifiable {
   let id: String
-  var userInfo: User
+  var user: UserData
   var sections: [SectionData]
 }
 
-extension Profile: Hashable, Equatable {
+extension ProfileData: Hashable, Equatable {
   public func hash(into hasher: inout Hasher) {
     hasher.combine(id)
   }
   
-  static func == (lhs: Profile, rhs: Profile) -> Bool {
+  static func == (lhs: ProfileData, rhs: ProfileData) -> Bool {
     lhs.id == rhs.id &&
-    lhs.userInfo == rhs.userInfo &&
+    lhs.user == rhs.user &&
     lhs.sections == rhs.sections
   }
 }
 
-extension Profile {
-  static func emptyProfile() -> Profile {
-    Profile(
+extension ProfileData {
+  static func emptyProfile() -> ProfileData {
+    ProfileData(
       id: UUID().uuidString,
-      userInfo: User(username: "", description: ""),
+      user: UserData(username: "", description: ""),
       sections: []
     )
   }
 
-  static func generatRandomProfile(id: String? = nil) -> Profile {
-    
+  static func generatRandomProfile(id: String? = nil) -> ProfileData {
     let userInfo = ProfileStubGenerator.randomUsernameDescriptionBundle()
-    
-    let profile = Profile(
+
+    let profile = ProfileData(
       id: id ?? UUID().uuidString,
-      userInfo: User(
+      user: UserData(
         username: userInfo.username,
         description: userInfo.description,
         profilePictureUrlString: ProfileStubGenerator.randomProfilePicture(),
@@ -53,7 +52,7 @@ extension Profile {
         SectionData.stubs(index: 3)
       ]
     )
-    
+
     return profile
   }
 }

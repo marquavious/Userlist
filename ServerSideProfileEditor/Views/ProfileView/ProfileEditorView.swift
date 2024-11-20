@@ -75,23 +75,23 @@ struct ProfileEditorView: View {
   @State private var shouldShowChanges: Bool = true
   @FocusState private var focusedTextField: ProfileEditorTextField?
 
-  var userDidUpdate: UpdatedUserClosure
+  var userDidUpdate: UserDidUpdate
 
-  init(initialUser: User, userDidUpdate: @escaping UpdatedUserClosure) {
+  init(initialUser: UserData, userDidUpdate: @escaping UserDidUpdate) {
     self.userDidUpdate = userDidUpdate
 
     self.switchOffStateText = ProfileEditorStateTextProvider(
       usernameText: initialUser.username,
       descriptionText: initialUser.description,
       profilePictureURL: initialUser.profilePictureUrlString ?? "",
-      bannerPhotoURL: initialUser.profileHeaderUrlString ?? ""
+      bannerPhotoURL: initialUser.profileBannerUrlString ?? ""
     )
 
     self.switchOnStateText = ProfileEditorStateTextProvider(
       usernameText: initialUser.username,
       descriptionText: initialUser.description,
       profilePictureURL: initialUser.profilePictureUrlString ?? "",
-      bannerPhotoURL: initialUser.profileHeaderUrlString ?? ""
+      bannerPhotoURL: initialUser.profileBannerUrlString ?? ""
     )
   }
 
@@ -238,7 +238,7 @@ struct ProfileEditorView: View {
 
   func didUpdateUser() {
     userDidUpdate(
-      User(
+      UserData(
         username: usernameText,
         description: descriptionText,
         profilePictureUrlString: profilePictureURL,
@@ -254,8 +254,8 @@ struct ProfileEditorView: View {
 
 struct ProfileEditorViewPreview: View {
   @State var showProfileChanges: Bool = false
-  @State var profile: User = User.stubs().first!
-  @State var updatedProfile: User = User.stubs().last!
+  @State var profile: UserData = UserData.stubs().first!
+  @State var updatedProfile: UserData = UserData.stubs().last!
 
   var body: some View {
     ProfileEditorView(

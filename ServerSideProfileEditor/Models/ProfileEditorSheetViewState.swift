@@ -9,11 +9,11 @@ import Foundation
 
 @Observable
 class ProfileEditorSheetViewState: ObservableObject, Identifiable {
-  var userData: User
+  var userData: UserData
   var sectionData: [SectionData]
 
   init(
-    userData: User,
+    userData: UserData,
     sectionData: [SectionData]
   ) {
     self.userData = userData

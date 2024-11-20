@@ -8,15 +8,15 @@
 import SwiftUI
 
 struct EditorLayoutSection: View {
-  @Binding var alignment: SectionData.AlignmentGuide
-  @Binding var layout: SectionData.Layout
+  @Binding var alignment: SectionLayout.AlignmentGuide
+  @Binding var layout: SectionLayout.Arrangement
   @Binding var media: Media?
 
   var body: some View {
     Section("Layout") {
       VStack {
         Picker("Text Position", selection: $alignment) {
-          ForEach(SectionData.AlignmentGuide.allCases) { option in
+          ForEach(SectionLayout.AlignmentGuide.allCases) { option in
             Image(systemName: option.systemImageString)
               .tag(option)
               .tint(.blue)
@@ -27,8 +27,8 @@ struct EditorLayoutSection: View {
         Picker("Media Position", selection: $layout) {
           ForEach(
             media == nil ?
-            SectionData.Layout.textOnlyCases :
-              SectionData.Layout.allCases
+            SectionLayout.Arrangement.textOnlyCases :
+              SectionLayout.Arrangement.allCases
           ) { option in
             Image(systemName: option.systemImageString)
               .tag(option)

@@ -10,7 +10,7 @@ import SwiftUI
 struct ProfileView: View {
 
   private enum LoadingState: Equatable {
-    case loading(id: String?), loaded(profile: Profile), error(description: String)
+    case loading(id: String?), loaded(profile: ProfileData), error(description: String)
   }
 
   private struct Constants {
@@ -21,20 +21,20 @@ struct ProfileView: View {
     static let cellHorizontalPadding: CGFloat = 16
   }
 
-  @State private var newProfileData: Profile?
-  @State private var initalProfileData: Profile?
+  @State private var newProfileData: ProfileData?
+  @State private var initalProfileData: ProfileData?
   @State private var isInEditorMode: Bool = false
   @State private var state: ProfileView.LoadingState
   @State private var showProfileChanges: Bool = false
   @State private var sheetPresentationDetent: PresentationDetent = PresentationDetent.fraction(0.2)
-  @Environment(UserListManager.self) private var userlist
+  @Environment(UserDatabase.self) private var userlist
   @Environment(RouterPath.self) private var router
 
   init(id: String) {
     state = .loading(id: id)
   }
 
-  init(profile: Profile) {
+  init(profile: ProfileData) {
     state = .loaded(profile: profile)
     initalProfileData = profile
     newProfileData = profile
@@ -56,15 +56,15 @@ struct ProfileView: View {
         }
       case .loaded(let profile):
         StretchyHeaderScrollView(
-          url: profile.userInfo.profileHeaderUrl,
+          url: URL(string: profile.user.profileBannerUrlString ?? ""),
           photoHeight: Constants.profileHeaderPictureHeight,
           verticalOffset: -Constants.profilePictureSize.height / 1.6
         ) {
           VStack {
             ProfileViewUserInfoSection(
-              username: profile.userInfo.username,
-              description: profile.userInfo.description,
-              profilePictureUrl: profile.userInfo.profilePictureUrl,
+              username: profile.user.username,
+              description: profile.user.description,
+              profilePictureUrl: URL(string: profile.user.profilePictureUrlString ?? ""),
               imageSize: Constants.profilePictureSize,
               editButtonPressed: {
                 isInEditorMode.toggle()
@@ -111,7 +111,7 @@ struct ProfileView: View {
   }
 
   private func loadData(id: String) {
-    if let profile = userlist.users.first(where: { $0.id == id }) {
+    if let profile = userlist.allUsers.first(where: { $0.id == id }) {
       state = .loaded(profile: profile)
       initalProfileData = profile
       newProfileData = profile

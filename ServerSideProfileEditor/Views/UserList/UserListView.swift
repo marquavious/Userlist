@@ -10,18 +10,18 @@ import SwiftUI
 
 struct UserListView: View {
   
-  @Environment(UserListManager.self) var userList
+  @Environment(UserDatabase.self) var userList
   @Environment(RouterPath.self) var router
 
   var body: some View {
     ScrollView {
       LazyVStack(alignment: .leading) {
-        ForEach(userList.users) { user in
+        ForEach(userList.allUsers) { user in
           HStack {
             UserListViewCell(
-              imageURL: user.userInfo.profilePictureUrl,
-              title: user.userInfo.username,
-              description: user.userInfo.description
+              imageURL: URL(string: user.user.profilePictureUrlString ?? ""),
+              title: user.user.username,
+              description: user.user.description
             )
           }
           .environment(router)

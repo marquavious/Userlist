@@ -9,27 +9,32 @@ import Foundation
 import SwiftUI
 
 enum Media: Equatable, CaseIterable, Identifiable {
-  // Only for type checking,
-  // There is for sure a better way to do this..
+
   static var allCases: [Media] = [
-    .urlPhoto(photoData: PhotoData.emptyInstance()),
-    .urlPhotoCarousel(photoArray: [PhotoData.emptyInstance(), PhotoData.emptyInstance(), PhotoData.emptyInstance()]),
-    .urlPhotoGrid(photoDataOne: PhotoData.emptyInstance(), photoDataTwo: PhotoData.emptyInstance(), photoDataThree: PhotoData.emptyInstance(), photoDataFour: PhotoData.emptyInstance())
+    .urlPhoto(photoData: .emptyInstance()),
+    .urlPhotoCarousel(photoArray: Array(repeating: .emptyInstance(), count: 4)),
+    .urlPhotoGrid(photoDataOne: .emptyInstance(), photoDataTwo: .emptyInstance(), photoDataThree: .emptyInstance(), photoDataFour: .emptyInstance())
   ]
+
   case urlPhoto(
     photoData: PhotoData
   )
+
   case urlPhotoGrid(
     photoDataOne: PhotoData,
     photoDataTwo: PhotoData,
     photoDataThree: PhotoData,
     photoDataFour: PhotoData
   )
+
   case urlPhotoCarousel(
     photoArray: [PhotoData]
   )
 
-  var id: String { UUID().uuidString }
+  var id: String {
+    UUID().uuidString
+  }
+
   var description: String {
     switch self {
     case .urlPhoto:
@@ -44,9 +49,7 @@ enum Media: Equatable, CaseIterable, Identifiable {
 
 extension Media {
   static func generateRandomMedia() -> Media {
-    let mediaType =
-    // Media.urlPhotoCarousel(photoArray: [PhotoData.emptyInstance()])
-    allCases.randomElement()!
+    let mediaType = allCases.randomElement()!
     switch mediaType {
     case .urlPhoto:
       return Media.urlPhoto(

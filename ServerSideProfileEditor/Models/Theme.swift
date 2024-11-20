@@ -79,9 +79,20 @@ public final class Theme {
       }
     }
   }
+
+  enum Button {
+    case buttonHeight
+
+    var height: CGFloat {
+      switch self {
+      case .buttonHeight:
+        40
+      }
+    }
+  }
 }
 
 #Preview {
-  ProfileView(profile: Profile.generatRandomProfile())
+  ProfileView(profile: ProfileData.generatRandomProfile())
     .withStubbedEnviorments()
 }

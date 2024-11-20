@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ProfileViewForPreviews: View {
 
-  @State var profile = UserListManager.shared.users.randomElement()!
+  @State var profile = UserDatabase.shared.allUsers.randomElement()!
 
   var body: some View {
     ProfileView(profile: profile)

@@ -10,19 +10,14 @@ import SwiftUI
 
 struct ControlPanelButtonViewModifier: ViewModifier {
 
-  struct Constants {
-    static let buttonHeight: CGFloat = 40
-    static let cornerRadius: CGFloat = 8
-  }
-
   var backgroundColor: Color
 
   func body(content: Content) -> some View {
     content
       .buttonStyle(.plain)
-      .frame(maxWidth: .infinity, maxHeight: Constants.buttonHeight)
+      .frame(maxWidth: .infinity, maxHeight: Theme.Button.buttonHeight.height)
       .background(backgroundColor)
       .foregroundStyle(.white)
-      .clipShape(RoundedRectangle(cornerRadius: Constants.cornerRadius))
+      .clipShape(RoundedRectangle(cornerRadius: Theme.Geomitry.cornerRadius.radius))
   }
 }

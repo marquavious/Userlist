@@ -11,8 +11,8 @@ struct SectionCell: View {
   var title: String?
   var description: String?
   var media: Media?
-  var alignment: SectionData.AlignmentGuide
-  var mediaPosition: SectionData.Layout
+  var alignment: SectionLayout.AlignmentGuide
+  var mediaPosition: SectionLayout.Arrangement
 
   private var titleIsEmpty: Bool {
     if let title = title {

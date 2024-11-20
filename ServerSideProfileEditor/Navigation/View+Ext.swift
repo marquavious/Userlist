@@ -15,10 +15,10 @@ extension View {
       switch destination {
       case .profile(let id):
         ProfileView(id: id)
-          .environment(UserListManager.shared)
+          .environment(UserDatabase.shared)
       case .userInfoEditor(let user, let updatedUserClosure):
           ProfileEditorView(initialUser: user, userDidUpdate: updatedUserClosure)
-        .environment(UserListManager.shared)
+        .environment(UserDatabase.shared)
       case .sectionInfoEditor(let section, let updatedSectionClosure):
         ProfileSectionEditorView(
           sectionData: section,
@@ -32,14 +32,13 @@ extension View {
 extension View {
 
   func withEnvironments() -> some View {
-    environment(UserListManager.shared)
+    environment(UserDatabase.shared)
       .environment(Theme())
       .environment(RouterPath())
   }
 
-  // Foe Debug
   func withStubbedEnviorments() -> some View {
-    environment(UserListManager.shared)
+    environment(UserDatabase.shared)
       .environment(Theme())
       .environment(RouterPath())
   }

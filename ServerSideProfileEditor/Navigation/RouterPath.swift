@@ -10,6 +10,8 @@ import SwiftUI
 
 @MainActor
 @Observable public class RouterPath {
+
+  // Would like to make this private...
   var path: [RouterDestination] = []
 
   init() {}

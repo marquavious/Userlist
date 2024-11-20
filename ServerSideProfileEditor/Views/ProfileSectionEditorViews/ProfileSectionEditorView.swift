@@ -15,17 +15,17 @@ struct ProfileSectionEditorView: View {
 
   @State var titleText: String = ""
   @State var descriptionText: String = ""
-  @State var alignment: SectionData.AlignmentGuide = .leading
-  @State var layout: SectionData.Layout = .top
+  @State var alignment: SectionLayout.AlignmentGuide = .leading
+  @State var layout: SectionLayout.Arrangement = .top
   @State var media: Media?
   @FocusState private var editorFocus: EditorFocus?
   @State var showChanges: Bool = true
   @State var updatedState: ProfileSectionEditorViewState
 
   private var initialState: ProfileSectionEditorViewState
-  private var sectionDidUpdate: UpdatedSectionClosure
+  private var sectionDidUpdate: SectionDidUpdate
 
-  init(sectionData: SectionData, sectionDidUpdate: @escaping UpdatedSectionClosure) {
+  init(sectionData: SectionData, sectionDidUpdate: @escaping SectionDidUpdate) {
     self.sectionDidUpdate = sectionDidUpdate
     self.initialState = .init(sectionData: sectionData)
     self.updatedState = .init(sectionData: sectionData)

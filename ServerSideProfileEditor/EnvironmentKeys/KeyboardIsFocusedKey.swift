@@ -1,5 +1,5 @@
 //
-//  FocusedKey.swift
+//  KeyboardIsFocusedKey.swift
 //  ServerSideProfileEditor
 //
 //  Created by Marquavious Draggon on 11/12/24.
@@ -8,13 +8,14 @@
 import Foundation
 import SwiftUI
 
-private struct FocusedKey: EnvironmentKey {
+
+private struct KeyboardIsFocusedKey: EnvironmentKey {
   static let defaultValue: Bool = false
 }
 
 extension EnvironmentValues {
   var isFocused: Bool {
-    get { self[FocusedKey.self] }
-    set { self[FocusedKey.self] = newValue }
+    get { self[KeyboardIsFocusedKey.self] }
+    set { self[KeyboardIsFocusedKey.self] = newValue }
   }
 }

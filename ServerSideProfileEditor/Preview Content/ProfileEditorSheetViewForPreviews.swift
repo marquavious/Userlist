@@ -11,8 +11,8 @@ import SwiftUI
 struct ProfileEditorSheetViewForPreviews: View {
 
   @State var showProfileChanges: Bool = true
-  @State var profile = Profile.generatRandomProfile()
-  @State var profileTwo = Profile.generatRandomProfile()
+  @State var profile = ProfileData.generatRandomProfile()
+  @State var profileTwo = ProfileData.generatRandomProfile()
 
   var body: some View {
     ProfileEditorSheetView(

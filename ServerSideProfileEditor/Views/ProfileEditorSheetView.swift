@@ -12,20 +12,20 @@ struct ProfileEditorSheetView: View {
   @State var router = RouterPath()
   @Binding var showProfileChanges: Bool
   @State private var initialProfileDataViewInfo: ProfileEditorSheetViewState
-  @State private var userData: User
+  @State private var userData: UserData
   @State private var sectionData: [SectionData]
 
-  var didUpdateProfile: ((Profile) -> Void)
-  var saveButtonPressed: ((Profile) -> Void)
+  var didUpdateProfile: ((ProfileData) -> Void)
+  var saveButtonPressed: ((ProfileData) -> Void)
 
-  init(showProfileChanges: Binding<Bool>, profile: Profile, didUpdateProfile: @escaping ((Profile) -> Void), saveButtonPressed: @escaping ((Profile) -> Void)) {
+  init(showProfileChanges: Binding<Bool>, profile: ProfileData, didUpdateProfile: @escaping ((ProfileData) -> Void), saveButtonPressed: @escaping ((ProfileData) -> Void)) {
     self._showProfileChanges = showProfileChanges
-    self.userData = profile.userInfo
+    self.userData = profile.user
     self.sectionData = profile.sections
     self.didUpdateProfile = didUpdateProfile
 
     self.initialProfileDataViewInfo = ProfileEditorSheetViewState(
-      userData: profile.userInfo,
+      userData: profile.user,
       sectionData: profile.sections
     )
     self.saveButtonPressed = saveButtonPressed
@@ -33,6 +33,7 @@ struct ProfileEditorSheetView: View {
 
   var body: some View {
     NavigationStack(path: $router.path) {
+      /*
       List {
         Section {
           ToggleStateControlPanel(title: "Show Updates", showChanges: $showProfileChanges) {
@@ -115,12 +116,13 @@ struct ProfileEditorSheetView: View {
       .scrollDismissesKeyboard(.interactively)
       .scrollIndicators(.hidden)
       .withAppRouter()
+       */
     }
     .onChange(of: userData) { oldValue, newValue in
-      didUpdateProfile(.init(id: UUID().uuidString, userInfo: userData, sections: sectionData))
+      didUpdateProfile(.init(id: UUID().uuidString, user: userData, sections: sectionData))
     }
     .onChange(of: sectionData) { oldValue, newValue in
-      didUpdateProfile(.init(id: UUID().uuidString, userInfo: userData, sections: sectionData))
+      didUpdateProfile(.init(id: UUID().uuidString, user: userData, sections: sectionData))
     }
     .environment(router)
   }

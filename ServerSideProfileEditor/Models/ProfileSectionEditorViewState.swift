@@ -13,17 +13,17 @@ class ProfileSectionEditorViewState {
   var titleText: String?
   var descriptionText: String?
   var media: Media?
-  var alignment: SectionData.AlignmentGuide
-  var layout: SectionData.Layout
+  var alignment: SectionLayout.AlignmentGuide
+  var layout: SectionLayout.Arrangement
 
   init(
     id: String,
     index: Int,
     titleText: String?,
     descriptionText: String?,
-    alignment: SectionData.AlignmentGuide,
+    alignment: SectionLayout.AlignmentGuide,
     media: Media?,
-    layout: SectionData.Layout
+    layout: SectionLayout.Arrangement
   ) {
     self.id = id
     self.index = index

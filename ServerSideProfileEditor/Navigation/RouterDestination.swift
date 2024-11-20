@@ -7,17 +7,14 @@
 
 import Foundation
 
-typealias UpdatedSectionClosure = (SectionData) -> Void
-typealias UpdatedUserClosure = (User) -> Void
+typealias SectionDidUpdate = (SectionData) -> Void
+typealias UserDidUpdate = (UserData) -> Void
 
-enum RouterDestination: Identifiable, Hashable {
-  static func == (lhs: RouterDestination, rhs: RouterDestination) -> Bool {
-    lhs.id == rhs.id
-  }
+enum RouterDestination: Identifiable {
 
   case profile(id: String)
-  case userInfoEditor(user: User, updatedUserClosure: UpdatedUserClosure)
-  case sectionInfoEditor(section: SectionData, updatedSectionClosure: UpdatedSectionClosure)
+  case userInfoEditor(userData: UserData, userDidUpdate: UserDidUpdate)
+  case sectionInfoEditor(sectionData: SectionData, sectionDidUpdate: SectionDidUpdate)
 
   var id: String {
     switch self {
@@ -29,8 +26,15 @@ enum RouterDestination: Identifiable, Hashable {
       "section_editor_\(section.id)"
     }
   }
+}
+
+extension RouterDestination: Hashable {
 
   func hash(into hasher: inout Hasher) {
     hasher.combine(id)
+  }
+
+  static func == (lhs: RouterDestination, rhs: RouterDestination) -> Bool {
+    lhs.id == rhs.id
   }
 }
