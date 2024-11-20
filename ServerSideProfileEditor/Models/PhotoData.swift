@@ -18,4 +18,8 @@ extension PhotoData {
   static func emptyInstance() -> PhotoData {
     PhotoData(id: UUID().uuidString, urlString: "", contentMode: .fit)
   }
+
+  static func stubs() -> PhotoData {
+    PhotoData(id: UUID().uuidString, urlString: ProfileStubGenerator.randomMediaPicture(), contentMode: .allCases.randomElement()!)
+  }
 }

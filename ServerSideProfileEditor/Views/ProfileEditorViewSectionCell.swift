@@ -33,9 +33,8 @@ struct ProfileEditorViewSectionCell: View {
       .frame(maxWidth: .infinity, alignment: .leading)
 
       if let media = media {
-        MediaView(
-          media: media,
-          cornerRadius: Theme.Geomitry.cornerRadius.radius
+        MediaWindowView(
+          media: media
         )
         .frame(width: 50, height: 50)
         .clipped()

@@ -8,19 +8,23 @@
 import Foundation
 import SwiftUI
 
-struct MediaView: View {
+struct MediaWindowView: View {
 
   var media: Media
-  @State var cornerRadius: CGFloat
 
   var body: some View {
     switch media {
     case .urlPhoto(let photoData):
-      CustomContentModeImageView(urlString: photoData.urlString, contentMode: photoData.contentMode)
-        .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-    case .urlPhotoGrid(let photoDataOne, let photoDataTwo, let photoDataThree, let photoDataFour):
+      CustomContentModePhotoView(
+        url: URL(string: photoData.urlString ?? ""),
+        contentMode: photoData.contentMode
+      )
+    case .urlPhotoGrid(
+      let photoDataOne,
+      let photoDataTwo,
+      let photoDataThree,
+      let photoDataFour):
       PhotoGridView(
-        cornerRadius: cornerRadius,
         photoDataOne: photoDataOne,
         photoDataTwo: photoDataTwo,
         photoDataThree: photoDataThree,
@@ -28,9 +32,16 @@ struct MediaView: View {
       )
     case .urlPhotoCarousel(photoArray: let photoArray):
       PhotoCarouselView(
-        photoArray: photoArray,
-        photoCornerRadius: Theme.Geomitry.cornerRadius.radius
+        photoArray: photoArray
       )
     }
   }
+}
+
+#Preview {
+  MediaWindowView(media: .generateRandomMedia())
+    .frame(
+      width: UIScreen.main.bounds.width - 16,
+      height: Theme.MediaSizes.mediaHeight.height
+    )
 }

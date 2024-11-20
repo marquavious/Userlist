@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct PhotoGridView: View {
-  @State var cornerRadius: CGFloat
+
   var photoDataOne: PhotoData
   var photoDataTwo: PhotoData
   var photoDataThree: PhotoData
@@ -18,28 +18,24 @@ struct PhotoGridView: View {
   var body: some View {
     VStack {
       HStack {
-        CustomContentModeImageView(
-          urlString: photoDataOne.urlString,
+        CustomContentModePhotoView(
+          url: URL(string: photoDataOne.urlString ?? ""),
           contentMode: photoDataOne.contentMode
         )
-        .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-        CustomContentModeImageView(
-          urlString: photoDataTwo.urlString,
+        CustomContentModePhotoView(
+          url: URL(string: photoDataTwo.urlString  ?? ""),
           contentMode: photoDataTwo.contentMode
         )
-        .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
       }
       HStack {
-        CustomContentModeImageView(
-          urlString: photoDataThree.urlString,
+        CustomContentModePhotoView(
+          url: URL(string: photoDataThree.urlString ?? ""),
           contentMode: photoDataThree.contentMode
         )
-        .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-        CustomContentModeImageView(
-          urlString: photoDataFour.urlString,
+        CustomContentModePhotoView(
+          url: URL(string: photoDataFour.urlString ?? ""),
           contentMode: photoDataFour.contentMode
         )
-        .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
       }
     }
   }

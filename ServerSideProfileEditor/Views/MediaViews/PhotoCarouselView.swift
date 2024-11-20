@@ -11,19 +11,17 @@ import SwiftUI
 struct PhotoCarouselView: View {
 
   var photoArray: [PhotoData]
-  var photoCornerRadius: CGFloat
 
   var body: some View {
     GeometryReader { proxy in
       ScrollView(.horizontal) {
         HStack {
           ForEach(photoArray) { image in
-            CustomContentModeImageView(
-              urlString: image.urlString,
+            CustomContentModePhotoView(
+              url: URL(string: image.urlString ?? ""),
               contentMode: image.contentMode
             )
             .frame(width: proxy.frame(in: .global).width)
-            .clipShape(RoundedRectangle(cornerRadius: photoCornerRadius))
           }
         }
         .scrollTargetLayout()
@@ -33,4 +31,19 @@ struct PhotoCarouselView: View {
     }
     .scrollClipDisabled()
   }
+}
+
+#Preview {
+  PhotoCarouselView(
+    photoArray: [
+      PhotoData.stubs(),
+      PhotoData.stubs(),
+      PhotoData.stubs(),
+      PhotoData.stubs()
+    ]
+  )
+  .frame(
+    width: UIScreen.main.bounds.width - 16,
+    height: Theme.MediaSizes.mediaHeight.height
+  )
 }

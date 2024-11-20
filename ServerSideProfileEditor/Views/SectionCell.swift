@@ -106,9 +106,8 @@ struct SectionCell: View {
   @ViewBuilder
   private func createMeidaView() -> some View {
     if let media = media {
-      MediaView(
-        media: media,
-        cornerRadius: Theme.Geomitry.cornerRadius.radius
+      MediaWindowView(
+        media: media
       )
       .frame(height: Theme.MediaSizes.mediaHeight.height)
       .padding(.vertical, Theme.Spacing.cellTextSpacing.spacing)
