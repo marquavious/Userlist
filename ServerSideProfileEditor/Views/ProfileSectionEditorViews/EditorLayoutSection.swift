@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct EditorLayoutSection: View {
+
   @Binding var alignment: SectionLayout.AlignmentGuide
   @Binding var layout: SectionLayout.Arrangement
   @Binding var media: Media?
@@ -19,7 +20,6 @@ struct EditorLayoutSection: View {
           ForEach(SectionLayout.AlignmentGuide.allCases) { option in
             Image(systemName: option.systemImageString)
               .tag(option)
-              .tint(.blue)
           }
         }
         .pickerStyle(.segmented)
@@ -28,7 +28,7 @@ struct EditorLayoutSection: View {
           ForEach(
             media == nil ?
             SectionLayout.Arrangement.textOnlyCases :
-              SectionLayout.Arrangement.allCases
+            SectionLayout.Arrangement.allCases
           ) { option in
             Image(systemName: option.systemImageString)
               .tag(option)
@@ -46,7 +46,7 @@ struct EditorLayoutSection: View {
         .urlPhoto(
           photoData: PhotoData(
             id: UUID().uuidString,
-            urlString: "https://i.imgur.com/ApCOa7j.jpeg",
+            urlString: ProfileStubGenerator.randomMediaPicture(),
             contentMode: .allCases.randomElement()!
           )
         )

@@ -45,6 +45,22 @@ enum Media: Equatable, CaseIterable, Identifiable {
       "Photo Carousel"
     }
   }
+
+  var emptyInstance: Self {
+    switch self {
+    case .urlPhoto:
+        .urlPhoto(photoData: .emptyInstance())
+    case .urlPhotoGrid:
+        .urlPhotoGrid(
+          photoDataOne: .emptyInstance(),
+          photoDataTwo: .emptyInstance(),
+          photoDataThree: .emptyInstance(),
+          photoDataFour: .emptyInstance()
+        )
+    case .urlPhotoCarousel:
+        .urlPhotoCarousel(photoArray: [.emptyInstance()])
+    }
+  }
 }
 
 extension Media {

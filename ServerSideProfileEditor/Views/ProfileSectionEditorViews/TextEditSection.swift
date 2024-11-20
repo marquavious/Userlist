@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct TextEditSection: View {
-
+  
   @Binding var titleText: String
   @Binding var descriptionText: String
   @FocusState.Binding var editorFocus: ProfileSectionEditorView.EditorFocus?
-
+  
   var body: some View {
     Section("Text Edit") {
       VStack {
@@ -24,6 +24,7 @@ struct TextEditSection: View {
         )
         .environment(\.isFocused, editorFocus == .title)
         .focused($editorFocus, equals: .title)
+        
         CustomTextField(
           title: "Description",
           textfieldPrompt: "Description...",
@@ -33,7 +34,6 @@ struct TextEditSection: View {
         .environment(\.isFocused, editorFocus == .description)
         .focused($editorFocus, equals: .description)
       }
-      .padding(.vertical, 8)
     }
   }
 }
@@ -44,7 +44,7 @@ struct TextEditSection: View {
         .urlPhoto(
           photoData: PhotoData(
             id: UUID().uuidString,
-            urlString: "https://i.imgur.com/ApCOa7j.jpeg",
+            urlString: ProfileStubGenerator.randomMediaPicture(),
             contentMode: .allCases.randomElement()!
           )
         )

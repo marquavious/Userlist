@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ProfileSectionEditorView: View {
 
-  enum EditorFocus: Hashable {
+  enum EditorFocus: Hashable, CaseIterable {
     case title, description, media
   }
 
@@ -18,10 +18,10 @@ struct ProfileSectionEditorView: View {
   @State var alignment: SectionLayout.AlignmentGuide = .leading
   @State var layout: SectionLayout.Arrangement = .top
   @State var media: Media?
-  @FocusState private var editorFocus: EditorFocus?
   @State var showChanges: Bool = true
   @State var updatedState: ProfileSectionEditorViewState
-
+  
+  @FocusState private var editorFocus: EditorFocus?
   private var initialState: ProfileSectionEditorViewState
   private var sectionDidUpdate: SectionDidUpdate
 
@@ -41,7 +41,6 @@ struct ProfileSectionEditorView: View {
           alignment: alignment,
           mediaPosition: layout
         )
-        .padding(.vertical, 8)
       }
 
       ControlPanelSection(
@@ -124,19 +123,15 @@ struct ProfileSectionEditorView: View {
   }
 
   private func refreshView() {
-    if showChanges {
-      titleText = updatedState.titleText ?? ""
-      descriptionText = updatedState.descriptionText ?? ""
-      media = updatedState.media
-      alignment = updatedState.alignment
-      layout = updatedState.layout
-    } else {
-      titleText = initialState.titleText ?? ""
-      descriptionText = initialState.descriptionText ?? ""
-      media = initialState.media
-      alignment = initialState.alignment
-      layout = initialState.layout
-    }
+    setState(state: showChanges ? updatedState : initialState)
+  }
+
+  private func setState(state: ProfileSectionEditorViewState) {
+    titleText = state.titleText ?? ""
+    descriptionText = state.descriptionText ?? ""
+    media = state.media
+    alignment = state.alignment
+    layout = state.layout
   }
 }
 

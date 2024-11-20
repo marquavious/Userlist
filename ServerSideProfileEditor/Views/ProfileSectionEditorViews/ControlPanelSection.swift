@@ -24,7 +24,6 @@ struct ControlPanelSection: View {
       } discardChangesPressed: {
         discardButtonPressed()
       }
-      .padding(.vertical, 8)
     }
   }
 }
@@ -35,7 +34,7 @@ struct ControlPanelSection: View {
         .urlPhoto(
           photoData: PhotoData(
             id: UUID().uuidString,
-            urlString: "https://i.imgur.com/ApCOa7j.jpeg",
+            urlString: ProfileStubGenerator.randomMediaPicture(),
             contentMode: .allCases.randomElement()!
           )
         )

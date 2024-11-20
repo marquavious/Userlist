@@ -9,28 +9,16 @@ import SwiftUI
 
 struct AddMediaButton: View {
 
-  var didSelectMediaOption: ((Media) -> Void)
+  var didSelectMedia: ((Media) -> Void)
+
   var body: some View {
     Menu("Add Media +", systemImage: "photo") {
-      Button("Photo With URL") {
-        withAnimation(.easeInOut(duration: 0.2)) {
-          didSelectMediaOption(.urlPhoto(photoData: .emptyInstance()))
+      ForEach(Media.allCases) { type in
+        Button(type.description) {
+          withAnimation(.easeInOut(duration: Double(Theme.AnimationSpeed.normal.rawValue))) {
+            didSelectMedia(type.emptyInstance)
+          }
         }
-      }
-
-      Button("Photo Grid With URLs") {
-        withAnimation(.easeInOut(duration: 0.2)) {
-          didSelectMediaOption(.urlPhotoGrid(
-            photoDataOne: .emptyInstance(),
-            photoDataTwo: .emptyInstance(),
-            photoDataThree: .emptyInstance(),
-            photoDataFour: .emptyInstance()
-          ))
-        }
-      }
-
-      Button("Photo Carusel With URLs") {
-        didSelectMediaOption(.urlPhotoCarousel(photoArray: [.emptyInstance()]))
       }
     }.menuStyle(.borderlessButton)
   }
@@ -42,7 +30,7 @@ struct AddMediaButton: View {
         .urlPhoto(
           photoData: PhotoData(
             id: UUID().uuidString,
-            urlString: "https://i.imgur.com/ApCOa7j.jpeg",
+            urlString: ProfileStubGenerator.randomMediaPicture(),
             contentMode: .allCases.randomElement()!
           )
         )

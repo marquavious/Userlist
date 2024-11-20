@@ -13,20 +13,19 @@ struct MediaEditSection: View {
 
   var body: some View {
     Section("Media Edit") {
-      if let unwrappedMedia = media {
+      if let media {
         VStack {
-          CreateMediaView(media: unwrappedMedia) { newMedia in
-            media = newMedia
+          CreateMediaView(media: media) { newMedia in
+            self.media = newMedia
           }
           Button {
-            media = nil
+            self.media = nil
           } label: {
             Text("Delete Media")
               .contentShape(Rectangle())
           }
           .buttonStyle(.bordered)
         }
-        .padding(.top, 8)
       } else {
         AddMediaButton { newMedia in
           media = newMedia
@@ -42,7 +41,7 @@ struct MediaEditSection: View {
         .urlPhoto(
           photoData: PhotoData(
             id: UUID().uuidString,
-            urlString: "https://i.imgur.com/ApCOa7j.jpeg",
+            urlString: ProfileStubGenerator.randomMediaPicture(),
             contentMode: .allCases.randomElement()!
           )
         )
