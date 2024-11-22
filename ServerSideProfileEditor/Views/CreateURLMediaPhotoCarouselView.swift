@@ -12,7 +12,6 @@ import SwiftUI
 class CreateURLMediaPhotoCarouselViewData: ObservableObject {
   var photoArray: [PhotoData]
 
-
   init(photoArray: [PhotoData]) {
     self.photoArray = photoArray
   }

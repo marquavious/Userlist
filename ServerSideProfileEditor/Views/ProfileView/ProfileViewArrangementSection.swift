@@ -11,6 +11,7 @@ import SwiftUI
 struct ProfileViewArrangementSection: View {
 
   var sections: [SectionData]
+
   var body: some View {
     ForEach(sections) { section in
       SectionCell(
@@ -20,8 +21,6 @@ struct ProfileViewArrangementSection: View {
         alignment: section.alignment,
         mediaPosition: section.layout
       )
-      .padding(.horizontal, 16)
-
       CustomDivider()
         .padding(.vertical, 8)
     }

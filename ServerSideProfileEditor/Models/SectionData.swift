@@ -19,7 +19,7 @@ class SectionData: Identifiable, ObservableObject {
   var mediaContentMode: ContentMode
   var alignment: SectionLayout.AlignmentGuide
   var media: Media?
-  
+
   init(
     id: String = UUID().uuidString,
     index: Int = 0,

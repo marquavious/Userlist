@@ -75,6 +75,7 @@ struct ProfileView: View {
             .padding(.vertical, Constants.cellHorizontalPadding / 2)
             Divider()
             ProfileViewArrangementSection(sections: profile.sections)
+            .padding(.horizontal, 16)
           }
         }
         .contentMargins(.bottom, isInEditorMode ? Constants.contentMarginsOffsetForEditingMode : Constants.contentMarginsOffset)

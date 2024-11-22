@@ -10,36 +10,17 @@ import SwiftUI
 
 struct ProfileEditorView: View {
 
-  class ProfileEditorStateTextProvider {
-    var usernameText: String = ""
-    var descriptionText: String = ""
-    var profilePictureURL: String = ""
-    var bannerPhotoURL: String = ""
-
-    init(
-      usernameText: String = "",
-      descriptionText: String = "",
-      profilePictureURL: String = "",
-      bannerPhotoURL: String = ""
-    ) {
-      self.usernameText = usernameText
-      self.descriptionText = descriptionText
-      self.profilePictureURL = profilePictureURL
-      self.bannerPhotoURL = bannerPhotoURL
-    }
-  }
-
-  enum ProfileEditorTextField: CaseIterable, Identifiable {
+  private enum TextField: CaseIterable, Identifiable {
     case username
     case description
     case profilePictureUrl
-    case headerPictureUrl
+    case bannerPictureUrl
 
     var id: String {
       UUID().uuidString
     }
 
-    var textFieldTitle: String {
+    var title: String {
       switch self {
       case .username:
         "Username:"
@@ -47,19 +28,32 @@ struct ProfileEditorView: View {
         "Description:"
       case .profilePictureUrl:
         "Profile Picture Url:"
-      case .headerPictureUrl:
+      case .bannerPictureUrl:
         "Header Profile Picture Url:"
       }
     }
 
-    var textFieldPromt: String {
+    var prompt: String {
       switch self {
       case .username:
         "Username..."
       case .description:
         "Description..."
-      case .profilePictureUrl, .headerPictureUrl:
-        "Url..."
+      case .profilePictureUrl, .bannerPictureUrl:
+        "URL..."
+      }
+    }
+
+    var isRequired: Bool {
+      switch self {
+      case .username:
+        true
+      case .description:
+        false
+      case .profilePictureUrl:
+        true
+      case .bannerPictureUrl:
+        true
       }
     }
   }
@@ -68,175 +62,106 @@ struct ProfileEditorView: View {
   @State private var descriptionText = ""
   @State private var profilePictureURL = ""
   @State private var bannerPhotoURL = ""
+  @State private var showChanges: Bool = true
+  @FocusState private var focusedTextField: TextField?
 
-  var switchOnStateText: ProfileEditorStateTextProvider = ProfileEditorStateTextProvider()
-  var switchOffStateText: ProfileEditorStateTextProvider = ProfileEditorStateTextProvider()
-
-  @State private var shouldShowChanges: Bool = true
-  @FocusState private var focusedTextField: ProfileEditorTextField?
-
-  var userDidUpdate: UserDidUpdate
+  private var initialViewState: ProfileEditorViewState
+  private var updatedViewState: ProfileEditorViewState
+  private var userDidUpdate: UserDidUpdate
 
   init(initialUser: UserData, userDidUpdate: @escaping UserDidUpdate) {
     self.userDidUpdate = userDidUpdate
-
-    self.switchOffStateText = ProfileEditorStateTextProvider(
-      usernameText: initialUser.username,
-      descriptionText: initialUser.description,
-      profilePictureURL: initialUser.profilePictureUrlString ?? "",
-      bannerPhotoURL: initialUser.profileBannerUrlString ?? ""
-    )
-
-    self.switchOnStateText = ProfileEditorStateTextProvider(
-      usernameText: initialUser.username,
-      descriptionText: initialUser.description,
-      profilePictureURL: initialUser.profilePictureUrlString ?? "",
-      bannerPhotoURL: initialUser.profileBannerUrlString ?? ""
-    )
+    self.updatedViewState = .init(userData: initialUser)
+    self.initialViewState = .init(userData: initialUser)
   }
 
   var body: some View {
     List {
-      Section {
-        VStack {
-          HStack {
-            AsyncImage(url: URL(string: profilePictureURL)) { image in
-              image
-                .resizable()
-                .scaledToFit()
-            } placeholder: {
-              Color.secondary
-            }
+      Section("Preview") {
+        HStack {
+          PhotoView(url: URL(string: profilePictureURL))
             .frame(
               width: Theme.MediaSizes.profilePicture.width,
               height: Theme.MediaSizes.profilePicture.height
             )
-            .background(.background)
             .clipShape(Circle())
-            Spacer()
-            AsyncImage(url: URL(string: bannerPhotoURL)) { image in
-              image
-                .resizable()
-                .scaledToFit()
-            } placeholder: {
-              Color.secondary
-            }
-            .scaledToFill()
-            .frame(height: Theme.MediaSizes.profilePicture.height)
+
+          PhotoView(url: URL(string: profilePictureURL))
+            .frame(
+              height: Theme.MediaSizes.profilePicture.height
+            )
             .clipShape(RoundedRectangle(cornerRadius: Theme.Geomitry.cornerRadius.radius))
-          }
-          .listRowSeparator(.hidden)
-
-          CustomTextField(
-            title: "Username",
-            textfieldPrompt: "Username...",
-            isRequired: true,
-            text: $usernameText
-          )
-          .environment(\.isFocused, focusedTextField == .username)
-          .focused($focusedTextField, equals: .username)
-          .disabled(!shouldShowChanges)
-
-          CustomTextField(
-            title: "Description",
-            textfieldPrompt: "Description...",
-            isRequired: false,
-            text: $descriptionText
-          )
-          .environment(\.isFocused, focusedTextField == .description)
-          .focused($focusedTextField, equals: .description)
-          .disabled(!shouldShowChanges)
-
-          CustomTextField(
-            title: "Profile Picure URL",
-            textfieldPrompt: "URl...",
-            iconSystemImageName: "link",
-            isRequired: true,
-            text: $profilePictureURL
-          )
-          .environment(\.isFocused, focusedTextField == .profilePictureUrl)
-          .focused($focusedTextField, equals: .profilePictureUrl)
-          .disabled(!shouldShowChanges)
-
-          CustomTextField(
-            title: "Banner Picure URL",
-            textfieldPrompt: "URL...",
-            iconSystemImageName: "link",
-            isRequired: true,
-            text: $bannerPhotoURL
-          )
-          .environment(\.isFocused, focusedTextField == .headerPictureUrl)
-          .focused($focusedTextField, equals: .headerPictureUrl)
-          .disabled(!shouldShowChanges)
         }
       }
-      .listRowSeparator(.hidden)
-      .listStyle(.sidebar)
-
-      Section {
+      Section("Text Edit") {
+        VStack {
+          ForEach(TextField.allCases) { textField in
+            CustomTextField(
+              title: textField.title,
+              textfieldPrompt: textField.prompt,
+              isRequired: textField.isRequired,
+              text: createBindingFor(textField: textField)
+            )
+            .environment(\.isFocused, focusedTextField == textField)
+            .focused($focusedTextField, equals: textField)
+          }
+        }
+      }
+      .disabled(!showChanges)
+      Section("Control Panel") {
         ToggleStateControlPanel(
           title: "Show Updates",
-          showChanges: $shouldShowChanges,
+          showChanges: $showChanges,
           saveButtonPressed: {
             didUpdateUser()
           },
           discardChangesPressed: {
-            switchOnStateText.usernameText = switchOffStateText.usernameText
-            switchOnStateText.descriptionText = switchOffStateText.descriptionText
-            switchOnStateText.profilePictureURL = switchOffStateText.profilePictureURL
-            switchOnStateText.bannerPhotoURL = switchOffStateText.bannerPhotoURL
-            shouldShowChanges = true
-            refreshTextFields()
-          })
-        .padding(.vertical, 8)
-      }
-      .listRowSeparator(.hidden)
-      .listStyle(.sidebar)
-    }
-    .onChange(of: usernameText) { oldValue, newValue in
-      if shouldShowChanges {
-        switchOnStateText.usernameText = newValue
+            showChanges = true
+            refreshViewState()
+          }
+        )
       }
     }
-    .onChange(of: descriptionText) { oldValue, newValue in
-      if shouldShowChanges {
-        switchOnStateText.descriptionText = newValue
+    .onChange(of: usernameText) { _, newValue in
+      if showChanges {
+        updatedViewState.usernameText = newValue
       }
     }
-    .onChange(of: profilePictureURL) { oldValue, newValue in
-      if shouldShowChanges {
-        switchOnStateText.profilePictureURL = newValue
+    .onChange(of: descriptionText) { _, newValue in
+      if showChanges {
+        updatedViewState.descriptionText = newValue
       }
     }
-    .onChange(of: bannerPhotoURL) { oldValue, newValue in
-      if shouldShowChanges {
-        switchOnStateText.bannerPhotoURL = newValue
+    .onChange(of: profilePictureURL) { _, newValue in
+      if showChanges {
+        updatedViewState.profilePictureURL = newValue
       }
+    }
+    .onChange(of: bannerPhotoURL) { _, newValue in
+      if showChanges {
+        updatedViewState.bannerPhotoURL = newValue
+      }
+    }
+    .onChange(of: showChanges) {
+      refreshViewState()
     }
     .onAppear {
-      refreshTextFields()
-    }
-    .onChange(of: shouldShowChanges) { oldValue, newValue in
-      refreshTextFields()
-    }
-    .navigationTitle("User Information")
-  }
-
-  private func refreshTextFields() {
-    if shouldShowChanges {
-      usernameText = switchOnStateText.usernameText
-      descriptionText = switchOnStateText.descriptionText
-      profilePictureURL = switchOnStateText.profilePictureURL
-      bannerPhotoURL = switchOnStateText.bannerPhotoURL
-    } else {
-      usernameText = switchOffStateText.usernameText
-      descriptionText = switchOffStateText.descriptionText
-      profilePictureURL = switchOffStateText.profilePictureURL
-      bannerPhotoURL = switchOffStateText.bannerPhotoURL
+      refreshViewState()
     }
   }
 
-  func didUpdateUser() {
+  private func refreshViewState() {
+    setViewFor(state: showChanges ? updatedViewState : initialViewState)
+  }
+
+  private func setViewFor(state: ProfileEditorViewState) {
+    usernameText = state.usernameText
+    descriptionText = state.descriptionText
+    profilePictureURL = state.profilePictureURL
+    bannerPhotoURL = state.bannerPhotoURL
+  }
+
+  private func didUpdateUser() {
     userDidUpdate(
       UserData(
         username: usernameText,
@@ -246,23 +171,21 @@ struct ProfileEditorView: View {
       )
     )
   }
+
+  private func createBindingFor(textField: TextField) -> Binding<String> {
+    switch textField {
+    case .username:
+      $usernameText
+    case .description:
+      $descriptionText
+    case .profilePictureUrl:
+      $profilePictureURL
+    case .bannerPictureUrl:
+      $bannerPhotoURL
+    }
+  }
 }
 
 #Preview {
-  ProfileEditorViewPreview()
-}
-
-struct ProfileEditorViewPreview: View {
-  @State var showProfileChanges: Bool = false
-  @State var profile: UserData = UserData.stubs().first!
-  @State var updatedProfile: UserData = UserData.stubs().last!
-
-  var body: some View {
-    ProfileEditorView(
-      initialUser: profile,
-      userDidUpdate: { _ in
-
-      }
-    )
-  }
+  ProfileEditorViewForPreviews()
 }

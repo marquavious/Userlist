@@ -15,30 +15,30 @@ struct ProfileEditorSheetView: View {
   @State private var userData: UserData
   @State private var sectionData: [SectionData]
 
-  var didUpdateProfile: ((ProfileData) -> Void)
-  var saveButtonPressed: ((ProfileData) -> Void)
+  private var didUpdateProfile: ((ProfileData) -> Void)
+  private var saveButtonPressed: ((ProfileData) -> Void)
 
-  init(showProfileChanges: Binding<Bool>, profile: ProfileData, didUpdateProfile: @escaping ((ProfileData) -> Void), saveButtonPressed: @escaping ((ProfileData) -> Void)) {
+  init(
+    showProfileChanges: Binding<Bool>,
+    profile: ProfileData,
+    didUpdateProfile: @escaping ((ProfileData) -> Void),
+    saveButtonPressed: @escaping ((ProfileData) -> Void)
+  ) {
     self._showProfileChanges = showProfileChanges
     self.userData = profile.user
     self.sectionData = profile.sections
     self.didUpdateProfile = didUpdateProfile
-
-    self.initialProfileDataViewInfo = ProfileEditorSheetViewState(
-      userData: profile.user,
-      sectionData: profile.sections
-    )
+    self.initialProfileDataViewInfo = .init(userData: profile.user, sectionData: profile.sections)
     self.saveButtonPressed = saveButtonPressed
   }
 
   var body: some View {
     NavigationStack(path: $router.path) {
-      /*
       List {
-        Section {
+        Section("Control Panel") {
           ToggleStateControlPanel(title: "Show Updates", showChanges: $showProfileChanges) {
-            saveButtonPressed(.init(id: UUID().uuidString, userInfo: userData, sections: sectionData))
-          } discardChangesPressed:  {
+            saveButtonPressed(.init(id: UUID().uuidString, user: userData, sections: sectionData))
+          } discardChangesPressed: {
             userData = initialProfileDataViewInfo.userData
             sectionData = initialProfileDataViewInfo.sectionData
           }
@@ -46,19 +46,11 @@ struct ProfileEditorSheetView: View {
         Section("User Details") {
           VStack(spacing: 8) {
             UserListViewCell(
-              imageURL: userData.profilePictureUrl,
+              imageURL: URL(string: userData.profilePictureUrlString ?? ""),
               title: userData.username,
               description: userData.description
             ).onTapGesture {
-              router.navigate(
-                to: .userInfoEditor(
-                  user: userData,
-                  updatedUserClosure: { user in
-                    userData = user
-                    _ = router.path.popLast()
-                  }
-                )
-              )
+              router.navigate(to: .userInfoEditor(userData: userData) { updateUser(user: $0) })
             }
             if initialProfileDataViewInfo.userData != userData {
               Divider()
@@ -82,18 +74,7 @@ struct ProfileEditorSheetView: View {
                 media: section.media
               )
               .onTapGesture {
-                router.navigate(to:
-                    .sectionInfoEditor(
-                      section: section,
-                      updatedSectionClosure: { newSection in
-                        if let index = sectionData.firstIndex(where: { $0.id == section.id }) {
-                          sectionData[index] = newSection
-                        } else {
-                          sectionData.append(newSection)
-                        }
-                        _ = router.path = []
-                      })
-                )
+                router.navigate(to: .sectionInfoEditor(sectionData: section) { updateSection(section: $0) })
               }
               .listRowSeparator(.hidden)
             }
@@ -116,7 +97,6 @@ struct ProfileEditorSheetView: View {
       .scrollDismissesKeyboard(.interactively)
       .scrollIndicators(.hidden)
       .withAppRouter()
-       */
     }
     .onChange(of: userData) { oldValue, newValue in
       didUpdateProfile(.init(id: UUID().uuidString, user: userData, sections: sectionData))
@@ -125,6 +105,20 @@ struct ProfileEditorSheetView: View {
       didUpdateProfile(.init(id: UUID().uuidString, user: userData, sections: sectionData))
     }
     .environment(router)
+  }
+
+  private func updateUser(user: UserData) {
+    self.userData = user
+    _ = router.path.popLast()
+  }
+
+  private func updateSection(section: SectionData) {
+    if let index = sectionData.firstIndex(where: { $0.id == section.id }) {
+      sectionData[index] = section
+    } else {
+      sectionData.append(section)
+    }
+    _ = router.path = []
   }
 }
 

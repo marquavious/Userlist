@@ -74,5 +74,5 @@ struct CustomTextField: View {
 }
 
 #Preview {
-  ProfileEditorViewPreview()
+  ProfileEditorViewForPreviews()
 }

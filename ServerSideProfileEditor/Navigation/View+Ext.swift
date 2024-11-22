@@ -18,6 +18,7 @@ extension View {
           .environment(UserDatabase.shared)
       case .userInfoEditor(let user, let updatedUserClosure):
           ProfileEditorView(initialUser: user, userDidUpdate: updatedUserClosure)
+          .navigationTitle("User Information")
         .environment(UserDatabase.shared)
       case .sectionInfoEditor(let section, let updatedSectionClosure):
         ProfileSectionEditorView(

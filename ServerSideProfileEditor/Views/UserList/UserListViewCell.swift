@@ -34,15 +34,14 @@ struct UserListViewCell: View {
             if !title.isEmpty {
               Text(title)
                 .font(Theme.Text.profileCellTitle.font)
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .bold()
-                .multilineTextAlignment(.leading)
             }
             if !description.isEmpty {
               Text(description)
                 .font(Theme.Text.profileCellDescription.font)
                 .lineLimit(3)
-                .frame(maxWidth: .infinity)
-                .multilineTextAlignment(.leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
           }
         }

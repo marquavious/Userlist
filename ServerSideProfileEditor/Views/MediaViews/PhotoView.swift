@@ -11,12 +11,13 @@ import SwiftUI
 struct PhotoView: View {
 
   var url: URL?
+  var contentMode: ContentMode = .fill
 
   var body: some View {
     AsyncImage(url: url) { image in
       image
         .resizable()
-        .aspectRatio(contentMode: .fill)
+        .aspectRatio(contentMode: contentMode)
     } placeholder: {
       Color.gray
     }
