@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 struct ProfileEditorViewSectionCell: View {
+
   @State var title: String?
   @State var description: String?
   @State var media: Media?

@@ -41,8 +41,7 @@ struct CreateMediaView: View {
       CreateURLMediaPhotoCarouselView(
         photoArray: photos
       ){
-        createdMedia(
-          .urlPhotoCarousel(photoArray: $0)
+        createdMedia(.urlPhotoCarousel(photoArray: $0)
         )
       }
     }

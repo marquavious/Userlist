@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 struct ProfileEditorViewForPreviews: View {
+
   @State var showProfileChanges: Bool = false
   @State var profile: UserData = UserData.stubs().first!
   @State var updatedProfile: UserData = UserData.stubs().last!

@@ -17,12 +17,11 @@ struct ProfileSectionEditorViewForPreview: View {
     descriptionText: String? = "",
     media: Media? = nil
   ) {
-    let sectionData = SectionData(
+    self.sectionData = SectionData(
       title: titleText,
       description: descriptionText,
       media: media
     )
-    self.sectionData = sectionData
   }
 
   init(sectionData: SectionData) {

@@ -25,7 +25,7 @@ struct UserListView: View {
             )
           }
           .environment(router)
-          .padding(.horizontal, 16)
+          .padding(.horizontal, Theme.Padding.profileViewHorizontalSpacing.padding)
           .onTapGesture {
             router.navigate(to: .profile(id: user.id))
           }

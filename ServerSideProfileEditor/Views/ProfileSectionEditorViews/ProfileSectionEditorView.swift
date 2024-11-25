@@ -9,8 +9,39 @@ import SwiftUI
 
 struct ProfileSectionEditorView: View {
 
-  enum EditorFocus: Hashable, CaseIterable {
+  enum EditorFocus: Hashable, CaseIterable, Identifiable {
     case title, description, media
+    static let textOnlyCases: [Self] = [.title, .description]
+    
+    var id: String {
+      UUID().uuidString
+    }
+    
+    var title: String {
+      switch self {
+      case .title:
+        "Title"
+      case .description:
+        "Description"
+      case .media:
+        "Media"
+      }
+    }
+    
+    var prompt: String {
+      switch self {
+      case .title:
+        "Title..."
+      case .description:
+        "Description..."
+      case .media:
+        "Media..."
+      }
+    }
+    
+    var isRequired: Bool {
+      false
+    }
   }
 
   @State private var titleText: String = ""
@@ -20,9 +51,9 @@ struct ProfileSectionEditorView: View {
   @State private var media: Media?
   @State private var seperator: Seperator = .none
   @State private var showChanges: Bool = true
- private var updatedState: ProfileSectionEditorViewState
-
   @FocusState private var editorFocus: EditorFocus?
+  private var updatedState: ProfileSectionEditorViewState
+
   private var initialState: ProfileSectionEditorViewState
   private var sectionDidUpdate: SectionDidUpdate
 

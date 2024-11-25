@@ -52,7 +52,7 @@ struct CreateURLMediaPhotoCarouselView: View {
                   .frame(maxHeight: .infinity)
                 Image(systemName: "x.circle")
                   .renderingMode(.template)
-                     .foregroundColor(.blue)
+                  .foregroundColor(.blue)
               }
             }
             .buttonStyle(.plain)

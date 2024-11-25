@@ -10,23 +10,25 @@ import SwiftUI
 struct ProfileView: View {
 
   private enum LoadingState: Equatable {
-    case loading(id: String?), loaded(profile: ProfileData), error(description: String)
+    case loading(id: String?)
+    case loaded(profile: ProfileData)
+    case error(description: String)
   }
 
   private struct Constants {
-    static let profilePictureSize: CGSize = CGSize(width: 95, height: 95)
+    static let profilePictureSize: CGSize = CGSize(width: Theme.MediaSizes.profilePicture.width, height: Theme.MediaSizes.profilePicture.height)
     static let profileHeaderPictureHeight: CGFloat = UIScreen.main.bounds.height * CGFloat(0.2)
-    static let contentMarginsOffset: CGFloat = UIScreen.main.bounds.height * CGFloat(0.05)
+    static let contentMarginBottomOffset: CGFloat = UIScreen.main.bounds.height * CGFloat(0.05)
     static let contentMarginsOffsetForEditingMode: CGFloat = UIScreen.main.bounds.height * CGFloat(0.2)
-    static let cellHorizontalPadding: CGFloat = 16
+    static let cellHorizontalPadding: CGFloat = Theme.Padding.profileViewHorizontalSpacing.padding
   }
 
   @State private var newProfileData: ProfileData?
   @State private var initalProfileData: ProfileData?
-  @State private var isInEditorMode: Bool = false
   @State private var state: ProfileView.LoadingState
+  @State private var isInEditorMode: Bool = false
   @State private var showProfileChanges: Bool = false
-  @State private var sheetPresentationDetent: PresentationDetent = PresentationDetent.fraction(0.2)
+  @State private var sheetPresentationDetent: PresentationDetent = PresentationDetent.fraction(0.0)
   @Environment(UserDatabase.self) private var userlist
   @Environment(RouterPath.self) private var router
 
@@ -58,7 +60,7 @@ struct ProfileView: View {
         StretchyHeaderScrollView(
           url: URL(string: profile.user.profileBannerUrlString ?? ""),
           photoHeight: Constants.profileHeaderPictureHeight,
-          verticalOffset: -Constants.profilePictureSize.height / 1.6
+          verticalOffset: -Constants.profilePictureSize.height / 1.5
         ) {
           VStack {
             ProfileViewUserInfoSection(
@@ -66,21 +68,20 @@ struct ProfileView: View {
               description: profile.user.description,
               profilePictureUrl: URL(string: profile.user.profilePictureUrlString ?? ""),
               editButtonPressed: {
-                isInEditorMode = true
+                isInEditorMode.toggle()
               }
             )
-            .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, Constants.cellHorizontalPadding)
             .padding(.vertical, Constants.cellHorizontalPadding / 2)
             Divider()
             ProfileViewArrangementSection(sections: profile.sections)
           }
         }
-        .contentMargins(.bottom, isInEditorMode ? Constants.contentMarginsOffsetForEditingMode : Constants.contentMarginsOffset)
         .sheet(isPresented: $isInEditorMode) {
           ProfileEditorSheetView(
             showProfileChanges: $showProfileChanges,
             profile: profile,
+            presentationDetent: $sheetPresentationDetent,
             didUpdateProfile: { updatedProfile in
               self.newProfileData = updatedProfile
               self.showProfileChanges = true
@@ -90,7 +91,7 @@ struct ProfileView: View {
               self.newProfileData = updatedProfile
               self.initalProfileData = updatedProfile
               self.state = .loaded(profile: updatedProfile)
-              self.isInEditorMode.toggle()
+              self.isInEditorMode = false
             }
           )
           .presentationBackground(.ultraThinMaterial)
@@ -105,6 +106,7 @@ struct ProfileView: View {
             }
           }
         }
+        .contentMargins(.bottom, isInEditorMode ? Constants.contentMarginsOffsetForEditingMode : Constants.contentMarginBottomOffset)
       }
     }
   }

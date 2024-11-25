@@ -92,6 +92,8 @@ struct ProfileEditorView: View {
             .clipShape(RoundedRectangle(cornerRadius: Theme.Geomitry.cornerRadius.radius))
         }
       }
+
+      /* Sigh...
       Section("Text Edit") {
         VStack {
           ForEach(TextField.allCases) { textField in
@@ -107,6 +109,51 @@ struct ProfileEditorView: View {
         }
       }
       .disabled(!showChanges)
+      */
+
+      Section("Text Edit") {
+        VStack {
+          CustomTextField(
+            title: "Username",
+            textfieldPrompt: "Username...",
+            isRequired: true,
+            text: $usernameText
+          )
+          .environment(\.isFocused, focusedTextField == .username)
+          .focused($focusedTextField, equals: .username)
+
+          CustomTextField(
+            title: "Description",
+            textfieldPrompt: "Description...",
+            isRequired: false,
+            text: $descriptionText
+          )
+          .environment(\.isFocused, focusedTextField == .description)
+          .focused($focusedTextField, equals: .description)
+
+          CustomTextField(
+            title: "Profile Picure URL",
+            textfieldPrompt: "URl...",
+            iconSystemImageName: "link",
+            isRequired: true,
+            text: $profilePictureURL
+          )
+          .environment(\.isFocused, focusedTextField == .profilePictureUrl)
+          .focused($focusedTextField, equals: .profilePictureUrl)
+
+          CustomTextField(
+            title: "Banner Picure URL",
+            textfieldPrompt: "URL...",
+            iconSystemImageName: "link",
+            isRequired: true,
+            text: $bannerPhotoURL
+          )
+          .environment(\.isFocused, focusedTextField == .bannerPictureUrl)
+          .focused($focusedTextField, equals: .bannerPictureUrl)
+        }
+      }
+      .disabled(!showChanges)
+
       Section("Control Panel") {
         ToggleStateControlPanel(
           title: "Show Updates",

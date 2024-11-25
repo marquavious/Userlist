@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 struct UserListViewCell: View {
+
   var imageURL: URL?
   var title: String
   var description: String
@@ -16,18 +17,13 @@ struct UserListViewCell: View {
   var body: some View {
     VStack(alignment: .leading) {
       HStack {
-        AsyncImage(url: imageURL) { image in
-          image
-            .resizable()
-            .scaledToFit()
-        } placeholder: {
-          Color.secondary
-        }
-        .frame(width: 60, height: 60)
-        .background(.background)
-        .background(.gray)
-        .clipShape(Circle())
-        .overlay(Circle().stroke(.gray, lineWidth: 1))
+        PhotoView(url: imageURL)
+          .frame(
+            width: 60,
+            height: 60
+          )
+          .clipShape(Circle())
+          .overlay(Circle().stroke(.gray, lineWidth: 1))
 
         if !title.isEmpty || !description.isEmpty {
           VStack(alignment: .leading) {
@@ -45,8 +41,6 @@ struct UserListViewCell: View {
             }
           }
         }
-        
-        Spacer()
       }
     }
   }

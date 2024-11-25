@@ -16,6 +16,20 @@ struct TextEditSection: View {
   var body: some View {
     Section("Text Edit") {
       VStack {
+        /* C'mon Apple. You're worth how much? 3T??? there must be a way to do this...
+        ForEach(ProfileSectionEditorView.EditorFocus.textOnlyCases) { textField in
+          CustomTextField(
+            title: textField.title,
+            textfieldPrompt: textField.prompt,
+            isRequired: textField.isRequired,
+            text: createBindingFor(editorFocus: textField)
+          )
+          .environment(\.isFocused, editorFocus == textField)
+          .focused($editorFocus, equals: textField)
+        }
+        */
+
+        // Sigh...
         CustomTextField(
           title: "Title",
           textfieldPrompt: "Title...",
@@ -34,6 +48,17 @@ struct TextEditSection: View {
         .environment(\.isFocused, editorFocus == .description)
         .focused($editorFocus, equals: .description)
       }
+    }
+  }
+
+  private func createBindingFor(editorFocus: ProfileSectionEditorView.EditorFocus) -> Binding<String> {
+    switch editorFocus {
+    case .title:
+      $titleText
+    case .description:
+      $descriptionText
+    case .media:
+      fatalError("Use Media Section")
     }
   }
 }

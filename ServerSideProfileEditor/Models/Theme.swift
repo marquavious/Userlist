@@ -82,9 +82,10 @@ public final class Theme {
 
   enum Padding {
     case profileViewHorizontalSpacing
+    case userListViewHorizontalSpacing
     var padding: CGFloat {
       switch self {
-      case .profileViewHorizontalSpacing:
+      case .profileViewHorizontalSpacing, .userListViewHorizontalSpacing:
         16
       }
     }

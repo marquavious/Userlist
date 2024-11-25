@@ -9,8 +9,10 @@ import Foundation
 import SwiftUI
 
 struct ProfileEditorSheetView: View {
+  
   @State var router = RouterPath()
   @Binding var showProfileChanges: Bool
+  @Binding var presentationDetent: PresentationDetent
   @State private var initialProfileDataViewInfo: ProfileEditorSheetViewState
   @State private var userData: UserData
   @State private var sectionData: [SectionData]
@@ -21,12 +23,14 @@ struct ProfileEditorSheetView: View {
   init(
     showProfileChanges: Binding<Bool>,
     profile: ProfileData,
+    presentationDetent: Binding<PresentationDetent>,
     didUpdateProfile: @escaping ((ProfileData) -> Void),
     saveButtonPressed: @escaping ((ProfileData) -> Void)
   ) {
     self._showProfileChanges = showProfileChanges
     self.userData = profile.user
     self.sectionData = profile.sections
+    self._presentationDetent = presentationDetent
     self.didUpdateProfile = didUpdateProfile
     self.initialProfileDataViewInfo = .init(userData: profile.user, sectionData: profile.sections)
     self.saveButtonPressed = saveButtonPressed
@@ -43,52 +47,54 @@ struct ProfileEditorSheetView: View {
             sectionData = initialProfileDataViewInfo.sectionData
           }
         }
-        Section("User Details") {
-          VStack(spacing: 8) {
-            UserListViewCell(
-              imageURL: URL(string: userData.profilePictureUrlString ?? ""),
-              title: userData.username,
-              description: userData.description
-            ).onTapGesture {
-              router.navigate(to: .userInfoEditor(userData: userData) { updateUser(user: $0) })
-            }
-            if initialProfileDataViewInfo.userData != userData {
-              Divider()
-              Button {
-                userData = initialProfileDataViewInfo.userData
-              } label: {
-                Text("Discard Changes")
-                  .contentShape(Rectangle())
-                  .foregroundStyle(.blue)
+        if presentationDetent == .large {
+          Section("User Details") {
+            VStack(spacing: 8) {
+              UserListViewCell(
+                imageURL: URL(string: userData.profilePictureUrlString ?? ""),
+                title: userData.username,
+                description: userData.description
+              ).onTapGesture {
+                router.navigate(to: .userInfoEditor(userData: userData) { updateUser(user: $0) })
               }
-              .buttonStyle(.bordered)
+              if initialProfileDataViewInfo.userData != userData {
+                Divider()
+                Button {
+                  userData = initialProfileDataViewInfo.userData
+                } label: {
+                  Text("Discard Changes")
+                    .contentShape(Rectangle())
+                    .foregroundStyle(.blue)
+                }
+                .buttonStyle(.bordered)
+              }
             }
           }
-        }
-        Section("Section Arangement") {
-          VStack {
-            ForEach(sectionData) { section in
-              ProfileEditorViewSectionCell(
-                title: section.title,
-                description: section.description,
-                media: section.media
-              )
-              .onTapGesture {
-                router.navigate(to: .sectionInfoEditor(sectionData: section) { updateSectionWith(id: section.id , newSection: $0) })
+          Section("Section Arangement") {
+            VStack {
+              ForEach(sectionData) { section in
+                ProfileEditorViewSectionCell(
+                  title: section.title,
+                  description: section.description,
+                  media: section.media
+                )
+                .onTapGesture {
+                  router.navigate(to: .sectionInfoEditor(sectionData: section) { updateSectionWith(id: section.id , newSection: $0) })
+                }
+                .listRowSeparator(.hidden)
               }
-              .listRowSeparator(.hidden)
-            }
 
-            if initialProfileDataViewInfo.sectionData != sectionData {
-              Divider()
-              Button {
-                sectionData = initialProfileDataViewInfo.sectionData
-              } label: {
-                Text("Discard Changes")
-                  .contentShape(Rectangle())
-                  .foregroundStyle(.blue)
+              if initialProfileDataViewInfo.sectionData != sectionData {
+                Divider()
+                Button {
+                  sectionData = initialProfileDataViewInfo.sectionData
+                } label: {
+                  Text("Discard Changes")
+                    .contentShape(Rectangle())
+                    .foregroundStyle(.blue)
+                }
+                .buttonStyle(.bordered)
               }
-              .buttonStyle(.bordered)
             }
           }
         }

@@ -8,7 +8,6 @@
 import Foundation
 import SwiftUI
 
-
 private struct KeyboardIsFocusedKey: EnvironmentKey {
   static let defaultValue: Bool = false
 }
