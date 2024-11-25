@@ -85,7 +85,6 @@ struct ProfileEditorView: View {
               height: Theme.MediaSizes.profilePicture.height
             )
             .clipShape(Circle())
-
           PhotoView(url: URL(string: profilePictureURL))
             .frame(
               height: Theme.MediaSizes.profilePicture.height

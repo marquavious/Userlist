@@ -9,9 +9,9 @@ import Foundation
 import SwiftUI
 
 struct ProfileViewArrangementSection: View {
-
+  
   var sections: [SectionData]
-
+  
   var body: some View {
     ForEach(sections) { section in
       SectionCell(
@@ -21,8 +21,11 @@ struct ProfileViewArrangementSection: View {
         alignment: section.alignment,
         mediaPosition: section.layout
       )
-      CustomDivider()
-        .padding(.vertical, 8)
+      .padding(.horizontal, Theme.Padding.profileViewHorizontalSpacing.padding)
+      SeperatorView(
+        seperator: section.seperator
+      )
+      .frame(alignment: .center)
     }
   }
 }

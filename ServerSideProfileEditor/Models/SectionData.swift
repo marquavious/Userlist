@@ -19,6 +19,7 @@ class SectionData: Identifiable, ObservableObject {
   var mediaContentMode: ContentMode
   var alignment: SectionLayout.AlignmentGuide
   var media: Media?
+  var seperator: Seperator
 
   init(
     id: String = UUID().uuidString,
@@ -29,7 +30,8 @@ class SectionData: Identifiable, ObservableObject {
     mediaHeight: CGFloat? = nil,
     mediaContentMode: ContentMode = .fill,
     alignment: SectionLayout.AlignmentGuide = .leading,
-    media: Media? = nil
+    media: Media? = nil,
+    seperator: Seperator = .none
   ) {
     self.id = id
     self.index = index
@@ -40,6 +42,7 @@ class SectionData: Identifiable, ObservableObject {
     self.mediaContentMode = mediaContentMode
     self.alignment = alignment
     self.media = media
+    self.seperator = seperator
   }
 }
 
@@ -76,7 +79,8 @@ extension SectionData {
       layout: .allCases.randomElement() ?? .top,
       mediaContentMode: .allCases.randomElement()!,
       alignment: .leading,
-      media: Bool.random() ? nil : Media.generateRandomMedia()
+      media: Bool.random() ? nil : Media.generateRandomMedia(),
+      seperator: .allCases.randomElement()!
     )
   }
 }

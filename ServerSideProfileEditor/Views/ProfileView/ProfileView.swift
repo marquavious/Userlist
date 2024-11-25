@@ -65,9 +65,8 @@ struct ProfileView: View {
               username: profile.user.username,
               description: profile.user.description,
               profilePictureUrl: URL(string: profile.user.profilePictureUrlString ?? ""),
-              imageSize: Constants.profilePictureSize,
               editButtonPressed: {
-                isInEditorMode.toggle()
+                isInEditorMode = true
               }
             )
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -75,7 +74,6 @@ struct ProfileView: View {
             .padding(.vertical, Constants.cellHorizontalPadding / 2)
             Divider()
             ProfileViewArrangementSection(sections: profile.sections)
-            .padding(.horizontal, 16)
           }
         }
         .contentMargins(.bottom, isInEditorMode ? Constants.contentMarginsOffsetForEditingMode : Constants.contentMarginsOffset)

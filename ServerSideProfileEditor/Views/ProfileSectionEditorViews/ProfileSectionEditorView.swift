@@ -13,14 +13,15 @@ struct ProfileSectionEditorView: View {
     case title, description, media
   }
 
-  @State var titleText: String = ""
-  @State var descriptionText: String = ""
-  @State var alignment: SectionLayout.AlignmentGuide = .leading
-  @State var layout: SectionLayout.Arrangement = .top
-  @State var media: Media?
-  @State var showChanges: Bool = true
-  @State var updatedState: ProfileSectionEditorViewState
-  
+  @State private var titleText: String = ""
+  @State private var descriptionText: String = ""
+  @State private var alignment: SectionLayout.AlignmentGuide = .leading
+  @State private var layout: SectionLayout.Arrangement = .top
+  @State private var media: Media?
+  @State private var seperator: Seperator = .none
+  @State private var showChanges: Bool = true
+ private var updatedState: ProfileSectionEditorViewState
+
   @FocusState private var editorFocus: EditorFocus?
   private var initialState: ProfileSectionEditorViewState
   private var sectionDidUpdate: SectionDidUpdate
@@ -34,13 +35,16 @@ struct ProfileSectionEditorView: View {
   var body: some View {
     List {
       Section("Preview") {
-        SectionCell(
-          title: titleText,
-          description: descriptionText,
-          media: media,
-          alignment: alignment,
-          mediaPosition: layout
-        )
+        VStack(spacing: 0) {
+          SectionCell(
+            title: titleText,
+            description: descriptionText,
+            media: media,
+            alignment: alignment,
+            mediaPosition: layout
+          )
+          SeperatorView(seperator: seperator)
+        }
       }
 
       ControlPanelSection(
@@ -54,7 +58,8 @@ struct ProfileSectionEditorView: View {
       EditorLayoutSection(
         alignment: $alignment,
         layout: $layout,
-        media: $media
+        media: $media,
+        seperator: $seperator
       )
       .disabled(media == nil && (titleText.isEmpty && descriptionText.isEmpty))
 
@@ -99,6 +104,12 @@ struct ProfileSectionEditorView: View {
         refreshView()
       }
     }
+    .onChange(of: seperator) { _, newValue in
+      if showChanges {
+        updatedState.seperator = newValue
+        refreshView()
+      }
+    }
     .onChange(of: showChanges) { _, newValue in
       refreshView()
     }
@@ -112,7 +123,8 @@ struct ProfileSectionEditorView: View {
         description: updatedState.descriptionText,
         layout: updatedState.layout,
         alignment: updatedState.alignment,
-        media: updatedState.media
+        media: updatedState.media,
+        seperator: updatedState.seperator
       )
     )
   }
@@ -132,6 +144,7 @@ struct ProfileSectionEditorView: View {
     media = state.media
     alignment = state.alignment
     layout = state.layout
+    seperator = state.seperator
   }
 }
 

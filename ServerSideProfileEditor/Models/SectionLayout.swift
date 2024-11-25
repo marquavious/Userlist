@@ -17,7 +17,7 @@ enum SectionLayout {
     var id: String { UUID().uuidString }
 
     var systemImageString: String {
-      switch self {
+      switch self { 
       case .top:
         "square.3.layers.3d.top.filled"
       case .middle:

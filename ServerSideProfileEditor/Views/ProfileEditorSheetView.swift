@@ -74,7 +74,7 @@ struct ProfileEditorSheetView: View {
                 media: section.media
               )
               .onTapGesture {
-                router.navigate(to: .sectionInfoEditor(sectionData: section) { updateSection(section: $0) })
+                router.navigate(to: .sectionInfoEditor(sectionData: section) { updateSectionWith(id: section.id , newSection: $0) })
               }
               .listRowSeparator(.hidden)
             }
@@ -112,11 +112,11 @@ struct ProfileEditorSheetView: View {
     _ = router.path.popLast()
   }
 
-  private func updateSection(section: SectionData) {
-    if let index = sectionData.firstIndex(where: { $0.id == section.id }) {
-      sectionData[index] = section
+  private func updateSectionWith(id: String, newSection: SectionData) {
+    if let index = sectionData.firstIndex(where: { $0.id == id }) {
+      sectionData[index] = newSection
     } else {
-      sectionData.append(section)
+      sectionData.append(newSection)
     }
     _ = router.path = []
   }

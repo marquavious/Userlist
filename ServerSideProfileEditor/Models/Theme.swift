@@ -80,6 +80,16 @@ public final class Theme {
     }
   }
 
+  enum Padding {
+    case profileViewHorizontalSpacing
+    var padding: CGFloat {
+      switch self {
+      case .profileViewHorizontalSpacing:
+        16
+      }
+    }
+  }
+
   enum Button {
     case buttonHeight
 
