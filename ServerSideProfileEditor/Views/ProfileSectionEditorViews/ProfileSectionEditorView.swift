@@ -52,9 +52,8 @@ struct ProfileSectionEditorView: View {
   @State private var seperator: Seperator = .none
   @State private var showChanges: Bool = true
   @FocusState private var editorFocus: EditorFocus?
-  private var updatedState: ProfileSectionEditorViewState
-
-  private var initialState: ProfileSectionEditorViewState
+  @State private var updatedState: ProfileSectionEditorViewState
+  @State private var initialState: ProfileSectionEditorViewState
   private var sectionDidUpdate: SectionDidUpdate
 
   init(sectionData: SectionData, sectionDidUpdate: @escaping SectionDidUpdate) {

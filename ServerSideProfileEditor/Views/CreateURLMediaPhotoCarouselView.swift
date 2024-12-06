@@ -8,108 +8,83 @@
 import Foundation
 import SwiftUI
 
-@Observable
-class CreateURLMediaPhotoCarouselViewData: ObservableObject {
-  var photoArray: [PhotoData]
-
-  init(photoArray: [PhotoData]) {
-    self.photoArray = photoArray
-  }
-}
-
 struct CreateURLMediaPhotoCarouselView: View {
 
-  @State var height: CGFloat = .zero
-
-  var photoData: CreateURLMediaPhotoCarouselViewData
+  @State var photoData: [PhotoData]
   var didUpdateMedia: (([PhotoData]) -> Void)
 
   init(photoArray: [PhotoData], didUpdateMedia: @escaping ([PhotoData]) -> Void) {
-    self.photoData = CreateURLMediaPhotoCarouselViewData(photoArray: photoArray)
+    self.photoData = photoArray
     self.didUpdateMedia = didUpdateMedia
   }
 
   var body: some View {
     VStack(spacing: 8) {
-      ForEach(Array(photoData.photoArray.enumerated()), id: \.offset) { index, data in
-          HStack(alignment: .center) {
-            CreateURLMediaPhotoView(
-              url: data.urlString ?? "",
-              contentMode: CreateURLMediaPhotoView.ContentModeOption.optionMode(contentMode: data.contentMode)
-            ) { updatededPhotoDataOne in
-              updateMedia(index: index, photoData: updatededPhotoDataOne)
-            }
-            Button {
-              self.photoData.photoArray.remove(at: index)
-              didUpdateMedia(self.photoData.photoArray)
-            } label: {
-              ZStack {
-                Rectangle()
-                  .fill(Color.gray)
-                  .opacity(0.1)
-                  .cornerRadius(8)
-                  .frame(maxWidth: 32)
-                  .frame(maxHeight: .infinity)
-                Image(systemName: "x.circle")
-                  .renderingMode(.template)
-                  .foregroundColor(.blue)
-              }
-            }
-            .buttonStyle(.plain)
-          }
-          .fixedSize(horizontal: false, vertical: true)
+      ForEach(Array(photoData.enumerated()), id: \.offset) { index, data in
+        CreateURLMediaPhotoView(
+          url: Binding<String>(get: { photoData[index].urlString ?? "" }, set: { photoData[index].urlString = $0 }),
+          contentMode: CreateURLMediaPhotoView.ContentModeOption.optionFor(contentMode: data.contentMode),
+          externalOptions: [
+            (id: "autofill", systemImageString: "dice", tint: .blue, action: { autoFill(index: index, oldPhotoData: data) }),
+            (id: "move_up", systemImageString: "chevron.up", tint: .green, action: { moveElementUp(&photoData, at: index) }),
+            (id: "move_down", systemImageString: "chevron.down", tint: .green, action: { moveElementDown(&photoData, at: index) }),
+            (id: "delete", systemImageString: "trash", tint: .red, action: { removeAt(index: index)})
+          ]
+        ) { updateMedia(index: index, photoData: $0) }
       }
 
       Button {
         addOne(photoData: .emptyInstance())
       } label: {
-        ZStack {
-          Rectangle()
-            .fill(Color.gray)
-            .opacity(0.1)
-            .cornerRadius(8)
-            .frame(maxWidth: .infinity)
-            .frame(maxHeight: 32)
-          Image(systemName: "plus.circle")
-            .renderingMode(.template)
-        }
+        Text("\(Image(systemName: "plus")) Add Image")
+          .font(.subheadline)
+          .frame(maxWidth: .infinity)
       }
+      .buttonStyle(.borderedProminent)
       .padding(.bottom, 4)
-
     }
   }
 
+  func moveElementUp(_ array: inout [PhotoData], at index: Int) {
+    guard index > 0 else { return }
+    array.swapAt(index, index - 1)
+    didUpdateMedia(self.photoData)
+  }
+
+  func moveElementDown(_ array: inout [PhotoData], at index: Int) {
+    guard index < array.count - 1 else { return }
+    array.swapAt(index, index + 1)
+
+    didUpdateMedia(self.photoData)
+  }
+
+  func autoFill(index: Int, oldPhotoData: PhotoData) {
+    updateMedia(index: index, photoData: .init(
+      id: UUID().uuidString,
+      urlString: ProfileStubGenerator.randomMediaPicture(),
+      contentMode: oldPhotoData.contentMode
+    ))
+    didUpdateMedia(self.photoData)
+  }
+
+  func removeAt(index: Int) {
+    photoData.remove(at: index)
+    didUpdateMedia(self.photoData)
+  }
+
   func addOne(photoData: PhotoData) {
-    self.photoData.photoArray.append(photoData)
-    didUpdateMedia(self.photoData.photoArray)
+    self.photoData.append(photoData)
+    didUpdateMedia(self.photoData)
   }
 
   func updateMedia(index: Int, photoData: PhotoData) {
-    self.photoData.photoArray[index] = photoData
-    didUpdateMedia(self.photoData.photoArray)
+    self.photoData[index] = photoData
+    didUpdateMedia(self.photoData)
   }
 }
 
 #Preview {
   CreateURLMediaPhotoCarouselView(photoArray: [PhotoData.emptyInstance()]) { _ in
 
-  }
-}
-
-struct SizePreferenceKey: PreferenceKey {
-  static var defaultValue: CGSize = .zero
-  static func reduce(value: inout CGSize, nextValue: () -> CGSize) {
-  }
-}
-
-extension View {
-  func readSize(onChange: @escaping (CGSize) -> Void) -> some View {
-    background(
-      GeometryReader { geometryProxy in
-        Color.clear
-          .preference(key: SizePreferenceKey.self, value: geometryProxy.size)
-      }
-    )
-    .onPreferenceChange(SizePreferenceKey.self, perform: onChange)
   }
 }

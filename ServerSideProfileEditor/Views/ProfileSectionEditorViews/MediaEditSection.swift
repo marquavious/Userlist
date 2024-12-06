@@ -15,11 +15,13 @@ struct MediaEditSection: View {
     Section("Media Edit") {
       if let media {
         VStack {
-          CreateMediaView(media: media) { newMedia in
+          CreateMediaView(media: media)
+          { newMedia in
             self.media = newMedia
           }
+
           Button {
-            self.media = nil
+            self.media = .none
           } label: {
             Text("Delete Media")
               .contentShape(Rectangle())
@@ -27,8 +29,11 @@ struct MediaEditSection: View {
           .buttonStyle(.bordered)
         }
       } else {
-        AddMediaButton { newMedia in
-          media = newMedia
+        HStack {
+          AddMediaButton { newMedia in
+            self.media = newMedia
+          }
+          .frame(alignment: .center)
         }
       }
     }

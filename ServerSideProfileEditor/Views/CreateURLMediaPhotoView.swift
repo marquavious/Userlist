@@ -8,6 +8,8 @@
 import Foundation
 import SwiftUI
 
+typealias CreateURLMediaPhotoViewOption = (id: String, systemImageString: String, tint: Color, action: () -> Void)
+
 struct CreateURLMediaPhotoView: View {
 
   private struct Constants {
@@ -28,7 +30,7 @@ struct CreateURLMediaPhotoView: View {
       }
     }
 
-    static func optionMode(contentMode: ContentMode) -> Self {
+    static func optionFor(contentMode: ContentMode) -> Self {
       switch contentMode {
       case ContentMode.fill:
         ContentModeOption.fill
@@ -47,9 +49,10 @@ struct CreateURLMediaPhotoView: View {
     }
   }
 
-  @State var url: String = ""
+  @Binding var url: String
   @State var contentMode: ContentModeOption
   @FocusState var isFocused: Bool
+  @State var externalOptions: [CreateURLMediaPhotoViewOption]?
 
   let didUpdateUrl: ((PhotoData) -> Void)
 
@@ -75,6 +78,21 @@ struct CreateURLMediaPhotoView: View {
         .pickerStyle(.segmented)
         .frame(maxWidth: .infinity)
         .pickerStyle(.segmented)
+
+        if let externalOptions {
+          ForEach(externalOptions, id: \.id) { option in
+            Button {
+              option.action()
+            } label : {
+              Image(systemName: option.systemImageString)
+                .renderingMode(.template)
+                .frame(height: 18)
+            }
+            .buttonStyle(.bordered)
+            .tint(option.tint)
+
+          }
+        }
       }
     }
     .onChange(of: url) {
@@ -94,3 +112,9 @@ struct CreateURLMediaPhotoView: View {
     )
   }
 }
+
+//#Preview {
+//  CreateURLMediaPhotoView(contentMode: .fill) { _ in
+//
+//  }
+//}

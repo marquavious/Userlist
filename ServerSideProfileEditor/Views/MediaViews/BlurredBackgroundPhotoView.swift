@@ -41,7 +41,7 @@ struct BlurredBackgroundPhotoView: View {
 
 #Preview {
   BlurredBackgroundPhotoView(
-    url: URL(string: ProfileStubGenerator.randomMediaPicture() ?? "")
+    url: URL(string: ProfileStubGenerator.randomMediaPicture())
   )
   .frame(width: UIScreen.main.bounds.width - 16, height: 200)
 }

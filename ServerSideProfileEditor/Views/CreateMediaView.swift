@@ -16,20 +16,16 @@ struct CreateMediaView: View {
 
   var body: some View {
     switch media {
-    case .urlPhoto(let photoData):
+    case .urlPhoto(var photoData):
+      // Extract View
       CreateURLMediaPhotoView(
-        url: photoData.urlString ?? "",
-        contentMode: CreateURLMediaPhotoView.ContentModeOption.optionMode(contentMode: photoData.contentMode)
+        url: Binding<String>(get: { photoData.urlString ?? "" }, set: { photoData.urlString = $0 }),
+        contentMode: CreateURLMediaPhotoView.ContentModeOption.optionFor(contentMode: photoData.contentMode)
       ) {
         createdMedia(.urlPhoto(photoData: $0))
       }
     case .urlPhotoGrid(let photoDataOne, let photoDataTwo, let photoDataThree, let photoDataFour):
-      CreateURLMediaPhotoGridView(
-        photoDataOne: photoDataOne,
-        photoDataTwo: photoDataTwo,
-        photoDataThree: photoDataThree,
-        photoDataFour: photoDataFour
-      ){
+      CreateURLMediaPhotoGridView(photoData: [photoDataOne, photoDataTwo, photoDataThree, photoDataFour]){
         createdMedia(.urlPhotoGrid(
           photoDataOne: $0,
           photoDataTwo: $1,
@@ -41,8 +37,7 @@ struct CreateMediaView: View {
       CreateURLMediaPhotoCarouselView(
         photoArray: photos
       ){
-        createdMedia(.urlPhotoCarousel(photoArray: $0)
-        )
+        createdMedia(.urlPhotoCarousel(photoArray: $0))
       }
     }
   }
