@@ -7,6 +7,8 @@
 
 import Foundation
 import SwiftUI
+import CoreLocation
+import MapKit
 
 struct MediaWindowView: View {
 
@@ -34,6 +36,14 @@ struct MediaWindowView: View {
       PhotoCarouselView(
         photoArray: photoArray
       )
+    case .location(title: let title, latitude: let latitude, longitude: let longitude):
+      MapView(
+        title: title,
+        coordinate: .init(
+          latitude: latitude,
+          longitude: longitude
+        )
+      )
     }
   }
 }
@@ -44,4 +54,5 @@ struct MediaWindowView: View {
       width: UIScreen.main.bounds.width - 16,
       height: Theme.MediaSizes.mediaHeight.height
     )
+    .clipShape(RoundedRectangle(cornerRadius: Theme.Geomitry.cornerRadius.radius))
 }

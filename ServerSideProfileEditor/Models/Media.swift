@@ -7,13 +7,15 @@
 
 import Foundation
 import SwiftUI
+import CoreLocation
 
 enum Media: Equatable, CaseIterable, Identifiable {
 
   static var allCases: [Media] = [
     .urlPhoto(photoData: .emptyInstance()),
     .urlPhotoCarousel(photoArray: Array(repeating: .emptyInstance(), count: 4)),
-    .urlPhotoGrid(photoDataOne: .emptyInstance(), photoDataTwo: .emptyInstance(), photoDataThree: .emptyInstance(), photoDataFour: .emptyInstance())
+    .urlPhotoGrid(photoDataOne: .emptyInstance(), photoDataTwo: .emptyInstance(), photoDataThree: .emptyInstance(), photoDataFour: .emptyInstance()),
+    .location(title:"", latitude: 0, longitude: 0)
   ]
 
   case urlPhoto(
@@ -31,6 +33,12 @@ enum Media: Equatable, CaseIterable, Identifiable {
     photoArray: [PhotoData]
   )
 
+  case location(
+    title: String,
+    latitude: CLLocationDegrees,
+    longitude: CLLocationDegrees
+  )
+
   var id: String {
     UUID().uuidString
   }
@@ -43,6 +51,8 @@ enum Media: Equatable, CaseIterable, Identifiable {
       "Photo Grid"
     case .urlPhotoCarousel:
       "Photo Carousel"
+    case .location:
+      "Map View"
     }
   }
 
@@ -59,6 +69,12 @@ enum Media: Equatable, CaseIterable, Identifiable {
         )
     case .urlPhotoCarousel:
         .urlPhotoCarousel(photoArray: [.emptyInstance()])
+    case .location:
+      Media.location(
+        title: "San Francicsco",
+        latitude:  37.773972,
+        longitude: -122.431297
+      )
     }
   }
 }
@@ -75,7 +91,7 @@ extension Media {
           contentMode: .allCases.randomElement()!)
       )
     case .urlPhotoGrid:
-      return Media.urlPhotoGrid(
+      return .urlPhotoGrid(
         photoDataOne: .init(
           id: UUID().uuidString,
           urlString: ProfileStubGenerator.randomMediaPicture(),
@@ -103,6 +119,38 @@ extension Media {
         .init(id: UUID().uuidString, urlString: ProfileStubGenerator.randomMediaPicture(), contentMode: .allCases.randomElement()!),
         .init(id: UUID().uuidString, urlString: ProfileStubGenerator.randomMediaPicture(), contentMode: .allCases.randomElement()!)
       ])
+    case .location:
+      return [
+        Media.location(
+          title: "New York",
+          latitude: 40.730610, longitude: -73.935
+        ),
+        Media.location(
+          title: "Seattle",
+          latitude: 47.608013, longitude: -100.335
+        ),
+        Media.location(
+          title: "San Francicsco",
+          latitude: 37.733795, longitude: -100.446
+        )
+      ].randomElement()!
     }
   }
+}
+
+extension CLLocationCoordinate2D {
+    static let newYork: Self = .init(
+        latitude: 40.730610,
+        longitude: -73.935
+    )
+
+    static let seattle: Self = .init(
+        latitude: 47.608013,
+        longitude: -100.335
+    )
+
+    static let sanFrancisco: Self = .init(
+        latitude: 37.733795,
+        longitude: -100.446
+    )
 }

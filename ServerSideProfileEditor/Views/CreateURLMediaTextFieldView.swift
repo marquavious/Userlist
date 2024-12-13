@@ -1,5 +1,5 @@
 //
-//  CreateURLMediaPhotoView.swift
+//  CreateURLMediaTextFieldView.swift
 //  ServerSideProfileEditor
 //
 //  Created by Marquavious Draggon on 10/26/24.
@@ -10,7 +10,7 @@ import SwiftUI
 
 typealias CreateURLMediaPhotoViewOption = (id: String, systemImageString: String, tint: Color, action: () -> Void)
 
-struct CreateURLMediaPhotoView: View {
+struct CreateURLMediaTextFieldView: View {
 
   private struct Constants {
     static let completionDelay: Int = 1_500

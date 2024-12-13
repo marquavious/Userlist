@@ -19,11 +19,9 @@ struct CreateMediaView: View {
     case .urlPhoto(var photoData):
       // Extract View
       CreateURLMediaPhotoView(
-        url: Binding<String>(get: { photoData.urlString ?? "" }, set: { photoData.urlString = $0 }),
-        contentMode: CreateURLMediaPhotoView.ContentModeOption.optionFor(contentMode: photoData.contentMode)
-      ) {
-        createdMedia(.urlPhoto(photoData: $0))
-      }
+        photoData: photoData) {
+          createdMedia(.urlPhoto(photoData: $0))
+        }
     case .urlPhotoGrid(let photoDataOne, let photoDataTwo, let photoDataThree, let photoDataFour):
       CreateURLMediaPhotoGridView(photoData: [photoDataOne, photoDataTwo, photoDataThree, photoDataFour]){
         createdMedia(.urlPhotoGrid(
@@ -38,6 +36,10 @@ struct CreateMediaView: View {
         photoArray: photos
       ){
         createdMedia(.urlPhotoCarousel(photoArray: $0))
+      }
+    case .location(title: let title, latitude: let latitude, longitude: let longitude):
+      CreateMapMediaView(title: title, latitude: latitude, longitude: longitude) {
+        createdMedia(.location(title: $0, latitude: $1, longitude: $2))
       }
     }
   }

@@ -21,9 +21,9 @@ struct CreateURLMediaPhotoGridView: View {
   var body: some View {
     VStack {
       ForEach(Array(photoData.enumerated()), id: \.offset) { index, data in
-        CreateURLMediaPhotoView(
+        CreateURLMediaTextFieldView(
           url: Binding<String>(get: { photoData[index].urlString ?? "" }, set: { photoData[index].urlString = $0 }),
-          contentMode: CreateURLMediaPhotoView.ContentModeOption.optionFor(contentMode: .fill),
+          contentMode: CreateURLMediaTextFieldView.ContentModeOption.optionFor(contentMode: .fill),
           externalOptions: [
             (id: "autofill", systemImageString: "dice", tint: .blue, action: { autoFill(index: index, oldPhotoData: photoData[index]) }),
             (id: "move_up", systemImageString: "chevron.up", tint: .green, action: { moveElementUp(&photoData, at: index) }),
