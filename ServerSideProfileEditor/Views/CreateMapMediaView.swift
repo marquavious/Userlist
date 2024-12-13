@@ -58,12 +58,32 @@ struct CreateMapMediaView: View {
       .environment(\.isFocused, focusedTextField == .longitude)
       .focused($focusedTextField, equals: .longitude)
       .keyboardType(.numberPad)
+
+      Button {
+        autoFill()
+      } label: {
+        Text("\(Image(systemName: "dice")) Randomize Image")
+          .font(.subheadline)
+          .frame(maxWidth: .infinity)
+      }
+      .buttonStyle(.borderedProminent)
+      .padding(.bottom, 4)
+
     }.onChange(of: latitude) {
       updateMedia()
     }.onChange(of: longitude) {
       updateMedia()
     }.onChange(of: title) {
       updateMedia()
+    }
+  }
+
+  private func autoFill() {
+    let mapData = ProfileStubGenerator.randomLoaction()
+    if case let .location(title, latitude, longitude) = mapData {
+      self.title = title
+      self.latitude = latitude
+      self.longitude = longitude
     }
   }
 

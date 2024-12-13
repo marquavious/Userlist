@@ -120,37 +120,11 @@ extension Media {
         .init(id: UUID().uuidString, urlString: ProfileStubGenerator.randomMediaPicture(), contentMode: .allCases.randomElement()!)
       ])
     case .location:
-      return [
-        Media.location(
-          title: "New York",
-          latitude: 40.730610, longitude: -73.935
-        ),
-        Media.location(
-          title: "Seattle",
-          latitude: 47.608013, longitude: -100.335
-        ),
-        Media.location(
-          title: "San Francicsco",
-          latitude: 37.733795, longitude: -100.446
-        )
-      ].randomElement()!
+      if case let .location(title, latitude, longitude) = ProfileStubGenerator.randomLoaction() {
+        return .location(title: title, latitude: latitude, longitude: longitude)
+      } else {
+        fatalError()
+      }
     }
   }
-}
-
-extension CLLocationCoordinate2D {
-    static let newYork: Self = .init(
-        latitude: 40.730610,
-        longitude: -73.935
-    )
-
-    static let seattle: Self = .init(
-        latitude: 47.608013,
-        longitude: -100.335
-    )
-
-    static let sanFrancisco: Self = .init(
-        latitude: 37.733795,
-        longitude: -100.446
-    )
 }

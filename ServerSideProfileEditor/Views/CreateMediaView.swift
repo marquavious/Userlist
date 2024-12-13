@@ -16,8 +16,7 @@ struct CreateMediaView: View {
 
   var body: some View {
     switch media {
-    case .urlPhoto(var photoData):
-      // Extract View
+    case .urlPhoto(let photoData):
       CreateURLMediaPhotoView(
         photoData: photoData) {
           createdMedia(.urlPhoto(photoData: $0))

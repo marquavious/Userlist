@@ -29,6 +29,10 @@ struct ProfileStubGenerator {
     descriptions.randomElement()!
   }
 
+  static func randomLoaction() -> Media {
+    locations.randomElement()!
+  }
+
   static func randomSectionTupleData() -> (title: String, description: String) {
     [
       (title: "Coffee Shops I Love", description: "I love discovering new coffee shops and trying different blends. Here are some of my favorites."),
@@ -131,5 +135,21 @@ struct ProfileStubGenerator {
     "https://i.imgur.com/vFTPjU4.png",
     "https://i.natgeofe.com/k/a6c9f195-de20-445d-9d36-745ef56042c5/OG_Colosseum_Ancient-Rome_KIDS_1122.jpg?w=1436&h=978",
     "https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+  ]
+
+  private static let locations: [Media] =
+  [
+    Media.location(
+      title: "New York",
+      latitude: 40.730610, longitude: -73.935
+    ),
+    Media.location(
+      title: "Seattle",
+      latitude: 47.60621, longitude: -122.33207
+    ),
+    Media.location(
+      title: "San Francicsco",
+      latitude: 37.773972, longitude: -122.431297
+    )
   ]
 }

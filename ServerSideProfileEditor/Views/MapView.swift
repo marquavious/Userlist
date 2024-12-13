@@ -1,5 +1,5 @@
 //
-//  MappView.swift
+//  MapView.swift
 //  ServerSideProfileEditor
 //
 //  Created by Marquavious Draggon on 12/9/24.
@@ -57,7 +57,7 @@ struct MapView: View {
 }
 
 #Preview {
-  MapView(title: "NY", coordinate: .newYork)
+  MapView(title: "NY", coordinate: CLLocationCoordinate2D(latitude: 40.730610, longitude: -73.935))
     .frame(
       width: UIScreen.main.bounds.width - 16,
       height: Theme.MediaSizes.mediaHeight.height
