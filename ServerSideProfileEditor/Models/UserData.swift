@@ -24,6 +24,13 @@ struct UserData: Equatable {
     self.profilePictureUrlString = profilePictureUrlString
     self.profileBannerUrlString = profileHeaderUrlString
   }
+
+  func isConceptualCopyOf(_ other: UserData) -> Bool {
+    username == other.username &&
+    description == other.description &&
+    profilePictureUrlString == other.profilePictureUrlString &&
+    profileBannerUrlString == other.profileBannerUrlString
+  }
 }
 
 extension UserData {

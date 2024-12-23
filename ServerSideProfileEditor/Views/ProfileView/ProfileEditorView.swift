@@ -10,6 +10,8 @@ import SwiftUI
 
 struct ProfileEditorView: View {
 
+  @Environment(\.dismiss) var dismiss
+
   private enum TextField: CaseIterable, Identifiable {
     case username
     case description
@@ -69,6 +71,13 @@ struct ProfileEditorView: View {
   private var updatedViewState: ProfileEditorViewState
   private var userDidUpdate: UserDidUpdate
 
+  private var changeExists: Bool {
+    initialViewState.usernameText != usernameText ||
+    initialViewState.descriptionText != descriptionText ||
+    initialViewState.profilePictureURL != profilePictureURL ||
+    initialViewState.bannerPhotoURL != bannerPhotoURL
+  }
+
   init(initialUser: UserData, userDidUpdate: @escaping UserDidUpdate) {
     self.userDidUpdate = userDidUpdate
     self.updatedViewState = .init(userData: initialUser)
@@ -81,15 +90,15 @@ struct ProfileEditorView: View {
         HStack {
           PhotoView(url: URL(string: profilePictureURL))
             .frame(
-              width: Theme.MediaSizes.profilePicture.width,
-              height: Theme.MediaSizes.profilePicture.height
+              width: StyleConstants.MediaSizes.ProfilePicture.profilePictureWidth,
+              height: StyleConstants.MediaSizes.ProfilePicture.profilePictureHeight
             )
             .clipShape(Circle())
           PhotoView(url: URL(string: profilePictureURL))
             .frame(
-              height: Theme.MediaSizes.profilePicture.height
+              height: StyleConstants.MediaSizes.ProfilePicture.profilePictureHeight
             )
-            .clipShape(RoundedRectangle(cornerRadius: Theme.Geomitry.cornerRadius.radius))
+            .clipShape(RoundedRectangle(cornerRadius: StyleConstants.Geometry.cornerRadius))
         }
       }
 
@@ -132,7 +141,7 @@ struct ProfileEditorView: View {
           .focused($focusedTextField, equals: .description)
 
           CustomTextField(
-            title: "Profile Picure URL",
+            title: "Profile Picture URL",
             textfieldPrompt: "URl...",
             iconSystemImageName: "link",
             isRequired: true,
@@ -158,12 +167,17 @@ struct ProfileEditorView: View {
         ToggleStateControlPanel(
           title: "Show Updates",
           showChanges: $showChanges,
-          saveButtonPressed: {
+          rightButtonText: changeExists ? "Discard Changes" : "Dismiss",
+          leftButtonPressed: {
             didUpdateUser()
           },
-          discardChangesPressed: {
-            showChanges = true
-            refreshViewState()
+          rightButtonPressed: {
+            if changeExists {
+              showChanges = true
+              setViewFor(state: initialViewState)
+            } else {
+              dismiss()
+            }
           }
         )
       }
@@ -218,18 +232,20 @@ struct ProfileEditorView: View {
     )
   }
 
+  /*
   private func createBindingFor(textField: TextField) -> Binding<String> {
     switch textField {
     case .username:
-      $usernameText
+      Binding(get: { usernameText }, set: { usernameText = $0 })
     case .description:
-      $descriptionText
+      Binding(get: { descriptionText }, set: { descriptionText = $0 })
     case .profilePictureUrl:
-      $profilePictureURL
+      Binding(get: { profilePictureURL }, set: { profilePictureURL = $0 })
     case .bannerPictureUrl:
-      $bannerPhotoURL
+      Binding(get: { bannerPhotoURL }, set: { bannerPhotoURL = $0 })
     }
   }
+  */
 }
 
 #Preview {

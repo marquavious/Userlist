@@ -41,7 +41,7 @@ struct MediaEditSection: View {
 }
 
 #Preview {
-  ProfileSectionEditorViewForPreview(
+  ProfileSectionEditorViewForPreviews(
     media:
         .urlPhoto(
           photoData: PhotoData(

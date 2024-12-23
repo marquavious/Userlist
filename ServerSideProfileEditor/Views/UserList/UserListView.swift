@@ -16,18 +16,18 @@ struct UserListView: View {
   var body: some View {
     ScrollView {
       LazyVStack(alignment: .leading) {
-        ForEach(userList.allUsers) { user in
+        ForEach(userList.allUsers) { userData in
           HStack {
             UserListViewCell(
-              imageURL: URL(string: user.user.profilePictureUrlString ?? ""),
-              title: user.user.username,
-              description: user.user.description
+              imageURL: userData.user.profilePictureUrlString?.urlValue,
+              title: userData.user.username,
+              description: userData.user.description
             )
           }
           .environment(router)
-          .padding(.horizontal, Theme.Padding.profileViewHorizontalSpacing.padding)
+          .padding(.horizontal, StyleConstants.Padding.profileViewHorizontalSpacing)
           .onTapGesture {
-            router.navigate(to: .profile(id: user.id))
+            router.navigate(to: .profile(id: userData.id))
           }
         }
       }
@@ -37,5 +37,5 @@ struct UserListView: View {
 
 #Preview {
   AppView()
-    .withStubbedEnviorments()
+    .withStubbedEnvironments()
 }

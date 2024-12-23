@@ -31,13 +31,13 @@ enum SectionLayout {
   }
 
   enum AlignmentGuide: Int, Identifiable, CaseIterable, Equatable {
-    case leading, centerd, trailing
+    case leading, centered, trailing
 
     var systemImageString: String {
       switch self {
       case .leading:
         "text.alignleft"
-      case .centerd:
+      case .centered:
         "text.aligncenter"
       case .trailing:
         "text.alignright"
@@ -50,7 +50,7 @@ enum SectionLayout {
       switch self {
       case .leading:
           .leading
-      case .centerd:
+      case .centered:
           .center
       case .trailing:
           .trailing
@@ -61,7 +61,7 @@ enum SectionLayout {
       switch self {
       case .leading:
           .leading
-      case .centerd:
+      case .centered:
           .center
       case .trailing:
           .trailing
@@ -74,7 +74,7 @@ enum SectionLayout {
           .leading
       case .trailing:
           .trailing
-      case .centerd:
+      case .centered:
           .center
       }
     }

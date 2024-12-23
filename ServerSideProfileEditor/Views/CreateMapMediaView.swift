@@ -62,12 +62,11 @@ struct CreateMapMediaView: View {
       Button {
         autoFill()
       } label: {
-        Text("\(Image(systemName: "dice")) Randomize Image")
+        Text("\(Image(systemName: "dice")) Randomize Location")
           .font(.subheadline)
           .frame(maxWidth: .infinity)
       }
       .buttonStyle(.borderedProminent)
-      .padding(.bottom, 4)
 
     }.onChange(of: latitude) {
       updateMedia()
@@ -79,8 +78,8 @@ struct CreateMapMediaView: View {
   }
 
   private func autoFill() {
-    let mapData = ProfileStubGenerator.randomLoaction()
-    if case let .location(title, latitude, longitude) = mapData {
+    let mapData = ProfileStubGenerator.randomLocation()
+    if case let .mapView(title, latitude, longitude) = mapData {
       self.title = title
       self.latitude = latitude
       self.longitude = longitude

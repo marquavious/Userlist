@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 // https://alladinian.hashnode.dev/stretchy-views-in-swiftui
-struct Stretchy: ViewModifier {
+struct StretchyViewModifier: ViewModifier {
   var isTop = true
 
   func heightFor(_ reader: GeometryProxy) -> CGFloat {
@@ -39,6 +39,6 @@ struct Stretchy: ViewModifier {
 
 extension View {
   func stretchy(isTop: Bool = true) -> some View {
-    self.modifier(Stretchy(isTop: isTop))
+    self.modifier(StretchyViewModifier(isTop: isTop))
   }
 }

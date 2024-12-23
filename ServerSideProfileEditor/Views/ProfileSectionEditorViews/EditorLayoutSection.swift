@@ -12,7 +12,7 @@ struct EditorLayoutSection: View {
   @Binding var alignment: SectionLayout.AlignmentGuide
   @Binding var layout: SectionLayout.Arrangement
   @Binding var media: Media?
-  @Binding var seperator: Seperator
+  @Binding var separator: Separator
 
   var body: some View {
     Section("Layout") {
@@ -37,8 +37,8 @@ struct EditorLayoutSection: View {
         }
         .pickerStyle(.segmented)
 
-        Picker("Separator Tyoe", selection: $seperator) {
-          ForEach(Seperator.allCases) { option in
+        Picker("Separator Type", selection: $separator) {
+          ForEach(Separator.allCases) { option in
             Image(systemName: option.systemImageString)
               .tag(option)
           }
@@ -51,7 +51,7 @@ struct EditorLayoutSection: View {
 }
 
 #Preview {
-  ProfileSectionEditorViewForPreview(
+  ProfileSectionEditorViewForPreviews(
     media:
         .urlPhoto(
           photoData: PhotoData(

@@ -15,9 +15,9 @@ struct ControlPanelButtonViewModifier: ViewModifier {
   func body(content: Content) -> some View {
     content
       .buttonStyle(.plain)
-      .frame(maxWidth: .infinity, maxHeight: Theme.Button.buttonHeight.height)
+      .frame(maxWidth: .infinity, maxHeight: StyleConstants.Button.buttonHeight)
       .background(backgroundColor)
       .foregroundStyle(.white)
-      .clipShape(RoundedRectangle(cornerRadius: Theme.Geomitry.cornerRadius.radius))
+      .clipShape(RoundedRectangle(cornerRadius: StyleConstants.Geometry.cornerRadius))
   }
 }

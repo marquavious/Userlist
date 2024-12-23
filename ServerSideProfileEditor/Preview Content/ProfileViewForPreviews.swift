@@ -13,7 +13,7 @@ struct ProfileViewForPreviews: View {
 
   var body: some View {
     ProfileView(profile: profile)
-      .withStubbedEnviorments()
+      .withStubbedEnvironments()
   }
 }
 

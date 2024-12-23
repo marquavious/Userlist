@@ -19,7 +19,7 @@ class SectionData: Identifiable, ObservableObject {
   var mediaContentMode: ContentMode
   var alignment: SectionLayout.AlignmentGuide
   var media: Media?
-  var seperator: Seperator
+  var separator: Separator
 
   init(
     id: String = UUID().uuidString,
@@ -31,7 +31,7 @@ class SectionData: Identifiable, ObservableObject {
     mediaContentMode: ContentMode = .fill,
     alignment: SectionLayout.AlignmentGuide = .leading,
     media: Media? = nil,
-    seperator: Seperator = .none
+    separator: Separator = .none
   ) {
     self.id = id
     self.index = index
@@ -42,7 +42,18 @@ class SectionData: Identifiable, ObservableObject {
     self.mediaContentMode = mediaContentMode
     self.alignment = alignment
     self.media = media
-    self.seperator = seperator
+    self.separator = separator
+  }
+
+  func isConceptualCopyOf(_ other: SectionData) -> Bool {
+    other.index == index &&
+    other.title == title &&
+    other.description == description &&
+    other.layout == layout &&
+    other.mediaHeight == mediaHeight &&
+    other.mediaContentMode == mediaContentMode &&
+    other.alignment == alignment &&
+    other.media == media
   }
 }
 
@@ -80,7 +91,7 @@ extension SectionData {
       mediaContentMode: .allCases.randomElement()!,
       alignment: .leading,
       media: Bool.random() ? nil : Media.generateRandomMedia(),
-      seperator: .allCases.randomElement()!
+      separator: .allCases.randomElement()!
     )
   }
 }

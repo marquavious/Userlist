@@ -36,9 +36,9 @@ struct CreateMediaView: View {
       ){
         createdMedia(.urlPhotoCarousel(photoArray: $0))
       }
-    case .location(title: let title, latitude: let latitude, longitude: let longitude):
+    case .mapView(title: let title, latitude: let latitude, longitude: let longitude):
       CreateMapMediaView(title: title, latitude: latitude, longitude: longitude) {
-        createdMedia(.location(title: $0, latitude: $1, longitude: $2))
+        createdMedia(.mapView(title: $0, latitude: $1, longitude: $2))
       }
     }
   }

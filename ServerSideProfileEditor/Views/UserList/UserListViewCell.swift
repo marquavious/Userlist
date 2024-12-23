@@ -19,8 +19,8 @@ struct UserListViewCell: View {
       HStack {
         PhotoView(url: imageURL)
           .frame(
-            width: 60,
-            height: 60
+            width: StyleConstants.MediaSizes.ProfilePicture.profileCellPictureWidth,
+            height: StyleConstants.MediaSizes.ProfilePicture.profileCellPictureHeight
           )
           .clipShape(Circle())
           .overlay(Circle().stroke(.gray, lineWidth: 1))
@@ -29,13 +29,13 @@ struct UserListViewCell: View {
           VStack(alignment: .leading) {
             if !title.isEmpty {
               Text(title)
-                .font(Theme.Text.profileCellTitle.font)
+                .font(StyleConstants.Text.profileCellTitle)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .bold()
             }
             if !description.isEmpty {
               Text(description)
-                .font(Theme.Text.profileCellDescription.font)
+                .font(StyleConstants.Text.profileCellDescription)
                 .lineLimit(3)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }

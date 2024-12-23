@@ -8,77 +8,70 @@
 import SwiftUI
 
 struct SectionCell: View {
+
   var title: String?
   var description: String?
   var media: Media?
   var alignment: SectionLayout.AlignmentGuide
   var mediaPosition: SectionLayout.Arrangement
 
-  private var titleIsEmpty: Bool {
-    if let title = title {
-      return title.isEmpty
-    } else {
-      return true
-    }
+  init(
+    title: String? = nil,
+    description: String? = nil,
+    media: Media? = nil,
+    alignment: SectionLayout.AlignmentGuide = .leading,
+    mediaPosition: SectionLayout.Arrangement = .top
+  ) {
+    self.title = title
+    self.description = description
+    self.media = media
+    self.alignment = alignment
+    self.mediaPosition = mediaPosition
   }
 
-  private var descriptionIsEmpty: Bool {
-    if let description = description {
-      return description.isEmpty
-    } else {
-      return true
-    }
-  }
-
-  private var mediaIsEmpty: Bool {
-    media == nil
+  init(
+    sectionData: SectionData
+  ) {
+    self.title = sectionData.title
+    self.description = sectionData.description
+    self.media = sectionData.media
+    self.alignment = sectionData.alignment
+    self.mediaPosition = sectionData.layout
   }
 
   var body: some View {
     VStack(
-      alignment: alignment.horizontalAlignment
+      alignment: alignment.horizontalAlignment,
+      spacing: .zero
     ) {
-      Group {
-        if mediaIsEmpty {
-          VStack(spacing: Theme.Spacing.cellTextSpacing.spacing) {
-            if mediaPosition == .flipped {
-              createDescriptionTextView()
-              createTitleTextView()
-            } else {
-              createTitleTextView()
-              createDescriptionTextView()
-            }
-          }
+      if media == nil {
+        if mediaPosition == .flipped {
+          createDescriptionTextView()
+          createTitleTextView()
         } else {
-          switch mediaPosition {
-          case .top:
-            createMeidaView()
-            VStack(spacing: Theme.Spacing.cellTextSpacing.spacing) {
-              createTitleTextView()
-              createDescriptionTextView()
-            }
-          case .middle:
-            VStack(spacing: mediaIsEmpty ? 0 : Theme.Spacing.cellTextSpacing.spacing) {
-              createTitleTextView()
-              createMeidaView()
-            }
-            createDescriptionTextView()
-          case .bottom:
-            VStack(spacing: (descriptionIsEmpty || titleIsEmpty) ? 0 : Theme.Spacing.cellTextSpacing.spacing) {
-              createTitleTextView()
-              createDescriptionTextView()
-            }
-            createMeidaView()
-          case .flipped:
-            createDescriptionTextView()
-            VStack(spacing: mediaIsEmpty ? 0 : Theme.Spacing.cellTextSpacing.spacing) {
-              createMeidaView()
-              createTitleTextView()
-            }
-          }
+          createTitleTextView()
+          createDescriptionTextView()
+        }
+      } else {
+        switch mediaPosition {
+        case .top:
+          createMediaView()
+          createTitleTextView()
+          createDescriptionTextView()
+        case .middle:
+          createTitleTextView()
+          createMediaView()
+          createDescriptionTextView()
+        case .bottom:
+          createTitleTextView()
+          createDescriptionTextView()
+          createMediaView()
+        case .flipped:
+          createDescriptionTextView()
+          createMediaView()
+          createTitleTextView()
         }
       }
-      .padding(.vertical, Theme.Spacing.intraSectionalHorizontalSpacing.spacing)
     }
   }
 
@@ -86,10 +79,12 @@ struct SectionCell: View {
   private func createTitleTextView() -> some View {
     if let title = title, !title.isEmpty {
       Text(title)
-        .font(Theme.Text.title.font)
+        .font(StyleConstants.Text.title)
         .fontWeight(.semibold)
         .frame(maxWidth: .infinity, alignment: alignment.frameAlignment)
         .multilineTextAlignment(alignment.textAlignment)
+        .edgesIgnoringSafeArea(.vertical)
+        .padding(.vertical, 4)
     }
   }
 
@@ -97,24 +92,27 @@ struct SectionCell: View {
   private func createDescriptionTextView() -> some View {
     if let description = description, !description.isEmpty {
       Text(description)
-        .font(Theme.Text.description.font)
-        .frame(maxWidth: .infinity,  alignment: alignment.frameAlignment)
+        .font(StyleConstants.Text.description)
+        .frame(maxWidth: .infinity, alignment: alignment.frameAlignment)
         .multilineTextAlignment(alignment.textAlignment)
+        .edgesIgnoringSafeArea(.vertical)
+        .padding(.vertical, 4)
     }
   }
 
   @ViewBuilder
-  private func createMeidaView() -> some View {
+  private func createMediaView() -> some View {
     if let media = media {
       MediaWindowView(
         media: media
       )
-      .frame(height: Theme.MediaSizes.mediaHeight.height)
-      .padding(.vertical, Theme.Spacing.cellTextSpacing.spacing)
+      .frame(height: StyleConstants.MediaSizes.mediaHeight)
+      .edgesIgnoringSafeArea(.vertical)
+      .padding(.vertical, 8)
     }
   }
 }
 
 #Preview {
-  SectionCell(alignment: .leading, mediaPosition: .bottom)
+  ProfileViewForPreviews()
 }

@@ -18,8 +18,7 @@ struct MediaWindowView: View {
     switch media {
     case .urlPhoto(let photoData):
       CustomContentModePhotoView(
-        url: URL(string: photoData.urlString ?? ""),
-        contentMode: photoData.contentMode
+        photoData: photoData
       )
     case .urlPhotoGrid(
       let photoDataOne,
@@ -36,7 +35,7 @@ struct MediaWindowView: View {
       PhotoCarouselView(
         photoArray: photoArray
       )
-    case .location(title: let title, latitude: let latitude, longitude: let longitude):
+    case .mapView(title: let title, latitude: let latitude, longitude: let longitude):
       MapView(
         title: title,
         coordinate: .init(
@@ -52,7 +51,7 @@ struct MediaWindowView: View {
   MediaWindowView(media: .generateRandomMedia())
     .frame(
       width: UIScreen.main.bounds.width - 16,
-      height: Theme.MediaSizes.mediaHeight.height
+      height: StyleConstants.MediaSizes.mediaHeight
     )
-    .clipShape(RoundedRectangle(cornerRadius: Theme.Geomitry.cornerRadius.radius))
+    .clipShape(RoundedRectangle(cornerRadius: StyleConstants.Geometry.cornerRadius))
 }

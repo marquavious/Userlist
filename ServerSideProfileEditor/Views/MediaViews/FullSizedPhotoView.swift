@@ -1,5 +1,5 @@
 //
-//  BlurredBackgroundPhotoView.swift
+//  FullSizedPhotoView.swift
 //  ServerSideProfileEditor
 //
 //  Created by Marquavious Draggon on 11/19/24.
@@ -8,11 +8,11 @@
 import Foundation
 import SwiftUI
 
-struct BlurredBackgroundPhotoView: View {
+struct FullSizedPhotoView: View {
 
   struct Constants {
     static let BlurRadius: CGFloat = 5
-    static let CornerRadius: CGFloat = Theme.Geomitry.cornerRadius.radius
+    static let CornerRadius: CGFloat = StyleConstants.Geometry.cornerRadius
   }
 
   var url: URL?
@@ -40,7 +40,7 @@ struct BlurredBackgroundPhotoView: View {
 }
 
 #Preview {
-  BlurredBackgroundPhotoView(
+  FullSizedPhotoView(
     url: URL(string: ProfileStubGenerator.randomMediaPicture())
   )
   .frame(width: UIScreen.main.bounds.width - 16, height: 200)

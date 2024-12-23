@@ -15,7 +15,7 @@ class ProfileSectionEditorViewState {
   var media: Media?
   var alignment: SectionLayout.AlignmentGuide
   var layout: SectionLayout.Arrangement
-  var seperator: Seperator
+  var separator: Separator
 
   init(
     id: String,
@@ -25,7 +25,7 @@ class ProfileSectionEditorViewState {
     alignment: SectionLayout.AlignmentGuide,
     media: Media?,
     layout: SectionLayout.Arrangement,
-    seperator: Seperator
+    separator: Separator
   ) {
     self.id = id
     self.index = index
@@ -34,7 +34,7 @@ class ProfileSectionEditorViewState {
     self.alignment = alignment
     self.media = media
     self.layout = layout
-    self.seperator = seperator
+    self.separator = separator
   }
 
   init(sectionData: SectionData) {
@@ -45,7 +45,7 @@ class ProfileSectionEditorViewState {
     self.alignment = sectionData.alignment
     self.media = sectionData.media
     self.layout = sectionData.layout
-    self.seperator = sectionData.seperator
+    self.separator = sectionData.separator
   }
 
   func copyState(_ state: ProfileSectionEditorViewState) {
@@ -56,6 +56,6 @@ class ProfileSectionEditorViewState {
     self.alignment = state.alignment
     self.media = state.media
     self.layout = state.layout
-    self.seperator = state.seperator
+    self.separator = state.separator
   }
 }

@@ -12,8 +12,11 @@ struct ToggleStateControlPanel: View {
   @State var title: String
   @Binding var showChanges: Bool
 
-  var saveButtonPressed: () -> Void
-  var discardChangesPressed: () -> Void
+  var leftButtonText: String = "Save"
+  var rightButtonText: String = "Discard Changes"
+
+  var leftButtonPressed: () -> Void
+  var rightButtonPressed: () -> Void
 
   var body: some View {
     VStack {
@@ -21,15 +24,16 @@ struct ToggleStateControlPanel: View {
         Text(title)
       }
       HStack {
-        Button("Save") {
-          saveButtonPressed()
+        Button(leftButtonText) {
+          leftButtonPressed()
         }
         .modifier(ControlPanelButtonViewModifier(backgroundColor: .blue))
-        Button("Discard Changes") {
-          discardChangesPressed()
+        Button(rightButtonText) {
+          rightButtonPressed()
         }
         .modifier(ControlPanelButtonViewModifier(backgroundColor: .red))
       }
-    }.padding(.vertical, 4)
+    }
+      .padding(.vertical, 4)
   }
 }

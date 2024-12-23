@@ -26,5 +26,5 @@ struct UserListTabView: View {
 
 #Preview {
   UserListTabView()
-    .withStubbedEnviorments()
+    .withStubbedEnvironments()
 }

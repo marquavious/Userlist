@@ -16,12 +16,11 @@ struct PhotoCarouselView: View {
     GeometryReader { proxy in
       ScrollView(.horizontal) {
         HStack {
-          ForEach(photoArray) { image in
+          ForEach(photoArray) { photoData in
             CustomContentModePhotoView(
-              url: URL(string: image.urlString ?? ""),
-              contentMode: image.contentMode
+              photoData: photoData
             )
-            .frame(width: proxy.frame(in: .global).width)
+            .frame(width: proxy.frame(in: .global).width, height: StyleConstants.MediaSizes.mediaHeight)
           }
         }
         .scrollTargetLayout()
@@ -44,6 +43,6 @@ struct PhotoCarouselView: View {
   )
   .frame(
     width: UIScreen.main.bounds.width - 16,
-    height: Theme.MediaSizes.mediaHeight.height
+    height: StyleConstants.MediaSizes.mediaHeight
   )
 }

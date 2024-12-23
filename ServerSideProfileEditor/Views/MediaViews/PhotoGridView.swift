@@ -18,24 +18,12 @@ struct PhotoGridView: View {
   var body: some View {
     VStack {
       HStack {
-        CustomContentModePhotoView(
-          url: URL(string: photoDataOne.urlString ?? ""),
-          contentMode: photoDataOne.contentMode
-        )
-        CustomContentModePhotoView(
-          url: URL(string: photoDataTwo.urlString  ?? ""),
-          contentMode: photoDataTwo.contentMode
-        )
+        CustomContentModePhotoView(photoData: photoDataOne)
+        CustomContentModePhotoView(photoData: photoDataTwo)
       }
       HStack {
-        CustomContentModePhotoView(
-          url: URL(string: photoDataThree.urlString ?? ""),
-          contentMode: photoDataThree.contentMode
-        )
-        CustomContentModePhotoView(
-          url: URL(string: photoDataFour.urlString ?? ""),
-          contentMode: photoDataFour.contentMode
-        )
+        CustomContentModePhotoView(photoData: photoDataThree)
+        CustomContentModePhotoView(photoData: photoDataFour)
       }
     }
   }

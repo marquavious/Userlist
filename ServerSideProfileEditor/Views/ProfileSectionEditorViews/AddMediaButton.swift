@@ -15,7 +15,7 @@ struct AddMediaButton: View {
     Menu("Add Media +", systemImage: "photo") {
       ForEach(Media.allCases) { type in
         Button(type.description) {
-          withAnimation(.easeInOut(duration: Double(Theme.AnimationSpeed.normal.rawValue))) {
+          withAnimation(.easeInOut(duration: Double(StyleConstants.AnimationSpeed.normal))) {
             didSelectMedia(type.emptyInstance)
           }
         }
@@ -25,7 +25,7 @@ struct AddMediaButton: View {
 }
 
 #Preview {
-  ProfileSectionEditorViewForPreview(
+  ProfileSectionEditorViewForPreviews(
     media:
         .urlPhoto(
           photoData: PhotoData(

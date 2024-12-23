@@ -18,7 +18,7 @@ struct ProfileStubGenerator {
   }
 
   static func randomMediaPicture() -> String {
-    media.randomElement()!
+    imageLinks.randomElement()!
   }
 
   static func randomUsername() -> String {
@@ -29,7 +29,7 @@ struct ProfileStubGenerator {
     descriptions.randomElement()!
   }
 
-  static func randomLoaction() -> Media {
+  static func randomLocation() -> Media {
     locations.randomElement()!
   }
 
@@ -129,26 +129,26 @@ struct ProfileStubGenerator {
     "https://upload.wikimedia.org/wikipedia/commons/3/37/Skyline-4582510_1920.jpg"
   ]
 
-  private static let media: [String] = [
+  private static let imageLinks: [String] = [
     "https://i.imgur.com/ApCOa7j.jpeg",
     "https://i.imgur.com/FRf8t4A.png",
     "https://i.imgur.com/vFTPjU4.png",
     "https://i.natgeofe.com/k/a6c9f195-de20-445d-9d36-745ef56042c5/OG_Colosseum_Ancient-Rome_KIDS_1122.jpg?w=1436&h=978",
-    "https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
   ]
 
   private static let locations: [Media] =
   [
-    Media.location(
+    Media.mapView(
       title: "New York",
       latitude: 40.730610, longitude: -73.935
     ),
-    Media.location(
+    Media.mapView(
       title: "Seattle",
       latitude: 47.60621, longitude: -122.33207
     ),
-    Media.location(
-      title: "San Francicsco",
+    Media.mapView(
+      title: "San Francisco",
       latitude: 37.773972, longitude: -122.431297
     )
   ]

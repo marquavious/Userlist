@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ProfileSectionEditorView: View {
 
+  @Environment(\.dismiss) var dismiss
+
   enum EditorFocus: Hashable, CaseIterable, Identifiable {
     case title, description, media
     static let textOnlyCases: [Self] = [.title, .description]
@@ -49,7 +51,7 @@ struct ProfileSectionEditorView: View {
   @State private var alignment: SectionLayout.AlignmentGuide = .leading
   @State private var layout: SectionLayout.Arrangement = .top
   @State private var media: Media?
-  @State private var seperator: Seperator = .none
+  @State private var separator: Separator = .none
   @State private var showChanges: Bool = true
   @FocusState private var editorFocus: EditorFocus?
   @State private var updatedState: ProfileSectionEditorViewState
@@ -62,10 +64,19 @@ struct ProfileSectionEditorView: View {
     self.updatedState = .init(sectionData: sectionData)
   }
 
+  private var changeExists: Bool {
+    alignment != initialState.alignment ||
+    layout != initialState.layout ||
+    media != initialState.media ||
+    separator != initialState.separator ||
+    titleText != initialState.titleText ||
+    descriptionText != initialState.descriptionText
+  }
+
   var body: some View {
     List {
       Section("Preview") {
-        VStack(spacing: 0) {
+        VStack {
           SectionCell(
             title: titleText,
             description: descriptionText,
@@ -73,23 +84,33 @@ struct ProfileSectionEditorView: View {
             alignment: alignment,
             mediaPosition: layout
           )
-          SeperatorView(seperator: seperator)
+          SeparatorView(separator: separator)
         }
       }
 
-      ControlPanelSection(
-        showChanges: $showChanges
-      ) {
-        saveButtonPressed()
-      } discardButtonPressed: {
-        discardButtonPressed()
+      Section("Control Panel") {
+        ToggleStateControlPanel(
+          title: "Show Updates",
+          showChanges: $showChanges,
+          rightButtonText: changeExists ? "Discard Changes" : "Dismiss",
+          leftButtonPressed: {
+            saveButtonPressed()
+          },
+          rightButtonPressed: {
+            if changeExists {
+              discardButtonPressed()
+            } else {
+              dismiss()
+            }
+          }
+        )
       }
 
       EditorLayoutSection(
         alignment: $alignment,
         layout: $layout,
         media: $media,
-        seperator: $seperator
+        separator: $separator
       )
       .disabled(media == nil && (titleText.isEmpty && descriptionText.isEmpty))
 
@@ -134,9 +155,9 @@ struct ProfileSectionEditorView: View {
         refreshView()
       }
     }
-    .onChange(of: seperator) { _, newValue in
+    .onChange(of: separator) { _, newValue in
       if showChanges {
-        updatedState.seperator = newValue
+        updatedState.separator = newValue
         refreshView()
       }
     }
@@ -154,7 +175,7 @@ struct ProfileSectionEditorView: View {
         layout: updatedState.layout,
         alignment: updatedState.alignment,
         media: updatedState.media,
-        seperator: updatedState.seperator
+        separator: updatedState.separator
       )
     )
   }
@@ -174,12 +195,12 @@ struct ProfileSectionEditorView: View {
     media = state.media
     alignment = state.alignment
     layout = state.layout
-    seperator = state.seperator
+    separator = state.separator
   }
 }
 
 #Preview {
-  ProfileSectionEditorViewForPreview(
+  ProfileSectionEditorViewForPreviews(
     media:
         .urlPhoto(
           photoData:

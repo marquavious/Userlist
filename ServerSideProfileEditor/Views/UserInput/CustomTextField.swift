@@ -24,7 +24,7 @@ struct CustomTextField: View {
       VStack(alignment: .leading) {
         Group {
           let textPrefix = "\(text.isEmpty && isRequired ? "* " : "")"
-          if let iconSystemImageName {
+          if iconSystemImageName != nil {
             HStack(alignment: .firstTextBaseline, spacing: 2) {
               Text(textPrefix)
                 .foregroundStyle((text.isEmpty && isRequired) ? .red : .primary)

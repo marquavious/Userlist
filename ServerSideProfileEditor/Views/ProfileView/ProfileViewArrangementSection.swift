@@ -13,18 +13,11 @@ struct ProfileViewArrangementSection: View {
   var sections: [SectionData]
   
   var body: some View {
-    ForEach(sections) { section in
-      SectionCell(
-        title: section.title,
-        description: section.description,
-        media: section.media,
-        alignment: section.alignment,
-        mediaPosition: section.layout
-      )
-      .padding(.horizontal, Theme.Padding.profileViewHorizontalSpacing.padding)
-      SeperatorView(
-        seperator: section.seperator
-      )
+    ForEach(sections) { sectionData in
+      SectionCell(sectionData: sectionData)
+      .padding(.horizontal, StyleConstants.Padding.profileViewHorizontalSpacing)
+
+      SeparatorView(separator: sectionData.separator)
       .frame(alignment: .center)
     }
   }

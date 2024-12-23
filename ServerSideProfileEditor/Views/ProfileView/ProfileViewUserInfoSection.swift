@@ -20,8 +20,8 @@ struct ProfileViewUserInfoSection: View {
     VStack(alignment: .leading, spacing: 8) {
       PhotoView(url: profilePictureUrl)
         .frame(
-          width: Theme.MediaSizes.profilePicture.width,
-          height: Theme.MediaSizes.profilePicture.height
+          width: StyleConstants.MediaSizes.ProfilePicture.profilePictureWidth,
+          height: StyleConstants.MediaSizes.ProfilePicture.profilePictureHeight
         )
         .clipShape(Circle())
         .overlay(Circle().stroke(.gray, lineWidth: 1))

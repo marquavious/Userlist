@@ -17,9 +17,9 @@ extension View {
         ProfileView(id: id)
           .environment(UserDatabase.shared)
       case .userInfoEditor(let user, let updatedUserClosure):
-          ProfileEditorView(initialUser: user, userDidUpdate: updatedUserClosure)
+        ProfileEditorView(initialUser: user, userDidUpdate: updatedUserClosure)
           .navigationTitle("User Information")
-        .environment(UserDatabase.shared)
+          .environment(UserDatabase.shared)
       case .sectionInfoEditor(let section, let updatedSectionClosure):
         ProfileSectionEditorView(
           sectionData: section,
@@ -34,13 +34,11 @@ extension View {
 
   func withEnvironments() -> some View {
     environment(UserDatabase.shared)
-      .environment(Theme())
       .environment(RouterPath())
   }
 
-  func withStubbedEnviorments() -> some View {
+  func withStubbedEnvironments() -> some View {
     environment(UserDatabase.shared)
-      .environment(Theme())
       .environment(RouterPath())
   }
 }

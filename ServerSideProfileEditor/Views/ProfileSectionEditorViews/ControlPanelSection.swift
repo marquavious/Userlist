@@ -11,25 +11,28 @@ struct ControlPanelSection: View {
 
   @Binding var showChanges: Bool
 
-  var saveButtonPressed: (() -> Void)
-  var discardButtonPressed: (() -> Void)
+  var leftButtonPressed: (() -> Void)
+  var rightButtonPressed: (() -> Void)
 
   var body: some View {
     Section("Control Panel") {
       ToggleStateControlPanel(
         title: "Show Updates",
-        showChanges: $showChanges
-      ) {
-        saveButtonPressed()
-      } discardChangesPressed: {
-        discardButtonPressed()
-      }
+        showChanges: $showChanges,
+        leftButtonPressed: {
+          leftButtonPressed()
+        },
+        rightButtonPressed: {
+          showChanges = true
+          rightButtonPressed()
+        }
+      )
     }
   }
 }
 
 #Preview {
-  ProfileSectionEditorViewForPreview(
+  ProfileSectionEditorViewForPreviews(
     media:
         .urlPhoto(
           photoData: PhotoData(

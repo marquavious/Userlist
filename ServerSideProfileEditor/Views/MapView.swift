@@ -11,7 +11,7 @@ import SwiftUI
 struct MapView: View {
 
   struct Constants {
-    static let cameraRenderingDistace: Double = 100_000
+    static let cameraRenderingDistance: Double = 100_000
   }
 
   var title: String
@@ -21,7 +21,7 @@ struct MapView: View {
   init(title: String, coordinate: CLLocationCoordinate2D) {
     self.title = title
     self.position = .camera(
-      .init(centerCoordinate: coordinate, distance: Constants.cameraRenderingDistace)
+      .init(centerCoordinate: coordinate, distance: Constants.cameraRenderingDistance)
     )
     self.coordinate = coordinate
   }
@@ -45,14 +45,18 @@ struct MapView: View {
         width: proxy.frame(in: .global).width,
         height: proxy.frame(in: .global).height
       )
-      .clipShape(RoundedRectangle(cornerRadius: Theme.Geomitry.cornerRadius.radius))
+      .clipShape(RoundedRectangle(cornerRadius: StyleConstants.Geometry.cornerRadius))
     }.onChange(of: coordinate) {
-      if CLLocationCoordinate2DIsValid(coordinate) {
-        position = .camera(
-          .init(centerCoordinate: coordinate, distance: Constants.cameraRenderingDistace)
-        )
-      }
+      updateCameraPosition(coordinate: coordinate)
+    }.onAppear {
+      updateCameraPosition(coordinate: coordinate)
     }
+  }
+
+  private func updateCameraPosition(coordinate: CLLocationCoordinate2D) {
+    position = .camera(
+      .init(centerCoordinate: coordinate, distance: Constants.cameraRenderingDistance)
+    )
   }
 }
 
@@ -60,13 +64,7 @@ struct MapView: View {
   MapView(title: "NY", coordinate: CLLocationCoordinate2D(latitude: 40.730610, longitude: -73.935))
     .frame(
       width: UIScreen.main.bounds.width - 16,
-      height: Theme.MediaSizes.mediaHeight.height
+      height: StyleConstants.MediaSizes.mediaHeight
     )
-    .clipShape(RoundedRectangle(cornerRadius: Theme.Geomitry.cornerRadius.radius))
-}
-
-extension CLLocationCoordinate2D: @retroactive Equatable {
-  public static func == (lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
-    lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude
-  }
+    .clipShape(RoundedRectangle(cornerRadius: StyleConstants.Geometry.cornerRadius))
 }

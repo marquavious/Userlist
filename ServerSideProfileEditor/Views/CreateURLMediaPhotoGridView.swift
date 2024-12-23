@@ -35,43 +35,43 @@ struct CreateURLMediaPhotoGridView: View {
     }
   }
 
-  func moveElementUp(_ array: inout [PhotoData], at index: Int) {
+  private func moveElementUp(_ array: inout [PhotoData], at index: Int) {
     guard index > 0 else { return }
     array.swapAt(index, index - 1)
-    didUpdateMediafr()
+    updateMedia()
   }
 
-  func moveElementDown(_ array: inout [PhotoData], at index: Int) {
+  private func moveElementDown(_ array: inout [PhotoData], at index: Int) {
     guard index < array.count - 1 else { return }
     array.swapAt(index, index + 1)
-    didUpdateMediafr()
+    updateMedia()
   }
 
-  func autoFill(index: Int, oldPhotoData: PhotoData) {
+  private func autoFill(index: Int, oldPhotoData: PhotoData) {
     updateMedia(index: index, photoData: .init(
       id: UUID().uuidString,
       urlString: ProfileStubGenerator.randomMediaPicture(),
       contentMode: oldPhotoData.contentMode
     ))
-    didUpdateMediafr()
+    updateMedia()
   }
 
-  func removeAt(index: Int) {
+  private func removeAt(index: Int) {
     photoData[index] = .emptyInstance()
-    didUpdateMediafr()
+    updateMedia()
   }
 
-  func addOne(photoData: PhotoData) {
+  private func addOne(photoData: PhotoData) {
     self.photoData.append(photoData)
-    didUpdateMediafr()
+    updateMedia()
   }
 
-  func updateMedia(index: Int, photoData: PhotoData) {
+  private func updateMedia(index: Int, photoData: PhotoData) {
     self.photoData[index] = photoData
-    didUpdateMediafr()
+    updateMedia()
   }
 
-  private func didUpdateMediafr() {
+  private func updateMedia() {
     DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
       didUpdateMedia(photoData[0], photoData[1], photoData[2], photoData[3])
     }

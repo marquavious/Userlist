@@ -12,10 +12,21 @@ import CoreLocation
 enum Media: Equatable, CaseIterable, Identifiable {
 
   static var allCases: [Media] = [
-    .urlPhoto(photoData: .emptyInstance()),
-    .urlPhotoCarousel(photoArray: Array(repeating: .emptyInstance(), count: 4)),
-    .urlPhotoGrid(photoDataOne: .emptyInstance(), photoDataTwo: .emptyInstance(), photoDataThree: .emptyInstance(), photoDataFour: .emptyInstance()),
-    .location(title:"", latitude: 0, longitude: 0)
+    .urlPhoto(
+      photoData: .emptyInstance()
+    ),
+    .urlPhotoCarousel(
+      photoArray: Array(repeating: .emptyInstance(), count: 4)
+    ),
+    .urlPhotoGrid(
+      photoDataOne: .emptyInstance(),
+      photoDataTwo: .emptyInstance(),
+      photoDataThree: .emptyInstance(),
+      photoDataFour: .emptyInstance()
+    ),
+    .mapView(
+      title: "", latitude: 0, longitude: 0
+    )
   ]
 
   case urlPhoto(
@@ -33,7 +44,7 @@ enum Media: Equatable, CaseIterable, Identifiable {
     photoArray: [PhotoData]
   )
 
-  case location(
+  case mapView(
     title: String,
     latitude: CLLocationDegrees,
     longitude: CLLocationDegrees
@@ -51,7 +62,7 @@ enum Media: Equatable, CaseIterable, Identifiable {
       "Photo Grid"
     case .urlPhotoCarousel:
       "Photo Carousel"
-    case .location:
+    case .mapView:
       "Map View"
     }
   }
@@ -69,11 +80,11 @@ enum Media: Equatable, CaseIterable, Identifiable {
         )
     case .urlPhotoCarousel:
         .urlPhotoCarousel(photoArray: [.emptyInstance()])
-    case .location:
-      Media.location(
-        title: "San Francicsco",
-        latitude:  37.773972,
-        longitude: -122.431297
+    case .mapView:
+      Media.mapView(
+        title: "",
+        latitude:  0,
+        longitude: 0
       )
     }
   }
@@ -119,11 +130,11 @@ extension Media {
         .init(id: UUID().uuidString, urlString: ProfileStubGenerator.randomMediaPicture(), contentMode: .allCases.randomElement()!),
         .init(id: UUID().uuidString, urlString: ProfileStubGenerator.randomMediaPicture(), contentMode: .allCases.randomElement()!)
       ])
-    case .location:
-      if case let .location(title, latitude, longitude) = ProfileStubGenerator.randomLoaction() {
-        return .location(title: title, latitude: latitude, longitude: longitude)
+    case .mapView:
+      if case let .mapView(title, latitude, longitude) = ProfileStubGenerator.randomLocation() {
+        return .mapView(title: title, latitude: latitude, longitude: longitude)
       } else {
-        fatalError()
+        fatalError("Should never run")
       }
     }
   }

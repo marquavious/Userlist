@@ -6,13 +6,8 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		C01FFB922D0BC028001FC96E /* CreateURLMediaPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01FFB912D0BC028001FC96E /* CreateURLMediaPhotoView.swift */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXFileReference section */
 		C00B1FF22CC5D8C200C73EE0 /* ServerSideProfileEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ServerSideProfileEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		C01FFB912D0BC028001FC96E /* CreateURLMediaPhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateURLMediaPhotoView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -37,7 +32,6 @@
 		C00B1FE92CC5D8C200C73EE0 = {
 			isa = PBXGroup;
 			children = (
-				C01FFB912D0BC028001FC96E /* CreateURLMediaPhotoView.swift */,
 				C00B1FF42CC5D8C200C73EE0 /* ServerSideProfileEditor */,
 				C00B1FF32CC5D8C200C73EE0 /* Products */,
 			);
@@ -125,7 +119,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C01FFB922D0BC028001FC96E /* CreateURLMediaPhotoView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

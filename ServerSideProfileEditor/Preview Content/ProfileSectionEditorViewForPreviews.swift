@@ -1,5 +1,5 @@
 //
-//  ProfileSectionEditorViewForPreview.swift
+//  ProfileSectionEditorViewForPreviews.swift
 //  ServerSideProfileEditor
 //
 //  Created by Marquavious Draggon on 10/26/24.
@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct ProfileSectionEditorViewForPreview: View {
+struct ProfileSectionEditorViewForPreviews: View {
 
   @State var sectionData: SectionData
 
@@ -17,7 +17,7 @@ struct ProfileSectionEditorViewForPreview: View {
     descriptionText: String? = "",
     media: Media? = nil
   ) {
-    self.sectionData = SectionData(
+    sectionData = SectionData(
       title: titleText,
       description: descriptionText,
       media: media

@@ -22,6 +22,6 @@ struct PhotoView: View {
       Color.gray
     }
     .background(.gray)
-    .clipShape(RoundedRectangle(cornerRadius: Theme.Geomitry.cornerRadius.radius))
+    .clipShape(RoundedRectangle(cornerRadius: StyleConstants.Geometry.cornerRadius))
   }
 }

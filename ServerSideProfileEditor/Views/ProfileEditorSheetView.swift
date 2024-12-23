@@ -9,7 +9,9 @@ import Foundation
 import SwiftUI
 
 struct ProfileEditorSheetView: View {
-  
+
+  @Environment(\.dismiss) var dismiss
+
   @State var router = RouterPath()
   @Binding var showProfileChanges: Bool
   @Binding var presentationDetent: PresentationDetent
@@ -19,6 +21,18 @@ struct ProfileEditorSheetView: View {
 
   private var didUpdateProfile: ((ProfileData) -> Void)
   private var saveButtonPressed: ((ProfileData) -> Void)
+
+  // Please refactor this what are you doing bro????
+  private var changesExist: Bool {
+    var isConceptualCopyOfSectionData: Bool = true
+
+    for (element1, element2) in zip(sectionData, initialProfileDataViewInfo.sectionData) {
+      if !element1.isConceptualCopyOf(element2) {
+        isConceptualCopyOfSectionData = false
+      }
+    }
+    return !(isConceptualCopyOfSectionData && initialProfileDataViewInfo.userData.isConceptualCopyOf(userData))
+  }
 
   init(
     showProfileChanges: Binding<Bool>,
@@ -40,12 +54,21 @@ struct ProfileEditorSheetView: View {
     NavigationStack(path: $router.path) {
       List {
         Section("Control Panel") {
-          ToggleStateControlPanel(title: "Show Updates", showChanges: $showProfileChanges) {
-            saveButtonPressed(.init(id: UUID().uuidString, user: userData, sections: sectionData))
-          } discardChangesPressed: {
-            userData = initialProfileDataViewInfo.userData
-            sectionData = initialProfileDataViewInfo.sectionData
-          }
+          ToggleStateControlPanel(
+            title: "Show Updates",
+            showChanges: $showProfileChanges,
+            rightButtonText: changesExist ? "Discard Changes" : "Dismiss",
+            leftButtonPressed: {
+              saveButtonPressed(.init(id: UUID().uuidString, user: userData, sections: sectionData))
+            }, rightButtonPressed: {
+              if changesExist {
+                userData = initialProfileDataViewInfo.userData
+                sectionData = initialProfileDataViewInfo.sectionData
+              } else {
+                dismiss()
+              }
+            }
+          )
         }
         if presentationDetent == .large {
           Section("User Details") {
