@@ -45,7 +45,6 @@ struct MediaEditSection: View {
     media:
         .urlPhoto(
           photoData: PhotoData(
-            id: UUID().uuidString,
             urlString: ProfileStubGenerator.randomMediaPicture(),
             contentMode: .allCases.randomElement()!
           )

@@ -9,21 +9,21 @@ import Foundation
 import SwiftUI
 
 struct PhotoData: Equatable, Identifiable, Hashable {
-  let id: String
+  let id = UUID().uuidString
   var urlString: String?
   let contentMode: ContentMode
 }
 
 extension PhotoData {
   static func emptyInstance() -> PhotoData {
-    PhotoData(id: UUID().uuidString, urlString: "", contentMode: .fit)
+    PhotoData(urlString: "", contentMode: .fit)
   }
 
   static func randomInstance() -> PhotoData {
-    PhotoData(id: UUID().uuidString, urlString: ProfileStubGenerator.randomMediaPicture(), contentMode: .fit)
+    PhotoData(urlString: ProfileStubGenerator.randomMediaPicture(), contentMode: .fit)
   }
 
   static func stubs() -> PhotoData {
-    PhotoData(id: UUID().uuidString, urlString: ProfileStubGenerator.randomMediaPicture(), contentMode: .allCases.randomElement()!)
+    PhotoData(urlString: ProfileStubGenerator.randomMediaPicture(), contentMode: .allCases.randomElement()!)
   }
 }

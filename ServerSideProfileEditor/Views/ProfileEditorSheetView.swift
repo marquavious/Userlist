@@ -59,7 +59,7 @@ struct ProfileEditorSheetView: View {
             showChanges: $showProfileChanges,
             rightButtonText: changesExist ? "Discard Changes" : "Dismiss",
             leftButtonPressed: {
-              saveButtonPressed(.init(id: UUID().uuidString, user: userData, sections: sectionData))
+              saveButtonPressed(.init(user: userData, sections: sectionData))
             }, rightButtonPressed: {
               if changesExist {
                 userData = initialProfileDataViewInfo.userData
@@ -128,10 +128,10 @@ struct ProfileEditorSheetView: View {
       .withAppRouter()
     }
     .onChange(of: userData) { oldValue, newValue in
-      didUpdateProfile(.init(id: UUID().uuidString, user: userData, sections: sectionData))
+      didUpdateProfile(.init(user: userData, sections: sectionData))
     }
     .onChange(of: sectionData) { oldValue, newValue in
-      didUpdateProfile(.init(id: UUID().uuidString, user: userData, sections: sectionData))
+      didUpdateProfile(.init(user: userData, sections: sectionData))
     }
     .environment(router)
   }

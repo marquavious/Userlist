@@ -10,7 +10,7 @@ import SwiftUICore
 
 @Observable
 class SectionData: Identifiable, ObservableObject {
-  let id: String
+  let id: String = UUID().uuidString
   var index: Int
   var title: String?
   var description: String?
@@ -22,7 +22,6 @@ class SectionData: Identifiable, ObservableObject {
   var separator: Separator
 
   init(
-    id: String = UUID().uuidString,
     index: Int = 0,
     title: String? = nil,
     description: String? = nil,
@@ -33,7 +32,6 @@ class SectionData: Identifiable, ObservableObject {
     media: Media? = nil,
     separator: Separator = .none
   ) {
-    self.id = id
     self.index = index
     self.title = title
     self.description = description
@@ -77,13 +75,11 @@ extension SectionData: Equatable, Hashable {
 
 extension SectionData {
   static func stubs(
-    id: String = UUID().uuidString,
     index: Int = 0
   ) -> SectionData {
     let stubData = ProfileStubGenerator.randomSectionTupleData()
 
     return SectionData(
-      id: id,
       index: index,
       title: stubData.title,
       description: stubData.description,

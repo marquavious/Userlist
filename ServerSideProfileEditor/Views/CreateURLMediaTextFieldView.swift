@@ -105,7 +105,6 @@ struct CreateURLMediaTextFieldView: View {
   private func didUpdate() {
     didUpdateUrl(
       PhotoData(
-        id: UUID().uuidString,
         urlString: url,
         contentMode: contentMode.contentMode
       )

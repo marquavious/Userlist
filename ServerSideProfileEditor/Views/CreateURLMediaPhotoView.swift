@@ -28,7 +28,6 @@ struct CreateURLMediaPhotoView: View {
   private func autoFill() {
     photoData =
       .init(
-        id: UUID().uuidString,
         urlString: ProfileStubGenerator.randomMediaPicture(),
         contentMode: photoData.contentMode
       )

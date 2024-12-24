@@ -97,38 +97,33 @@ extension Media {
     case .urlPhoto:
       return Media.urlPhoto(
         photoData: .init(
-          id: UUID().uuidString,
           urlString: ProfileStubGenerator.randomMediaPicture(),
           contentMode: .allCases.randomElement()!)
       )
     case .urlPhotoGrid:
       return .urlPhotoGrid(
         photoDataOne: .init(
-          id: UUID().uuidString,
           urlString: ProfileStubGenerator.randomMediaPicture(),
           contentMode: .allCases.randomElement()!
         ),
         photoDataTwo: .init(
-          id: UUID().uuidString,
           urlString: ProfileStubGenerator.randomMediaPicture(),
           contentMode: .allCases.randomElement()!
         ),
         photoDataThree: .init(
-          id: UUID().uuidString,
           urlString: ProfileStubGenerator.randomMediaPicture(),
           contentMode: .allCases.randomElement()!
         ),
         photoDataFour: .init(
-          id: UUID().uuidString,
           urlString: ProfileStubGenerator.randomMediaPicture(),
           contentMode: .allCases.randomElement()!
         )
       )
     case .urlPhotoCarousel:
       return .urlPhotoCarousel(photoArray: [
-        .init(id: UUID().uuidString, urlString: ProfileStubGenerator.randomMediaPicture(), contentMode: .allCases.randomElement()!),
-        .init(id: UUID().uuidString, urlString: ProfileStubGenerator.randomMediaPicture(), contentMode: .allCases.randomElement()!),
-        .init(id: UUID().uuidString, urlString: ProfileStubGenerator.randomMediaPicture(), contentMode: .allCases.randomElement()!)
+        .init(urlString: ProfileStubGenerator.randomMediaPicture(), contentMode: .allCases.randomElement()!),
+        .init(urlString: ProfileStubGenerator.randomMediaPicture(), contentMode: .allCases.randomElement()!),
+        .init(urlString: ProfileStubGenerator.randomMediaPicture(), contentMode: .allCases.randomElement()!)
       ])
     case .mapView:
       if case let .mapView(title, latitude, longitude) = ProfileStubGenerator.randomLocation() {

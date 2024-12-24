@@ -51,7 +51,6 @@ struct ProfileEditorViewSectionCell: View {
       description: "Description",
       media: .urlPhoto(
         photoData: .init(
-          id: "1",
           urlString: ProfileStubGenerator.randomMediaPicture(),
           contentMode: .allCases.randomElement()!)
       )
@@ -63,22 +62,18 @@ struct ProfileEditorViewSectionCell: View {
       media: .urlPhotoCarousel(
         photoArray: [
           .init(
-            id: UUID().uuidString,
             urlString: ProfileStubGenerator.randomMediaPicture(),
             contentMode: .allCases.randomElement()!
           ),
           .init(
-            id: UUID().uuidString,
             urlString: ProfileStubGenerator.randomMediaPicture(),
             contentMode: .allCases.randomElement()!
           ),
           .init(
-            id: UUID().uuidString,
             urlString: ProfileStubGenerator.randomMediaPicture(),
             contentMode: .allCases.randomElement()!
           ),
           .init(
-            id: UUID().uuidString,
             urlString: ProfileStubGenerator.randomMediaPicture(),
             contentMode: .allCases.randomElement()!
           )
@@ -91,22 +86,18 @@ struct ProfileEditorViewSectionCell: View {
       description: "Description",
       media: .urlPhotoGrid(
         photoDataOne: .init(
-          id: UUID().uuidString,
           urlString: ProfileStubGenerator.randomMediaPicture(),
           contentMode: .allCases.randomElement()!
         ),
         photoDataTwo: .init(
-          id: UUID().uuidString,
           urlString: ProfileStubGenerator.randomMediaPicture(),
           contentMode: .allCases.randomElement()!
         ),
         photoDataThree: .init(
-          id: UUID().uuidString,
           urlString: ProfileStubGenerator.randomMediaPicture(),
           contentMode: .allCases.randomElement()!
         ),
         photoDataFour: .init(
-          id: UUID().uuidString,
           urlString: ProfileStubGenerator.randomMediaPicture(),
           contentMode: .allCases.randomElement()!
         )

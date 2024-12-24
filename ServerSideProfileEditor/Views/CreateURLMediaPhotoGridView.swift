@@ -49,7 +49,6 @@ struct CreateURLMediaPhotoGridView: View {
 
   private func autoFill(index: Int, oldPhotoData: PhotoData) {
     updateMedia(index: index, photoData: .init(
-      id: UUID().uuidString,
       urlString: ProfileStubGenerator.randomMediaPicture(),
       contentMode: oldPhotoData.contentMode
     ))

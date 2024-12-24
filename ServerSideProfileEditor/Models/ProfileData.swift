@@ -8,7 +8,7 @@
 import Foundation
 
 struct ProfileData: Identifiable {
-  let id: String
+  let id = UUID().uuidString
   var user: UserData
   var sections: [SectionData]
 }
@@ -28,7 +28,6 @@ extension ProfileData: Hashable, Equatable {
 extension ProfileData {
   static func emptyProfile() -> ProfileData {
     ProfileData(
-      id: UUID().uuidString,
       user: UserData(username: "", description: ""),
       sections: []
     )
@@ -38,7 +37,6 @@ extension ProfileData {
     let userInfo = ProfileStubGenerator.randomUsernameDescriptionBundle()
 
     let profile = ProfileData(
-      id: id ?? UUID().uuidString,
       user: UserData(
         username: userInfo.username,
         description: userInfo.description,

@@ -205,7 +205,6 @@ struct ProfileSectionEditorView: View {
         .urlPhoto(
           photoData:
             PhotoData(
-              id: UUID().uuidString,
               urlString: "https://i.imgur.com/ApCOa7j.jpeg",
               contentMode: .allCases.randomElement()!
             )
