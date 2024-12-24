@@ -42,17 +42,6 @@ class SectionData: Identifiable, ObservableObject {
     self.media = media
     self.separator = separator
   }
-
-  func isConceptualCopyOf(_ other: SectionData) -> Bool {
-    other.index == index &&
-    other.title == title &&
-    other.description == description &&
-    other.layout == layout &&
-    other.mediaHeight == mediaHeight &&
-    other.mediaContentMode == mediaContentMode &&
-    other.alignment == alignment &&
-    other.media == media
-  }
 }
 
 extension SectionData: Equatable, Hashable {

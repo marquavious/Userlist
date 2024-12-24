@@ -71,7 +71,7 @@ struct ProfileEditorView: View {
   private var updatedViewState: ProfileEditorViewState
   private var userDidUpdate: UserDidUpdate
 
-  private var changeExists: Bool {
+  private var changesExist: Bool {
     initialViewState.usernameText != usernameText ||
     initialViewState.descriptionText != descriptionText ||
     initialViewState.profilePictureURL != profilePictureURL ||
@@ -167,12 +167,12 @@ struct ProfileEditorView: View {
         ToggleStateControlPanel(
           title: "Show Updates",
           showChanges: $showChanges,
-          rightButtonText: changeExists ? "Discard Changes" : "Dismiss",
+          rightButtonText: changesExist ? "Discard Changes" : "Dismiss",
           leftButtonPressed: {
             didUpdateUser()
           },
           rightButtonPressed: {
-            if changeExists {
+            if changesExist {
               showChanges = true
               setViewFor(state: initialViewState)
             } else {
@@ -207,6 +207,44 @@ struct ProfileEditorView: View {
     }
     .onAppear {
       refreshViewState()
+    }
+    .toolbar {
+      ToolbarItem(placement: .keyboard) {
+        HStack {
+          Button("Done") {
+            focusedTextField = nil
+          }
+
+          Spacer()
+
+          Button {
+            switchFocus(next: false)
+          } label: {
+              Image(systemName: "chevron.up")
+          }
+
+          Button {
+            switchFocus(next: true)
+          } label: {
+              Image(systemName: "chevron.down")
+          }
+        }
+      }
+    }
+  }
+
+  private func switchFocus(next: Bool) {
+    switch focusedTextField {
+    case .username:
+      focusedTextField = next ? .description : .bannerPictureUrl
+    case .description:
+      focusedTextField =  next ? .profilePictureUrl : .username
+    case .profilePictureUrl:
+      focusedTextField = next ? .bannerPictureUrl : .description
+    case .bannerPictureUrl:
+      focusedTextField = next ? .username : .profilePictureUrl
+    case .none:
+        focusedTextField = .username
     }
   }
 

@@ -22,16 +22,8 @@ struct ProfileEditorSheetView: View {
   private var didUpdateProfile: ((ProfileData) -> Void)
   private var saveButtonPressed: ((ProfileData) -> Void)
 
-  // Please refactor this what are you doing bro????
   private var changesExist: Bool {
-    var isConceptualCopyOfSectionData: Bool = true
-
-    for (element1, element2) in zip(sectionData, initialProfileDataViewInfo.sectionData) {
-      if !element1.isConceptualCopyOf(element2) {
-        isConceptualCopyOfSectionData = false
-      }
-    }
-    return !(isConceptualCopyOfSectionData && initialProfileDataViewInfo.userData.isConceptualCopyOf(userData))
+    sectionData != initialProfileDataViewInfo.sectionData || userData != initialProfileDataViewInfo.userData
   }
 
   init(
@@ -93,7 +85,7 @@ struct ProfileEditorSheetView: View {
               }
             }
           }
-          Section("Section Arangement") {
+          Section("Section Arrangement") {
             VStack {
               ForEach(sectionData) { section in
                 ProfileEditorViewSectionCell(

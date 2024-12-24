@@ -6,8 +6,6 @@
 //
 
 import Foundation
-
-import Foundation
 import SwiftUI
 
 struct CustomNavBar: View {
@@ -32,26 +30,27 @@ struct CustomNavBar: View {
         )
         .opacity(showNavigationBar ? 1 : 0)
         .overlay(alignment: .center) {
+          HStack(alignment: .center) {
+            Image(systemName: "chevron.left")
+              .frame(width: 20,height: 20)
+              .padding(8)
+              .foregroundColor((showNavigationBar && colorScheme == .light) ? .black: .white)
+              .background(
+                showNavigationBar ? .clear : Color.black.opacity(0.5)
+              )
+              .clipShape(Circle())
+              .padding([.horizontal])
+              .allowsHitTesting(true)
+              .onTapGesture { dismiss() }
+              .background(Rectangle().fill(Color.black.opacity(0.0001)))
+              .frame(maxWidth: .infinity, alignment: .leading)
+          }
           Text(title)
             .fontWeight(.semibold)
             .opacity(showNavigationBar ? 1 : 0)
             .foregroundStyle(colorScheme == .light ? .black: .white)
+            .edgesIgnoringSafeArea(.vertical)
         }
-
-      Image(systemName: "chevron.left")
-        .font(.title2)
-        .frame(width: 20,height: 20)
-        .padding(8)
-        .foregroundColor((showNavigationBar && colorScheme == .light) ? .black: .white)
-        .background(
-          showNavigationBar ? .clear : Color.black.opacity(0.5)
-        )
-        .clipShape(Circle())
-        .padding([.horizontal])
-        .allowsHitTesting(true)
-        .onTapGesture { dismiss() }
-        .background(Rectangle().fill(Color.black.opacity(0.0001)))
-        .frame(maxWidth: .infinity, alignment: .leading)
     }
   }
 }
@@ -59,7 +58,6 @@ struct CustomNavBar: View {
 #Preview {
   ProfileViewForPreviews()
 }
-
 
 extension UINavigationController: @retroactive UIGestureRecognizerDelegate {
     override open func viewDidLoad() {

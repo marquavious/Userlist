@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct UserData: Equatable {
+struct UserData: Identifiable {
+  let id: String = UUID().uuidString
   var username: String
   var description: String
   var profilePictureUrlString: String?
@@ -24,12 +25,18 @@ struct UserData: Equatable {
     self.profilePictureUrlString = profilePictureUrlString
     self.profileBannerUrlString = profileHeaderUrlString
   }
+}
 
-  func isConceptualCopyOf(_ other: UserData) -> Bool {
-    username == other.username &&
-    description == other.description &&
-    profilePictureUrlString == other.profilePictureUrlString &&
-    profileBannerUrlString == other.profileBannerUrlString
+extension UserData: Equatable, Hashable {
+  static func == (lhs: UserData, rhs: UserData) -> Bool {
+    lhs.username == rhs.username &&
+    lhs.id == rhs.id &&
+    lhs.description == rhs.description &&
+    lhs.profilePictureUrlString == rhs.profilePictureUrlString
+  }
+
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(id)
   }
 }
 

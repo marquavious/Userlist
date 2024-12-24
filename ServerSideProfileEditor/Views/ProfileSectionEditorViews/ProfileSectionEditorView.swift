@@ -64,7 +64,7 @@ struct ProfileSectionEditorView: View {
     self.updatedState = .init(sectionData: sectionData)
   }
 
-  private var changeExists: Bool {
+  private var changesExist: Bool {
     alignment != initialState.alignment ||
     layout != initialState.layout ||
     media != initialState.media ||
@@ -92,12 +92,12 @@ struct ProfileSectionEditorView: View {
         ToggleStateControlPanel(
           title: "Show Updates",
           showChanges: $showChanges,
-          rightButtonText: changeExists ? "Discard Changes" : "Dismiss",
+          rightButtonText: changesExist ? "Discard Changes" : "Dismiss",
           leftButtonPressed: {
             saveButtonPressed()
           },
           rightButtonPressed: {
-            if changeExists {
+            if changesExist {
               discardButtonPressed()
             } else {
               dismiss()

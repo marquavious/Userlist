@@ -112,12 +112,12 @@ struct ProfileView: View {
                 }
               }
             }
-            .contentMargins(.bottom, isInEditorMode ? Constants.contentMarginsOffsetForEditingMode : Constants.contentMarginBottomOffset)
           },
           offsetDidChange: { scrollOffset = $0 }
         )
       }
     }
+    .contentMargins(.bottom, isInEditorMode ? Constants.contentMarginsOffsetForEditingMode : Constants.contentMarginBottomOffset)
     .onChange(of: scrollOffset) {
       handleNavigationBarAnimation(scrollViewOffset: scrollOffset)
     }
