@@ -51,6 +51,12 @@ struct TextEditSection: View {
     }
   }
 
+  private func autoFill() {
+    let data = ProfileStubGenerator.randomSectionTupleData()
+    titleText = data.0
+    descriptionText = data.1
+  }
+
   private func createBindingFor(editorFocus: ProfileSectionEditorView.EditorFocus) -> Binding<String> {
     switch editorFocus {
     case .title:

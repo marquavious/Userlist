@@ -10,6 +10,7 @@ import SwiftUI
 struct MediaEditSection: View {
 
   @Binding var media: Media?
+  @FocusState.Binding var editorFocus: ProfileSectionEditorView.EditorFocus?
 
   var body: some View {
     Section("Media Edit") {
@@ -19,6 +20,8 @@ struct MediaEditSection: View {
           { newMedia in
             self.media = newMedia
           }
+          .environment(\.isFocused, editorFocus == .media)
+          .focused($editorFocus, equals: .media)
 
           Button {
             self.media = .none

@@ -73,6 +73,22 @@ struct ProfileSectionEditorView: View {
     descriptionText != initialState.descriptionText
   }
 
+  private var keyboardOptions: [KeyboardToolBarOption] {
+    switch editorFocus {
+    case .title, .description:
+      [
+        (id: "autofill", systemImageString: "dice", tint: .green, action: {
+          let data = ProfileStubGenerator.randomSectionTupleData()
+          titleText = data.0
+          descriptionText = data.1
+        })
+
+      ]
+    case .none, .media:
+      []
+    }
+  }
+
   var body: some View {
     List {
       Section("Preview") {
@@ -120,7 +136,17 @@ struct ProfileSectionEditorView: View {
         editorFocus: $editorFocus
       )
 
-      MediaEditSection(media: $media)
+      MediaEditSection(
+        media: $media,
+        editorFocus: $editorFocus
+      )
+    }
+    .toolbar {
+      ToolbarItem(placement: .keyboard) {
+        KeyboardToolbar(doneButtonPressed: {
+          editorFocus = nil
+        }, externalOptions: keyboardOptions)
+      }
     }
     .onAppear {
       refreshView()
