@@ -94,7 +94,7 @@ struct ProfileEditorView: View {
               height: StyleConstants.MediaSizes.ProfilePicture.profilePictureHeight
             )
             .clipShape(Circle())
-          PhotoView(url: URL(string: profilePictureURL))
+          PhotoView(url: URL(string: bannerPhotoURL))
             .frame(
               height: StyleConstants.MediaSizes.ProfilePicture.profilePictureHeight
             )
@@ -210,26 +210,25 @@ struct ProfileEditorView: View {
     }
     .toolbar {
       ToolbarItem(placement: .keyboard) {
-        HStack {
-          Button("Done") {
-            focusedTextField = nil
-          }
-
-          Spacer()
-
-          Button {
-            switchFocus(next: false)
-          } label: {
-              Image(systemName: "chevron.up")
-          }
-
-          Button {
-            switchFocus(next: true)
-          } label: {
-              Image(systemName: "chevron.down")
-          }
-        }
+        KeyboardToolbar(doneButtonPressed: {
+          focusedTextField = nil
+        }, externalOptions: [
+          (id: "up", systemImageString: "chevron.up", tint: .blue, action: { switchFocus(next: false) }),
+          (id: "down", systemImageString: "chevron.down", tint: .blue, action: { switchFocus(next: true) }),
+          (id: "autofill", systemImageString: "dice", tint: .green, action: { autoFill() })
+        ]
+        )
       }
+    }
+  }
+
+  private func autoFill() {
+    switch focusedTextField {
+    case .username: usernameText = ProfileStubGenerator.randomUsername()
+    case .description: descriptionText = ProfileStubGenerator.randomDescription()
+    case .profilePictureUrl: profilePictureURL = ProfileStubGenerator.randomProfilePicture()
+    case .bannerPictureUrl: bannerPhotoURL = ProfileStubGenerator.randomBannerPicture()
+    case .none: break
     }
   }
 
@@ -244,7 +243,7 @@ struct ProfileEditorView: View {
     case .bannerPictureUrl:
       focusedTextField = next ? .username : .profilePictureUrl
     case .none:
-        focusedTextField = .username
+      focusedTextField = .username
     }
   }
 
