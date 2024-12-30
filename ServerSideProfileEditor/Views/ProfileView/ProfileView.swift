@@ -53,7 +53,35 @@ struct ProfileView: View {
     Group {
       switch state {
       case .error(let description):
-        Text("ERROR: \(description)")
+        VStack(spacing: 16) {
+          Image(systemName: "exclamationmark.triangle.fill")
+            .font(.system(size: 50))
+            .foregroundColor(.red)
+
+          Text("Error Loading Profile")
+            .font(.title2)
+            .fontWeight(.bold)
+
+          Text(description)
+            .font(.body)
+            .multilineTextAlignment(.center)
+            .foregroundColor(.secondary)
+
+          Button(action: {
+            if case .loading(let id) = state, let id {
+              loadData(id: id)
+            }
+          }) {
+            Label("Try Again", systemImage: "arrow.clockwise")
+              .padding()
+              .background(Color.accentColor)
+              .foregroundColor(.white)
+              .cornerRadius(10)
+          }
+          .modifier(ControlPanelButtonViewModifier(backgroundColor: .accentColor))
+        }
+        .padding()
+        .frame(maxHeight: .infinity)
       case .loading(let id):
         if let id {
           Text("LOADING (\(id)...")

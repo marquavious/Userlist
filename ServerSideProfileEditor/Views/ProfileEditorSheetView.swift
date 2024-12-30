@@ -87,7 +87,7 @@ struct ProfileEditorSheetView: View {
           }
           Section("Section Arrangement") {
             VStack {
-              ForEach(sectionData) { section in
+              ForEach(sectionData.sorted(by: { $0.index < $1.index })) { section in
                 ProfileEditorViewSectionCell(
                   title: section.title,
                   description: section.description,

@@ -20,7 +20,10 @@ struct PhotoCarouselView: View {
             CustomContentModePhotoView(
               photoData: photoData
             )
-            .frame(width: proxy.frame(in: .global).width, height: StyleConstants.MediaSizes.mediaHeight)
+            .frame(
+              width: proxy.size.width,
+              height: proxy.size.height
+            )
           }
         }
         .scrollTargetLayout()
