@@ -92,7 +92,17 @@ struct ProfileEditorSheetView: View {
               }
             }
           )
+
+          if presentationDetent == .large {
+            Button("Auto Fill", systemImage: "wand.and.stars") {
+              userData = ProfileData.generatRandomProfile().user
+              sectionData = ProfileData.generatRandomProfile().sections
+            }
+            .modifier(ControlPanelButtonViewModifier(backgroundColor: .blue))
+            .listRowSeparator(.hidden)
+          }
         }
+
         if presentationDetent == .large {
           Section("User Details") {
             VStack(spacing: 8) {

@@ -180,7 +180,18 @@ struct ProfileEditorView: View {
             }
           }
         )
+
+        Button("Auto Fill", systemImage: "wand.and.stars") {
+          usernameText = ProfileStubGenerator.randomUsername()
+          descriptionText = ProfileStubGenerator.randomDescription()
+          profilePictureURL = ProfileStubGenerator.randomProfilePicture()
+          bannerPhotoURL = ProfileStubGenerator.randomBannerPicture()
+        }
+        .modifier(ControlPanelButtonViewModifier(backgroundColor: .blue))
+        .listRowSeparator(.hidden)
       }
+      .padding(.bottom, 4)
+
     }
     .onChange(of: usernameText) { _, newValue in
       if showChanges {
