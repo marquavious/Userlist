@@ -132,7 +132,6 @@ struct ProfileView: View {
               .presentationBackgroundInteraction(.enabled)
               .presentationDetents([.fraction(0.2), .large], selection: $sheetPresentationDetent)
               .interactiveDismissDisabled(true)
-              .navigationBarHidden(true)
             }
             .onChange(of: showProfileChanges) { _, nv in
               if let initialProfileData, let newProfileData {
