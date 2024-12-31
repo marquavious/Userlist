@@ -86,30 +86,29 @@ struct ProfileEditorSheetView: View {
             }
           }
           Section("Section Arrangement") {
-            VStack {
-              ForEach(sectionData.sorted(by: { $0.index < $1.index })) { section in
-                ProfileEditorViewSectionCell(
-                  title: section.title,
-                  description: section.description,
-                  media: section.media
-                )
-                .onTapGesture {
-                  router.navigate(to: .sectionInfoEditor(sectionData: section) { updateSectionWith(id: section.id , newSection: $0) })
-                }
-                .listRowSeparator(.hidden)
+            ForEach(sectionData) { section in
+              ProfileEditorViewSectionCell(
+                title: section.title,
+                description: section.description,
+                media: section.media
+              )
+              .onTapGesture {
+                router.navigate(to: .sectionInfoEditor(sectionData: section) { updateSectionWith(id: section.id, newSection: $0) })
               }
+              .listRowSeparator(.hidden)
+            }
+            .onMove(perform: moveRow)
 
-              if initialProfileDataViewInfo.sectionData != sectionData {
-                Divider()
-                Button {
-                  sectionData = initialProfileDataViewInfo.sectionData
-                } label: {
-                  Text("Discard Changes")
-                    .contentShape(Rectangle())
-                    .foregroundStyle(.blue)
-                }
-                .buttonStyle(.bordered)
+            if initialProfileDataViewInfo.sectionData != sectionData {
+              Button {
+                sectionData = initialProfileDataViewInfo.sectionData
+              } label: {
+                Text("Discard Changes")
+                  .contentShape(Rectangle())
+                  .foregroundStyle(.blue)
               }
+              .buttonStyle(.bordered)
+              .frame(maxWidth: .infinity, alignment:.center)
             }
           }
         }
@@ -126,6 +125,10 @@ struct ProfileEditorSheetView: View {
       didUpdateProfile(.init(user: userData, sections: sectionData))
     }
     .environment(router)
+  }
+
+  private func moveRow(source: IndexSet, destination: Int) {
+    sectionData.move(fromOffsets: source, toOffset: destination)
   }
 
   private func updateUser(user: UserData) {

@@ -9,7 +9,7 @@ import Foundation
 
 class ProfileSectionEditorViewState {
   var id: String
-  var index: Int
+//  var index: Int
   var titleText: String?
   var descriptionText: String?
   var media: Media?
@@ -19,7 +19,7 @@ class ProfileSectionEditorViewState {
 
   init(
     id: String,
-    index: Int,
+//    index: Int,
     titleText: String?,
     descriptionText: String?,
     alignment: SectionLayout.AlignmentGuide,
@@ -28,7 +28,7 @@ class ProfileSectionEditorViewState {
     separator: Separator
   ) {
     self.id = id
-    self.index = index
+//    self.index = index
     self.titleText = titleText
     self.descriptionText = descriptionText
     self.alignment = alignment
@@ -39,7 +39,7 @@ class ProfileSectionEditorViewState {
 
   init(sectionData: SectionData) {
     self.id = sectionData.id
-    self.index = sectionData.index
+//    self.index = sectionData.index
     self.titleText = sectionData.title
     self.descriptionText = sectionData.description
     self.alignment = sectionData.alignment
@@ -50,7 +50,7 @@ class ProfileSectionEditorViewState {
 
   func copyState(_ state: ProfileSectionEditorViewState) {
     self.id = state.id
-    self.index = state.index
+//    self.index = state.index
     self.titleText = state.titleText
     self.descriptionText = state.descriptionText
     self.alignment = state.alignment

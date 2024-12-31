@@ -13,7 +13,7 @@ struct ProfileViewArrangementSection: View {
   var sections: [SectionData]
   
   var body: some View {
-    ForEach(sections.sorted(by: { $0.index < $1.index })) { sectionData in
+    ForEach(sections) { sectionData in
       SectionCell(sectionData: sectionData)
       .padding(.horizontal, StyleConstants.Padding.profileViewHorizontalSpacing)
 

@@ -195,7 +195,7 @@ struct ProfileSectionEditorView: View {
   private func saveButtonPressed() {
     sectionDidUpdate(
       SectionData(
-        index: updatedState.index,
+//        index: updatedState.index,
         title: updatedState.titleText,
         description: updatedState.descriptionText,
         layout: updatedState.layout,

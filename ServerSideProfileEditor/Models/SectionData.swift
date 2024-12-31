@@ -11,7 +11,7 @@ import SwiftUICore
 @Observable
 class SectionData: Identifiable, ObservableObject {
   let id: String = UUID().uuidString
-  var index: Int
+//  var index: Int
   var title: String?
   var description: String?
   var layout: SectionLayout.Arrangement
@@ -22,7 +22,7 @@ class SectionData: Identifiable, ObservableObject {
   var separator: Separator
 
   init(
-    index: Int = 0,
+//    index: Int = 0,
     title: String? = nil,
     description: String? = nil,
     layout: SectionLayout.Arrangement = .top,
@@ -32,7 +32,7 @@ class SectionData: Identifiable, ObservableObject {
     media: Media? = nil,
     separator: Separator = .none
   ) {
-    self.index = index
+//    self.index = index
     self.title = title
     self.description = description
     self.layout = layout
@@ -47,7 +47,7 @@ class SectionData: Identifiable, ObservableObject {
 extension SectionData: Equatable, Hashable {
   static func == (lhs: SectionData, rhs: SectionData) -> Bool {
     lhs.id == rhs.id &&
-    lhs.index == rhs.index &&
+//    lhs.index == rhs.index &&
     lhs.title == rhs.title &&
     lhs.description == rhs.description &&
     lhs.layout == rhs.layout &&
@@ -64,12 +64,12 @@ extension SectionData: Equatable, Hashable {
 
 extension SectionData {
   static func stubs(
-    index: Int = 0
+//    index: Int = 0
   ) -> SectionData {
     let stubData = ProfileStubGenerator.randomSectionTupleData()
 
     return SectionData(
-      index: index,
+//      index: index,
       title: stubData.title,
       description: stubData.description,
       layout: .allCases.randomElement() ?? .top,

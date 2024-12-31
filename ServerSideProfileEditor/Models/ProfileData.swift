@@ -44,10 +44,14 @@ extension ProfileData {
         profileHeaderUrlString: ProfileStubGenerator.randomBannerPicture()
       ),
       sections: [
-        SectionData.stubs(index: 0),
-        SectionData.stubs(index: 1),
-        SectionData.stubs(index: 2),
-        SectionData.stubs(index: 3)
+//        SectionData.stubs(index: 0),
+//        SectionData.stubs(index: 1),
+//        SectionData.stubs(index: 2),
+//        SectionData.stubs(index: 3)
+        SectionData.stubs(),
+        SectionData.stubs(),
+        SectionData.stubs(),
+        SectionData.stubs()
       ]
     )
 
