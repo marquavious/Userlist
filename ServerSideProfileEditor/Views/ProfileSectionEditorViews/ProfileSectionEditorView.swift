@@ -82,7 +82,6 @@ struct ProfileSectionEditorView: View {
           titleText = data.0
           descriptionText = data.1
         })
-
       ]
     case .none, .media:
       []
@@ -120,6 +119,17 @@ struct ProfileSectionEditorView: View {
             }
           }
         )
+
+        Button("Auto Fill", systemImage: "wand.and.stars") {
+          let data = ProfileStubGenerator.randomSectionTupleData()
+          titleText = data.0
+          descriptionText = data.1
+          alignment = .allCases.randomElement()!
+          layout = .allCases.randomElement()!
+          media = Media.generateRandomMedia()
+          separator = .allCases.randomElement()!
+        }
+        .modifier(ControlPanelButtonViewModifier(backgroundColor: .blue))
       }
 
       EditorLayoutSection(

@@ -63,6 +63,7 @@ extension SectionData: Equatable, Hashable {
 }
 
 extension SectionData {
+
   static func stubs(
 //    index: Int = 0
   ) -> SectionData {

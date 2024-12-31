@@ -10,6 +10,37 @@ import SwiftUI
 
 struct ProfileEditorSheetView: View {
 
+  enum SwipeActionButtons {
+    case edit, delete
+
+    var displayTitle: String {
+      switch self {
+      case .edit:
+        "Edit"
+      case .delete:
+        "Delete Row"
+      }
+    }
+
+    var systemImage: String {
+      switch self {
+      case .edit:
+        "pencil"
+      case .delete:
+        "trash.fill"
+      }
+    }
+
+    var tint: Color {
+      switch self {
+      case .edit:
+          .blue
+      case .delete:
+          .red
+      }
+    }
+  }
+
   @Environment(\.dismiss) var dismiss
 
   @State var router = RouterPath()
@@ -72,6 +103,8 @@ struct ProfileEditorSheetView: View {
               ).onTapGesture {
                 router.navigate(to: .userInfoEditor(userData: userData) { updateUser(user: $0) })
               }
+
+              /* CLEAN THIS UP
               if initialProfileDataViewInfo.userData != userData {
                 Divider()
                 Button {
@@ -83,6 +116,7 @@ struct ProfileEditorSheetView: View {
                 }
                 .buttonStyle(.bordered)
               }
+              */
             }
           }
           Section("Section Arrangement") {
@@ -93,12 +127,28 @@ struct ProfileEditorSheetView: View {
                 media: section.media
               )
               .onTapGesture {
-                router.navigate(to: .sectionInfoEditor(sectionData: section) { updateSectionWith(id: section.id, newSection: $0) })
+                router.navigate(to: .sectionInfoEditor(sectionData: section) {
+                  updateSectionWith(id: section.id, newSection: $0)
+                })
               }
-              .listRowSeparator(.hidden)
+              .swipeActions(allowsFullSwipe: true) {
+                if sectionData.count > 1 {
+                  crateSwipeActionButton(swipeAction: .delete) {
+                    sectionData.removeAll { $0.id == section.id }
+                  }
+                }
+                crateSwipeActionButton(swipeAction: .edit) {
+                  router.navigate(to: .sectionInfoEditor(sectionData: section) {
+                    updateSectionWith(id: section.id, newSection: $0)
+                  })
+                }
+              }
             }
             .onMove(perform: moveRow)
 
+            createNewSectionRow
+
+            /* CLEAN THIS UP
             if initialProfileDataViewInfo.sectionData != sectionData {
               Button {
                 sectionData = initialProfileDataViewInfo.sectionData
@@ -107,9 +157,17 @@ struct ProfileEditorSheetView: View {
                   .contentShape(Rectangle())
                   .foregroundStyle(.blue)
               }
+              //            .listRowSeparator(.hidden)
               .buttonStyle(.bordered)
-              .frame(maxWidth: .infinity, alignment:.center)
+              .frame(maxWidth: .infinity, alignment: .center)
             }
+            */
+
+            Text("Drag to re-arrange sections.")
+              .font(.footnote)
+              .frame(maxWidth: .infinity)
+              .listRowBackground(Color.clear)
+              .opacity(0.5)
           }
         }
       }
@@ -125,6 +183,37 @@ struct ProfileEditorSheetView: View {
       didUpdateProfile(.init(user: userData, sections: sectionData))
     }
     .environment(router)
+  }
+
+  private var createNewSectionRow: some View {
+    Button {
+      createNewSection()
+    } label: {
+      Text("Add New section \(Image(systemName: "plus"))")
+        .font(.subheadline)
+        .foregroundStyle(.gray.opacity(0.5))
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+    .buttonStyle(.plain)
+  }
+
+  private func crateSwipeActionButton(swipeAction: SwipeActionButtons, action: @escaping (()->Void)) -> some View {
+    Button(role: .destructive) {
+      action()
+    } label: {
+      Label(swipeAction.displayTitle, systemImage: swipeAction.systemImage)
+    }
+    .tint(swipeAction.tint)
+  }
+
+  private func createNewSection() {
+    router.navigate(
+      to: .sectionInfoEditor(
+        sectionData: SectionData()
+      ) { newSection in
+        sectionData.append(newSection)
+        updateSectionWith(id: newSection.id, newSection: newSection)
+      })
   }
 
   private func moveRow(source: IndexSet, destination: Int) {
