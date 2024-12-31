@@ -30,7 +30,9 @@ struct CreateURLMediaPhotoCarouselView: View {
             (id: "move_down", systemImageString: "chevron.down", tint: .green, action: { moveElementDown(&arrayOfPhotoData, at: index) }),
             (id: "delete", systemImageString: "trash", tint: .red, action: { removeAt(index: index)})
           ]
-        ) { updateMedia(index: index, photoData: $0) }
+        ) {
+          arrayOfPhotoData[index] = $0
+        }
       }
 
       Button {
@@ -42,41 +44,34 @@ struct CreateURLMediaPhotoCarouselView: View {
       }
       .buttonStyle(.borderedProminent)
     }
+    .onChange(of: arrayOfPhotoData) {
+      didUpdateMedia(arrayOfPhotoData)
+    }
   }
 
   private func moveElementUp(_ array: inout [PhotoData], at index: Int) {
     guard index > 0 else { return }
     array.swapAt(index, index - 1)
-    didUpdateMedia(self.arrayOfPhotoData)
   }
 
   private func moveElementDown(_ array: inout [PhotoData], at index: Int) {
     guard index < array.count - 1 else { return }
     array.swapAt(index, index + 1)
-    didUpdateMedia(self.arrayOfPhotoData)
   }
 
   private func autoFill(index: Int, oldPhotoData: PhotoData) {
-    updateMedia(index: index, photoData: .init(
+    arrayOfPhotoData[index] = .init(
       urlString: ProfileStubGenerator.randomMediaPicture(),
       contentMode: oldPhotoData.contentMode
-    ))
-    didUpdateMedia(self.arrayOfPhotoData)
+    )
   }
 
   private func removeAt(index: Int) {
     arrayOfPhotoData.remove(at: index)
-    didUpdateMedia(self.arrayOfPhotoData)
   }
 
   private func addOne(photoData: PhotoData) {
     self.arrayOfPhotoData.append(photoData)
-    didUpdateMedia(self.arrayOfPhotoData)
-  }
-
-  private func updateMedia(index: Int, photoData: PhotoData) {
-    self.arrayOfPhotoData[index] = photoData
-    didUpdateMedia(self.arrayOfPhotoData)
   }
 }
 
@@ -84,4 +79,8 @@ struct CreateURLMediaPhotoCarouselView: View {
   CreateURLMediaPhotoCarouselView(photoArray: [PhotoData.emptyInstance()]) { _ in
 
   }
+}
+
+#Preview {
+  ProfileSectionEditorViewForPreviews()
 }

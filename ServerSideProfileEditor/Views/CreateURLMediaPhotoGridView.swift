@@ -33,18 +33,17 @@ struct CreateURLMediaPhotoGridView: View {
         ) { updateMedia(index: index, photoData: $0) }
       }
     }
+    .onChange(of: photoData) { updateMedia() }
   }
 
   private func moveElementUp(_ array: inout [PhotoData], at index: Int) {
     guard index > 0 else { return }
     array.swapAt(index, index - 1)
-    updateMedia()
   }
 
   private func moveElementDown(_ array: inout [PhotoData], at index: Int) {
     guard index < array.count - 1 else { return }
     array.swapAt(index, index + 1)
-    updateMedia()
   }
 
   private func autoFill(index: Int, oldPhotoData: PhotoData) {
@@ -52,22 +51,18 @@ struct CreateURLMediaPhotoGridView: View {
       urlString: ProfileStubGenerator.randomMediaPicture(),
       contentMode: oldPhotoData.contentMode
     ))
-    updateMedia()
   }
 
   private func removeAt(index: Int) {
     photoData[index] = .emptyInstance()
-    updateMedia()
   }
 
   private func addOne(photoData: PhotoData) {
     self.photoData.append(photoData)
-    updateMedia()
   }
 
   private func updateMedia(index: Int, photoData: PhotoData) {
     self.photoData[index] = photoData
-    updateMedia()
   }
 
   private func updateMedia() {
