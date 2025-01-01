@@ -27,25 +27,26 @@ struct MapView: View {
   }
 
   var body: some View {
-      Group {
-        if CLLocationCoordinate2DIsValid(coordinate) {
-          Map(
-            position: $position,interactionModes: []
-          ) {
-            Marker(title, coordinate: coordinate)
-          }
-        } else {
-          Color.black.overlay {
-            Text("INVALID COORDINATES \(Image(systemName: "exclamationmark.triangle"))")
-              .foregroundStyle(.red)
-          }
+    Group {
+      if CLLocationCoordinate2DIsValid(coordinate) {
+        Map(
+          position: $position,interactionModes: []
+        ) {
+          Marker(title, coordinate: coordinate)
         }
+      } else {
+        Color.black.overlay {
+          Text("INVALID COORDINATES \(Image(systemName: "exclamationmark.triangle"))")
+            .foregroundStyle(.red)
+        }
+      }
     }
-      .onChange(of: coordinate) {
+    .onChange(of: coordinate) {
       updateCameraPosition(coordinate: coordinate)
     }.onAppear {
       updateCameraPosition(coordinate: coordinate)
     }
+    .clipShape(RoundedRectangle(cornerRadius: StyleConstants.Geometry.cornerRadius))
     // Extremely important or app will crash.
     // Hide the navigation bar for the map view.
     // No clue why it's showing up when the editor sheet is presented.

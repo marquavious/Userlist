@@ -80,7 +80,3 @@ struct CreateURLMediaPhotoCarouselView: View {
 
   }
 }
-
-#Preview {
-  ProfileSectionEditorViewForPreviews()
-}
