@@ -6,13 +6,8 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		C07310772D1B9CF4005A1059 /* KeyboardToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07310762D1B9CF4005A1059 /* KeyboardToolbar.swift */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXFileReference section */
 		C00B1FF22CC5D8C200C73EE0 /* ServerSideProfileEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ServerSideProfileEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		C07310762D1B9CF4005A1059 /* KeyboardToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardToolbar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -37,7 +32,6 @@
 		C00B1FE92CC5D8C200C73EE0 = {
 			isa = PBXGroup;
 			children = (
-				C07310762D1B9CF4005A1059 /* KeyboardToolbar.swift */,
 				C00B1FF42CC5D8C200C73EE0 /* ServerSideProfileEditor */,
 				C00B1FF32CC5D8C200C73EE0 /* Products */,
 			);
@@ -125,7 +119,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C07310772D1B9CF4005A1059 /* KeyboardToolbar.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
