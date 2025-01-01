@@ -43,9 +43,6 @@ struct MediaWindowView: View {
           longitude: longitude
         )
       )
-      // Hide the navigation bar for the map view.
-      // No clue why it's showing up when the editor sheet is presented.
-      .navigationBarHidden(true)
     }
   }
 }

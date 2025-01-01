@@ -27,7 +27,6 @@ struct MapView: View {
   }
 
   var body: some View {
-    GeometryReader { proxy in
       Group {
         if CLLocationCoordinate2DIsValid(coordinate) {
           Map(
@@ -41,16 +40,16 @@ struct MapView: View {
               .foregroundStyle(.red)
           }
         }
-      }.frame(
-        width: proxy.frame(in: .global).width,
-        height: proxy.frame(in: .global).height
-      )
-      .clipShape(RoundedRectangle(cornerRadius: StyleConstants.Geometry.cornerRadius))
-    }.onChange(of: coordinate) {
+    }
+      .onChange(of: coordinate) {
       updateCameraPosition(coordinate: coordinate)
     }.onAppear {
       updateCameraPosition(coordinate: coordinate)
     }
+    // Extremely important or app will crash.
+    // Hide the navigation bar for the map view.
+    // No clue why it's showing up when the editor sheet is presented.
+    .toolbarBackground(.hidden, for: .navigationBar)
   }
 
   private func updateCameraPosition(coordinate: CLLocationCoordinate2D) {
